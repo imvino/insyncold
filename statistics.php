@@ -30,7 +30,7 @@ HEAD_WRAP
 ;
 
 include("includes/header.php");
-require_once("/helpers/FileIOHelper.php");
+require_once("helpers/FileIOHelper.php");
 
 ////////////////////////////////////////////////////////////////////////////////
 // PAGE PHP

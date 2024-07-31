@@ -26,7 +26,7 @@ if (empty($permissions["configure"])) {
     exit;
 }
 
-require_once("/helpers/phaseHelper.php");
+require_once("helpers/phaseHelper.php");
 
 $phaseNames = getPhaseNames();
 

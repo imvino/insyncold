@@ -77,9 +77,9 @@ if(empty($permissions["cameras"]))
 }
 
 $loggedIn = true;
-require_once("/helpers/databaseInterface.php");
-require_once("/helpers/cameraViewHelper.php");
-require_once("/helpers/libraries/intersectionUtil.php");
+require_once("helpers/databaseInterface.php");
+require_once("helpers/cameraViewHelper.php");
+require_once("helpers/libraries/intersectionUtil.php");
 	
 $intersectionUtil = new IntersectionUtil();
 

@@ -36,8 +36,8 @@ if(empty($permissions["maintenance"]))
     exit;
 }
 
-require_once("/helpers/maintenanceHelper.php");
-require_once("/helpers/pathDefinitions.php");
+require_once("helpers/maintenanceHelper.php");
+require_once("helpers/pathDefinitions.php");
 
 // Gather restore archive info
 $autoRestoreFiles = [];
