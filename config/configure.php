@@ -8,11 +8,12 @@ $title = ": Configure Detectors";
 $breadCrumb = "<h1>Settings <small>Configure Detectors</small></h1>";
 $menuCategory = "settings";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP
+;
 
 include("../includes/header.php");
 

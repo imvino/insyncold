@@ -18,8 +18,8 @@ use Luracast\Restler\Data\Object;
 
 class YamlFormat extends Format
 {
-    const MIME = 'text/plain';
-    const EXTENSION = 'yaml';
+    public const MIME = 'text/plain';
+    public const EXTENSION = 'yaml';
 
     public function encode($data, $humanReadable = false)
     {

@@ -15,8 +15,8 @@ namespace Luracast\Restler\Format;
  */
 class UrlEncodedFormat extends Format
 {
-    const MIME = 'application/x-www-form-urlencoded';
-    const EXTENSION = 'post';
+    public const MIME = 'application/x-www-form-urlencoded';
+    public const EXTENSION = 'post';
 
     public function encode($data, $humanReadable = false)
     {

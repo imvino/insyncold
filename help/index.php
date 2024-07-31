@@ -8,11 +8,12 @@ $title = "Help";
 $breadCrumb = "<h1>Help</h1>";
 $menuCategory = "settings";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP
+;
 
 include("../includes/header.php");
 

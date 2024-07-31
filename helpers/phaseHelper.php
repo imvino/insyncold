@@ -67,11 +67,11 @@ if($action == "save")
         pg_query($db, "BEGIN TRANSACTION");
 	$username = $permissions['username'];
 	
-        if (pg_query_params($db, 'delete from phase_renaming where "user" = $1', array($username)))
+        if (pg_query_params($db, 'delete from phase_renaming where "user" = $1', [$username]))
         {
             foreach ($phase as $index => $names) {
                 if (!pg_query_params($db, 'INSERT INTO phase_renaming ("user", phase_number, short, long) values ($1, $2, $3, $4)',
-                        array($username, $index, $names['short'], $names['long'])))
+                        [$username, $index, $names['short'], $names['long']]))
                 {
                     pg_query($db, "ROLLBACK TRANSACTION");
                     pg_close($db);
@@ -96,7 +96,7 @@ function getActivePedestrians()
     $pedInfoData = $insync->getPedestrianInfo();
     $xml = simplexml_load_string($pedInfoData);
 
-    $activePhases = array();
+    $activePhases = [];
     foreach($xml->PedPhase as $pedPhase)
     {
         $number = (int)$pedPhase["Number"];
@@ -115,7 +115,7 @@ function getActivePhases()
 	$intersectionObject = simplexml_load_string($intersectionXML);
 	
 	// get active phases
-	$activePhases = array();
+	$activePhases = [];
 	foreach($intersectionObject->Intersection->Direction as $Directions)
 		foreach($Directions->Phases->Phase as $Phase)
 			array_push($activePhases, (int)$Phase["name"]);
@@ -145,7 +145,7 @@ function intFromExt($phaseMap, $external)
 
 function getIntExtPhaseMap()
 {
-    $phaseMap = array();
+    $phaseMap = [];
     // phaseMap will be filled with an associative array for all active phases
     // phaseMap [ internal# ] = external#
     
@@ -217,7 +217,7 @@ function setDefaultPhaseNames()
     global $permissions;
     
     $phaseMap = getIntExtPhaseMap();
-    $phaseArr = array();
+    $phaseArr = [];
     $phase = getDefaultPhases();
 
     for($i = 1; $i < 9; $i++)
@@ -244,11 +244,11 @@ function setDefaultPhaseNames()
     pg_query($db, "BEGIN TRANSACTION");
     $username = $permissions['username'];
     
-    if (pg_query_params($db, 'delete from phase_renaming where "user" = $1', array($username)))
+    if (pg_query_params($db, 'delete from phase_renaming where "user" = $1', [$username]))
     {
         foreach ($phaseArr as $index => $names) {
             if (!pg_query_params($db, 'INSERT INTO phase_renaming ("user", phase_number, short, long) values ($1, $2, $3, $4)',
-                    array($username, $index, $names['short'], $names['long'])))
+                    [$username, $index, $names['short'], $names['long']]))
             {
                 pg_query($db, "ROLLBACK TRANSACTION");
                 pg_close($db);
@@ -285,8 +285,8 @@ function getPhaseNames()
     $username = $permissions['username'];
     
     $found_mappings = false;
-    $returnArray = array();
-    if($result = pg_query_params($db, 'SELECT phase_number, short, long from phase_renaming where "user" = $1', array($username)))
+    $returnArray = [];
+    if($result = pg_query_params($db, 'SELECT phase_number, short, long from phase_renaming where "user" = $1', [$username]))
     {
             while ($row = pg_fetch_assoc($result))
             {
@@ -329,7 +329,7 @@ function getPhaseNames()
 
 function getDefaultPhases()
 {
-    $phase = array();
+    $phase = [];
 
     $phase[1] = ["long" => "Southbound Left", "short" => "SL"];
     

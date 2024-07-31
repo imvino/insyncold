@@ -24,10 +24,10 @@ switch($action)
 	case "getoldest":
 	{
 		$files = @scandir(TMC_STATS_ROOT, SCANDIR_SORT_ASCENDING);
-        $validFiles = array();
+        $validFiles = [];
         
         foreach($files as $file)
-            if(substr($file,0,3) == "TM_")
+            if(str_starts_with($file, "TM_"))
                 $validFiles[] = $file;
         
         if(count($validFiles) == 0)
@@ -71,7 +71,7 @@ switch($action)
 
 			if($statsArray)
 			{
-                $flotData = array();
+                $flotData = [];
                 
                 require_once("phaseHelper.php");
                 
@@ -159,10 +159,10 @@ switch($action)
         
         require_once("phaseHelper.php");
         $phases = getActivePhases();
-        $phaseArr = array();
+        $phaseArr = [];
         foreach($phases as $order => $phase)
         {
-            $phaseArr[$phase] = array();
+            $phaseArr[$phase] = [];
             
             $phaseArr[$phase]["g_max"] = -1;
             $phaseArr[$phase]["g_min"] = 999999999;
@@ -212,14 +212,14 @@ switch($action)
         
         ksort($phaseArr);
         
-        $dataArr = array();
+        $dataArr = [];
         
         { // build bar graphs
-            $dataArr["chart1"] = array();
+            $dataArr["chart1"] = [];
 
-            $dataArr["chart1"]["bars"] = array();
-            $dataArr["chart1"]["errors"] = array();
-            $dataArr["chart1"]["ticks"] = array();
+            $dataArr["chart1"]["bars"] = [];
+            $dataArr["chart1"]["errors"] = [];
+            $dataArr["chart1"]["ticks"] = [];
 
             $count = 0;
             foreach($phaseArr as $phase => $data)
@@ -227,8 +227,8 @@ switch($action)
                 if($data["g_min"] == 999999999 || $data["g_max"] == -1)
                     continue;
                 
-                $dataArr["chart1"]["errors"][] = array($count, (float)$data["g_avg"], (float)$data["g_avg"] - (float)$data["g_min"], (float)$data["g_max"] - (float)$data["g_avg"]);
-                $dataArr["chart1"]["ticks"][] = array($count, "Phase $phase");
+                $dataArr["chart1"]["errors"][] = [$count, (float)$data["g_avg"], (float)$data["g_avg"] - (float)$data["g_min"], (float)$data["g_max"] - (float)$data["g_avg"]];
+                $dataArr["chart1"]["ticks"][] = [$count, "Phase $phase"];
                 $count++;
             }
 
@@ -238,20 +238,20 @@ switch($action)
                 if($data["g_min"] == 999999999 || $data["g_max"] == -1)
                     continue;
                 
-                $dataArr["chart1"]["bars"][] = array($count, (float)$data["g_max"], (float)$data["g_min"]);
+                $dataArr["chart1"]["bars"][] = [$count, (float)$data["g_max"], (float)$data["g_min"]];
                 $count++;
             }
         }
         
         { // build pie charts
-            $dataArr["chart2"] = array();
+            $dataArr["chart2"] = [];
 
-            $dataArr["chart2"]["data"] = array();
+            $dataArr["chart2"]["data"] = [];
 
             $count = 0;
             foreach($phaseArr as $phase => $data)
             {            
-                $dataArr["chart2"]["data"][] = array("label"=>"Phase $phase", "data"=> (float)$data["g_total"]);
+                $dataArr["chart2"]["data"][] = ["label"=>"Phase $phase", "data"=> (float)$data["g_total"]];
                 $count++;
             }
         }
@@ -288,7 +288,7 @@ switch($action)
 	 */
 	case "getactivedirections":
 	{
-		$associationArray = array();
+		$associationArray = [];
 		
 		// Get phases with cameras for systems with hawkeye detection
 		$activeCameraPhases = getActiveCameraPhases();
@@ -536,13 +536,13 @@ function loadSplits($startDate, $endDate, $phases)
     $startTimestamp = strtotime($startDate);
     $endTimestamp = strtotime($endDate);
     
-    $splitArr = array();
+    $splitArr = [];
 
     $dateRangeArray = createDateRange($startDate, $endDate, "Ymd");
     
     foreach($dateRangeArray as $date)
     {
-        $greenSplitArr = array();
+        $greenSplitArr = [];
         
         $filename = GREEN_DURATIONS_STATS_ROOT . "/GD_" . $date . "_000000.txt";
         if(file_exists($filename))
@@ -558,7 +558,7 @@ function loadSplits($startDate, $endDate, $phases)
 
 function parseSplitFile($filename, $date, $startTimestamp, $endTimestamp, $activePhases)
 {    
-    $splitArray = array();
+    $splitArray = [];
 
     if (($handle = fopen($filename, "r")) !== FALSE) 
     {
@@ -582,7 +582,7 @@ function parseSplitFile($filename, $date, $startTimestamp, $endTimestamp, $activ
 
 function getTotals($statsArr)
 {
-	$jsonData = array();
+	$jsonData = [];
 	
 	for($i=1; $i <= 8; $i++)
 	{
@@ -650,30 +650,30 @@ function convertCPUToFlot($statsArray)
 {
 	$numCPUs = count(current($statsArray)["cpuload"]);
 	
-	$flotData = array();
-    $flotData["load"] = array();
-    $flotData["temp"] = array();
-    $flotData["speed"] = array();
+	$flotData = [];
+    $flotData["load"] = [];
+    $flotData["temp"] = [];
+    $flotData["speed"] = [];
 	
 	for($i=0; $i < $numCPUs; $i++)
 	{
 		$flotData["load"][$i]["label"] = "CPU #" . ($i+1);
 		$flotData["load"][$i]["lines"]["show"] = true;
-		$flotData["load"][$i]["data"] = array();
+		$flotData["load"][$i]["data"] = [];
         
         $flotData["temp"][$i]["label"] = "CPU #" . ($i+1);
 		$flotData["temp"][$i]["lines"]["show"] = true;
-		$flotData["temp"][$i]["data"] = array();
+		$flotData["temp"][$i]["data"] = [];
         
         $flotData["speed"][$i]["label"] = "CPU #" . ($i+1);
 		$flotData["speed"][$i]["lines"]["show"] = true;
-		$flotData["speed"][$i]["data"] = array();
+		$flotData["speed"][$i]["data"] = [];
 
 		foreach($statsArray as $time => $data)
         {
-			$flotData["load"][$i]["data"][] = array($time*1000, $data["cpuload"][$i]);
-            $flotData["temp"][$i]["data"][] = array($time*1000, $data["cputemp"][$i]);
-            $flotData["speed"][$i]["data"][] = array($time*1000, $data["cpufreq"][$i]);
+			$flotData["load"][$i]["data"][] = [$time*1000, $data["cpuload"][$i]];
+            $flotData["temp"][$i]["data"][] = [$time*1000, $data["cputemp"][$i]];
+            $flotData["speed"][$i]["data"][] = [$time*1000, $data["cpufreq"][$i]];
         }
 	}
 	
@@ -688,7 +688,7 @@ function loadPerformanceStats($startDateTime, $endDateTime)
 	$endTimestamp = strtotime($endDateTime);
 	
 	// remove dates with no log files
-	$validDates = array();
+	$validDates = [];
 	foreach($dateRangeArray as $date)
 		if(file_exists(PERFORMANCE_STATS_ROOT . "/" . "PS_" . $date . "_000000.txt"))
 			$validDates[] = $date;
@@ -696,7 +696,7 @@ function loadPerformanceStats($startDateTime, $endDateTime)
 	if(count($validDates) == 0)
 		return false;
 	
-	$graphData = array();
+	$graphData = [];
 	
 	foreach($validDates as $date)
 	{
@@ -748,17 +748,17 @@ function downloadRawLogs($startDateTime, $endDateTime)
 	$unixDateEndAdditional = strtotime('+1day', $unixDateEndAdditional);	
 	
 	$logFilesTemp = scandir(TMC_STATS_ROOT);
-	$logFiles = array();
+	$logFiles = [];
 	
 	$additionalDay = "";
 	$lastfileFlag = "Y";	
 	
-	$columnMap = array();
+	$columnMap = [];
 		
 	// turn each filename into a Unix timestamp
 	foreach($logFilesTemp as $log)
 	{
-		if(strncmp($log, "TM_", 3) == 0)
+		if(str_starts_with($log, "TM_"))
 		{
 			$timeStr = substr($log,3,4) . "/" . substr($log,7,2). "/" . substr($log,9,2) . " 00:00";
 			
@@ -893,13 +893,13 @@ function convertTMCtoCSV($statsArray, $vehicleCounts, $pedestrianCounts, $hourly
 	
 	$pedCount = count($pedList);
 	
-	$outputArray = array();
+	$outputArray = [];
 	$outputCSV = "";	
 	$outputCSV .= $intersectionName . "\r\n\r\n";
 	
 	foreach($statsArray as $date=>$timeArray)
 	{
-		$timeList = array("12:00 AM", "12:15 AM","12:30 AM","12:45 AM","01:00 AM","01:15 AM","01:30 AM","01:45 AM","02:00 AM","02:15 AM","02:30 AM","02:45 AM","03:00 AM","03:15 AM","03:30 AM","03:45 AM","04:00 AM","04:15 AM","04:30 AM","04:45 AM","05:00 AM","05:15 AM","05:30 AM","05:45 AM","06:00 AM","06:15 AM","06:30 AM","06:45 AM","07:00 AM","07:15 AM","07:30 AM","07:45 AM","08:00 AM","08:15 AM","08:30 AM","08:45 AM","09:00 AM","09:15 AM","09:30 AM","09:45 AM","10:00 AM","10:15 AM","10:30 AM","10:45 AM","11:00 AM","11:15 AM","11:30 AM","11:45 AM","12:00 PM","12:15 PM","12:30 PM","12:45 PM","01:00 PM","01:15 PM","01:30 PM","01:45 PM","02:00 PM","02:15 PM","02:30 PM","02:45 PM","03:00 PM","03:15 PM","03:30 PM","03:45 PM","04:00 PM","04:15 PM","04:30 PM","04:45 PM","05:00 PM","05:15 PM","05:30 PM","05:45 PM","06:00 PM","06:15 PM","06:30 PM","06:45 PM","07:00 PM","07:15 PM","07:30 PM","07:45 PM","08:00 PM","08:15 PM","08:30 PM","08:45 PM","09:00 PM","09:15 PM","09:30 PM","09:45 PM","10:00 PM","10:15 PM","10:30 PM","10:45 PM","11:00 PM","11:15 PM","11:30 PM","11:45 PM");
+		$timeList = ["12:00 AM", "12:15 AM", "12:30 AM", "12:45 AM", "01:00 AM", "01:15 AM", "01:30 AM", "01:45 AM", "02:00 AM", "02:15 AM", "02:30 AM", "02:45 AM", "03:00 AM", "03:15 AM", "03:30 AM", "03:45 AM", "04:00 AM", "04:15 AM", "04:30 AM", "04:45 AM", "05:00 AM", "05:15 AM", "05:30 AM", "05:45 AM", "06:00 AM", "06:15 AM", "06:30 AM", "06:45 AM", "07:00 AM", "07:15 AM", "07:30 AM", "07:45 AM", "08:00 AM", "08:15 AM", "08:30 AM", "08:45 AM", "09:00 AM", "09:15 AM", "09:30 AM", "09:45 AM", "10:00 AM", "10:15 AM", "10:30 AM", "10:45 AM", "11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM", "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "01:00 PM", "01:15 PM", "01:30 PM", "01:45 PM", "02:00 PM", "02:15 PM", "02:30 PM", "02:45 PM", "03:00 PM", "03:15 PM", "03:30 PM", "03:45 PM", "04:00 PM", "04:15 PM", "04:30 PM", "04:45 PM", "05:00 PM", "05:15 PM", "05:30 PM", "05:45 PM", "06:00 PM", "06:15 PM", "06:30 PM", "06:45 PM", "07:00 PM", "07:15 PM", "07:30 PM", "07:45 PM", "08:00 PM", "08:15 PM", "08:30 PM", "08:45 PM", "09:00 PM", "09:15 PM", "09:30 PM", "09:45 PM", "10:00 PM", "10:15 PM", "10:30 PM", "10:45 PM", "11:00 PM", "11:15 PM", "11:30 PM", "11:45 PM"];
 		
 		$useDate = substr($date, 4, 2) . "/" . substr($date, 6, 2) . "/" . substr($date, 0, 4);
 		
@@ -971,7 +971,7 @@ function convertTMCtoCSV($statsArray, $vehicleCounts, $pedestrianCounts, $hourly
 			
 			if($hourlySummaries)
 			{
-				if(strpos($time, ":45") !== FALSE)
+				if(str_contains($time, ":45"))
 				{
 					$outputCSV .= "Total,";
 					
@@ -1038,7 +1038,7 @@ function convertTMCtoFlot($statsArray, $data)
 	else if($data == "pedestrianhourly")
 		$data = "ped_hourly";
 	
-	$outputArray = array();
+	$outputArray = [];
 	
 	foreach($statsArray as $date=>$timeArray)
 	{
@@ -1046,15 +1046,15 @@ function convertTMCtoFlot($statsArray, $data)
 		
 		foreach($timeArray as $time => $phaseData)
 		{
-			if(strpos($data, "hourly") !== FALSE && strpos($time, ":00") === FALSE)
+			if(str_contains($data, "hourly") && !str_contains($time, ":00"))
 				continue;
 					
 			for($phase = 1; $phase <= 8; $phase++)
 				if(isset($phaseData[$data . $phase]))
-					$outputArray[$phase][] = array(strtotime($useDate . " " . $time)*1000, (int)$phaseData[$data . $phase]);
+					$outputArray[$phase][] = [strtotime($useDate . " " . $time)*1000, (int)$phaseData[$data . $phase]];
 		}
 		
-		$finishArray = array();
+		$finishArray = [];
 		
 		$activePhases = 0;
 		
@@ -1077,11 +1077,11 @@ function convertPeriodToFlot($logData)
 {
 	$outputArray = $logData;
 	
-	$finishArray = array();
+	$finishArray = [];
 	
 	$finishArray["data"][0]["label"] = "Period Length";
-	$finishArray["data"][0]["points"] = array("show"=>true);
-	$finishArray["data"][0]["lines"] = array("show"=>true);
+	$finishArray["data"][0]["points"] = ["show"=>true];
+	$finishArray["data"][0]["lines"] = ["show"=>true];
 	$finishArray["data"][0]["data"] = $outputArray;
     
     $finishArray["timezone"] = date_default_timezone_get();
@@ -1094,7 +1094,7 @@ function loadPeriodStats($startDateTime, $endDateTime)
 	$dateRangeArray = createPeriodGraphDateRange($startDateTime, $endDateTime, "Ymd");
 
 	// remove dates with no log files
-	$validDates = array();
+	$validDates = [];
 	foreach($dateRangeArray as $date)
 		if(file_exists(PERIOD_STATS_ROOT . "/" . "PD_" . $date . "_000000.txt"))
 			$validDates[] = $date;
@@ -1102,7 +1102,7 @@ function loadPeriodStats($startDateTime, $endDateTime)
 	if(count($validDates) == 0)
 		return false;
 	
-	$graphData = array();
+	$graphData = [];
 	
     $startTime = (int)strtotime($startDateTime);
     $endTime = (int)strtotime($endDateTime);
@@ -1110,7 +1110,7 @@ function loadPeriodStats($startDateTime, $endDateTime)
     // contains the valid period data points
     // found within the date range, plus one
     // extra data point prior to the start date
-    $periodData = array();
+    $periodData = [];
     
     // process all of the potential files
 	foreach($validDates as $date)
@@ -1139,8 +1139,8 @@ function loadPeriodStats($startDateTime, $endDateTime)
                 // keep re-initializing the period
                 // data array and adding the 
                 // first period data to it
-                $periodData = array();
-                $periodData[] = array((int)$currLineTime, $currPeriod);
+                $periodData = [];
+                $periodData[] = [(int)$currLineTime, $currPeriod];
             }
             else if($currLineTime > $endTime)
             {
@@ -1149,7 +1149,7 @@ function loadPeriodStats($startDateTime, $endDateTime)
             else
             {
                 // add to the data list
-                $periodData[] = array((int)$currLineTime, $currPeriod);
+                $periodData[] = [(int)$currLineTime, $currPeriod];
             }
         }
 
@@ -1160,7 +1160,7 @@ function loadPeriodStats($startDateTime, $endDateTime)
     // removing any TUNNELLESS
     // entries with less than 5 sec.
     // duration
-    $periodDataFiltered = array();
+    $periodDataFiltered = [];
     
     if (count($periodData) > 0)
     {
@@ -1221,11 +1221,11 @@ function loadPeriodStats($startDateTime, $endDateTime)
     $firstPeriod = $periodDataFiltered[0][1];
     if ($firstPeriod != "TUNNELLESS" && count($validDates) > 1)
     {
-        $graphData[] = array($startTime*1000, $firstPeriod);
+        $graphData[] = [$startTime*1000, $firstPeriod];
     }
 	else if ($firstPeriod != "TUNNELLESS" && count($validDates) == 1) 	
 	{
-		$graphData[] = array($periodDataFiltered[0][0]*1000, $firstPeriod);
+		$graphData[] = [$periodDataFiltered[0][0]*1000, $firstPeriod];
 	}
 	
     //if ($firstPeriod != "TUNNELLESS")
@@ -1245,13 +1245,13 @@ function loadPeriodStats($startDateTime, $endDateTime)
             $previousPeriod = $periodDataFiltered[$i-1][1];
             if ($previousPeriod != "TUNNELLESS")
             {
-                $graphData[] = array($periodDataFiltered[$i][0]*1000, $previousPeriod);
+                $graphData[] = [$periodDataFiltered[$i][0]*1000, $previousPeriod];
             }
-            $graphData[] = array($periodDataFiltered[$i][0]*1000, null);
+            $graphData[] = [$periodDataFiltered[$i][0]*1000, null];
         }
         else
         {
-            $graphData[] = array($periodDataFiltered[$i][0]*1000, $periodDataFiltered[$i][1]);
+            $graphData[] = [$periodDataFiltered[$i][0]*1000, $periodDataFiltered[$i][1]];
         }
     }
     
@@ -1260,7 +1260,7 @@ function loadPeriodStats($startDateTime, $endDateTime)
     $lastPeriod = $periodDataFiltered[$numFilteredPeriodDataPoints-1][1];
     if ($lastPeriod != "TUNNELLESS")
     {
-        $graphData[] = array($endTime*1000, $lastPeriod);
+        $graphData[] = [$endTime*1000, $lastPeriod];
     }
     
 	return $graphData;
@@ -1272,7 +1272,7 @@ function loadTMCStats($startDateTime, $endDateTime)
 	$dateRangeArray = createDateRange($startDateTime, $endDateTime, "Ymd");
 
 	// remove dates with no log files
-	$validDates = array();
+	$validDates = [];
 	foreach($dateRangeArray as $date)
 		if(file_exists(TMC_STATS_ROOT . "/" . "TM_" . $date . "_000000.txt"))
 			$validDates[] = $date;
@@ -1283,7 +1283,7 @@ function loadTMCStats($startDateTime, $endDateTime)
 	global $intersectionName;
 	$intersectionName = "Intersection";
 	
-    $graphPhaseData = array();
+    $graphPhaseData = [];
             
 	foreach ($validDates as $date) 
 	{
@@ -1325,7 +1325,7 @@ function loadTMCStats($startDateTime, $endDateTime)
 			// get timestamp for CSV line
 			$lineTime = strtotime("$month/$day/$year " . $line[$columnMap["time"]]) - 900;
             
-            $graphPhaseData[date("Ymd", $lineTime)][date("h:i A", $lineTime)] = array();
+            $graphPhaseData[date("Ymd", $lineTime)][date("h:i A", $lineTime)] = [];
 
 			// Add Phase data
 			for ($phase = 1; $phase <= 8; $phase++) 
@@ -1350,7 +1350,7 @@ function loadTMCStats($startDateTime, $endDateTime)
 	foreach ($graphPhaseData as $date => $value)
 	{
 		// list of required times
-		$timeList = array("12:00 AM", "12:15 AM", "12:30 AM", "12:45 AM", "01:00 AM", "01:15 AM", "01:30 AM", "01:45 AM", "02:00 AM", "02:15 AM", "02:30 AM", "02:45 AM", "03:00 AM", "03:15 AM", "03:30 AM", "03:45 AM", "04:00 AM", "04:15 AM", "04:30 AM", "04:45 AM", "05:00 AM", "05:15 AM", "05:30 AM", "05:45 AM", "06:00 AM", "06:15 AM", "06:30 AM", "06:45 AM", "07:00 AM", "07:15 AM", "07:30 AM", "07:45 AM", "08:00 AM", "08:15 AM", "08:30 AM", "08:45 AM", "09:00 AM", "09:15 AM", "09:30 AM", "09:45 AM", "10:00 AM", "10:15 AM", "10:30 AM", "10:45 AM", "11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM", "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "01:00 PM", "01:15 PM", "01:30 PM", "01:45 PM", "02:00 PM", "02:15 PM", "02:30 PM", "02:45 PM", "03:00 PM", "03:15 PM", "03:30 PM", "03:45 PM", "04:00 PM", "04:15 PM", "04:30 PM", "04:45 PM", "05:00 PM", "05:15 PM", "05:30 PM", "05:45 PM", "06:00 PM", "06:15 PM", "06:30 PM", "06:45 PM", "07:00 PM", "07:15 PM", "07:30 PM", "07:45 PM", "08:00 PM", "08:15 PM", "08:30 PM", "08:45 PM", "09:00 PM", "09:15 PM", "09:30 PM", "09:45 PM", "10:00 PM", "10:15 PM", "10:30 PM", "10:45 PM", "11:00 PM", "11:15 PM", "11:30 PM", "11:45 PM");
+		$timeList = ["12:00 AM", "12:15 AM", "12:30 AM", "12:45 AM", "01:00 AM", "01:15 AM", "01:30 AM", "01:45 AM", "02:00 AM", "02:15 AM", "02:30 AM", "02:45 AM", "03:00 AM", "03:15 AM", "03:30 AM", "03:45 AM", "04:00 AM", "04:15 AM", "04:30 AM", "04:45 AM", "05:00 AM", "05:15 AM", "05:30 AM", "05:45 AM", "06:00 AM", "06:15 AM", "06:30 AM", "06:45 AM", "07:00 AM", "07:15 AM", "07:30 AM", "07:45 AM", "08:00 AM", "08:15 AM", "08:30 AM", "08:45 AM", "09:00 AM", "09:15 AM", "09:30 AM", "09:45 AM", "10:00 AM", "10:15 AM", "10:30 AM", "10:45 AM", "11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM", "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "01:00 PM", "01:15 PM", "01:30 PM", "01:45 PM", "02:00 PM", "02:15 PM", "02:30 PM", "02:45 PM", "03:00 PM", "03:15 PM", "03:30 PM", "03:45 PM", "04:00 PM", "04:15 PM", "04:30 PM", "04:45 PM", "05:00 PM", "05:15 PM", "05:30 PM", "05:45 PM", "06:00 PM", "06:15 PM", "06:30 PM", "06:45 PM", "07:00 PM", "07:15 PM", "07:30 PM", "07:45 PM", "08:00 PM", "08:15 PM", "08:30 PM", "08:45 PM", "09:00 PM", "09:15 PM", "09:30 PM", "09:45 PM", "10:00 PM", "10:15 PM", "10:30 PM", "10:45 PM", "11:00 PM", "11:15 PM", "11:30 PM", "11:45 PM"];
 
 		foreach ($timeList as $time) 
 		{
@@ -1365,7 +1365,7 @@ function loadTMCStats($startDateTime, $endDateTime)
 				}
 			}
 
-			$sortingArray = array();
+			$sortingArray = [];
 			
 			foreach ($timeList as $ltime) 
 				if (isset($graphPhaseData[$date][$ltime]))
@@ -1384,7 +1384,7 @@ function loadTMCStats($startDateTime, $endDateTime)
 			if (strstr($time, ":00")) 
 			{
 				// keep total count per hour for each phase
-				$totalPhase = array();
+				$totalPhase = [];
 
 				for ($phase = 1; $phase <= 8; $phase++) 
 				{
@@ -1489,7 +1489,7 @@ function loadTMCStats($startDateTime, $endDateTime)
 
 function getColumnMapping($lineArray)
 {
-	$columnMap = array();
+	$columnMap = [];
 	
 	foreach($lineArray as $key => $val)
 	{			
@@ -1526,20 +1526,20 @@ function getColumnMapping($lineArray)
 			else if($val  == "EXTENDED COUNT West Bound")
 				$columnMap["ecWB"] = $key;
 		}
-		else if(strncmp($val,"Ph",2) == 0)
+		else if(str_starts_with($val, "Ph"))
 		{
 			for($i=1; $i < 9; $i++)
 				for($j=1; $j < 10; $j++)
 					if($val  == "Phase" . $i . "_" . $j)
 						$columnMap["sub" . $i . "_" . $j] = $key;
 		}				
-		else if(strncmp($val,"PedC",4) == 0)
+		else if(str_starts_with($val, "PedC"))
 		{
 			for($i=1; $i < 9; $i++)
 				if($val  == "PedCount_Ped_Phase_" . $i)
 					$columnMap["pc" . $i] = $key;
 		}			
-		else if(strncmp($val,"PedW",4) == 0)
+		else if(str_starts_with($val, "PedW"))
 		{
 			for($i=1; $i < 9; $i++)
 				if($val  == "PedWait_Ped_Phase_" . $i)
@@ -1555,7 +1555,7 @@ function createDateRange($startDate, $endDate, $outputFormat)
 	$startTimestamp = strtotime($startDate);
 	$endTimestamp = strtotime($endDate) + 86400;
 	
-	$dateArray = array();
+	$dateArray = [];
 	
 	for($date = $startTimestamp; $date <= $endTimestamp; $date += 86400)
 		$dateArray[] = date($outputFormat, $date);
@@ -1572,7 +1572,7 @@ function createPeriodGraphDateRange($startDate, $endDate, $outputFormat)
 	$startTimestamp = strtotime($startDate) - 86400;
 	$endTimestamp = strtotime($endDate);
 	
-	$dateArray = array();
+	$dateArray = [];
 	
 	for($date = $startTimestamp; $date <= $endTimestamp; $date += 86400)
 		$dateArray[] = date($outputFormat, $date);
@@ -1719,8 +1719,8 @@ function getModifiedLine($line)
 
 function removeColumnsinError($line)
 {
-	$originallineArray = array();
-	$modifiedlineArray = array();
+	$originallineArray = [];
+	$modifiedlineArray = [];
 	$modifiedline = "";
 	$arraycolCount = 0;
 
@@ -1770,12 +1770,12 @@ function getlastRecord($additionalDay)
 // This is used show data only for phases with cameras
 function getActiveCameraPhases()
 {
-	$phasesWithCamera = Array();
+	$phasesWithCamera = [];
 	$systemConfigurationType = getSystemType();
 	
 	if ($systemConfigurationType === 0 || $systemConfigurationType === "" )
 	{
-		return Array();
+		return [];
 	}
 	else
 	{

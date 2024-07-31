@@ -151,7 +151,7 @@ switch($action)
 		    $statusXML->addAttribute("status", "working");
 		    
 		    // get all intersection IPs
-		    $intersectionArr = array();
+		    $intersectionArr = [];
 			foreach ($Intersections as $IntIP => $name)
 			{
 	            $intersectionArr[] = $protocol . $IntIP . "/helpers/corridorDesignerHelper.php";
@@ -167,7 +167,7 @@ switch($action)
 		    
 		    file_put_contents($statusFile, $statusXML->asXML());
 		    
-		    $postParams = array("action"=>"upload", "save"=>"true", "file"=>"@" . CORRIDORVIEWER_CONF_FILE, "u" => base64_encode("PEC"), "p" => base64_encode("lenpec4321"));
+		    $postParams = ["action"=>"upload", "save"=>"true", "file"=>"@" . CORRIDORVIEWER_CONF_FILE, "u" => base64_encode("PEC"), "p" => base64_encode("lenpec4321")];
 		    
 		    $collector = new PropagationCollector();
 		    $collector->run($intersectionArr, $postParams, $hash);
@@ -258,10 +258,10 @@ switch($action)
 
 function generateFromXML($xml)
 {
-    $json = Array();
+    $json = [];
     
     $json["title"] = (string)$xml["title"];
-    $json["list"] = array();
+    $json["list"] = [];
     
     $objCount = 0;
     
@@ -269,28 +269,28 @@ function generateFromXML($xml)
     {
         if($node->getName() == "Intersection")
         {
-            $json["list"][$objCount] = array();
+            $json["list"][$objCount] = [];
             $json["list"][$objCount]["type"] = "intersection";
             $json["list"][$objCount]["name"] = (string)$node["name"];
             $json["list"][$objCount]["ip"] = (string)$node["ip"];
-            $json["list"][$objCount]["cameras"] = array();
+            $json["list"][$objCount]["cameras"] = [];
 
             foreach($node->Camera as $camera)
                 $json["list"][$objCount]["cameras"][] = (string)$camera["name"];
         }
         else if($node->getName() == "Column")
         {
-            $json["list"][$objCount] = array();
+            $json["list"][$objCount] = [];
             $json["list"][$objCount]["type"] = "column";
             $json["list"][$objCount]["name"] = (string)$node["name"];
-            $json["list"][$objCount]["cameras"] = array();
+            $json["list"][$objCount]["cameras"] = [];
 
             foreach($node->Camera as $camera)
             {
                 if((string)$camera["name"] == "gap")
-                    $json["list"][$objCount]["cameras"][] = array("name"=>(string)$camera["name"], "ip"=>"");
+                    $json["list"][$objCount]["cameras"][] = ["name"=>(string)$camera["name"], "ip"=>""];
                 else
-                    $json["list"][$objCount]["cameras"][] = array("name"=>(string)$camera["name"], "ip"=>(string)$camera["ip"]);
+                    $json["list"][$objCount]["cameras"][] = ["name"=>(string)$camera["name"], "ip"=>(string)$camera["ip"]];
             }
         }
         
@@ -357,7 +357,7 @@ class PropagationCollector
 
     function __construct()
     {
-        $this->rc = new RollingCurl(array($this, 'processResponse'));
+        $this->rc = new RollingCurl([$this, 'processResponse']);
         $this->rc->window_size = 10;
     }
 
@@ -392,7 +392,7 @@ class PropagationCollector
         foreach ($urls as $url)
         {
             $request = new RollingCurlRequest($url);
-            $request->options = array(CURLOPT_POST => true, CURLOPT_SSL_VERIFYPEER => false, CURLOPT_CONNECTTIMEOUT => 25, CURLOPT_SSL_VERIFYHOST => false, CURLOPT_TIMEOUT => 45, CURLOPT_POSTFIELDS => $postParams);
+            $request->options = [CURLOPT_POST => true, CURLOPT_SSL_VERIFYPEER => false, CURLOPT_CONNECTTIMEOUT => 25, CURLOPT_SSL_VERIFYHOST => false, CURLOPT_TIMEOUT => 45, CURLOPT_POSTFIELDS => $postParams];
             $fallback_request = new RollingCurlRequest(preg_replace('/^https:/i', 'http:', $url));
             $fallback_request->options = $request->options;
             $request->fallback_request = $fallback_request;

@@ -43,8 +43,8 @@ class JsonFormat extends Format
      */
     public static $bigIntAsString = null;
 
-    const MIME = 'application/json';
-    const EXTENSION = 'json';
+    public const MIME = 'application/json';
+    public const EXTENSION = 'json';
 
     public function encode($data, $humanReadable = false)
     {
@@ -74,10 +74,7 @@ class JsonFormat extends Format
         if ($humanReadable) $result = $this->formatJson($result);
         if (self::$unEscapedUnicode) {
             $result = preg_replace_callback('/\\\u(\w\w\w\w)/',
-                function($matches)
-                {
-                    return mb_convert_encoding(pack('H*', $matches[1]), 'UTF-8', 'UTF-16BE');
-                }
+                fn($matches) => mb_convert_encoding(pack('H*', $matches[1]), 'UTF-8', 'UTF-16BE')
                 , $result);
         }
         if (self::$unEscapedSlashes) $result = str_replace('\/', '/', $result);

@@ -8,16 +8,17 @@ $title = ": Recording Options";
 $breadCrumb = "<h1>Views <small>Recording Options</small></h1>";
 $menuCategory = "views";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 
 <link rel="stylesheet" type="text/css" href="/css/default.css">
 <link rel="stylesheet" type="text/css" href="/css/cameraViews.css">
-		
+\t\t
 <script language="javascript" type="text/javascript" src="/js/recording.js"></script>
 
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP
+;
 
 include("includes/header.php");
 

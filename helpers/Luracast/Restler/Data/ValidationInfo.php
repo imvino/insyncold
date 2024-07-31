@@ -147,9 +147,7 @@ class ValidationInfo implements iValueObject
 
     public static function arrayValue($value)
     {
-        return is_array($value) ? $value : array(
-            $value
-        );
+        return is_array($value) ? $value : [$value];
     }
 
     public static function stringValue($value)
@@ -159,24 +157,20 @@ class ValidationInfo implements iValueObject
             : ( string )$value;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return ' new ValidationInfo() ';
     }
 
     public function __construct(array $info)
     {
-        $this->name = isset($info ['name']) ? $info ['name'] :
-            'Unknown';
+        $this->name = $info ['name'] ?? 'Unknown';
         $this->required = isset($info['required'])
             ? (bool)$info['required']
             : false;
-        $this->from = isset($info['from'])
-            ? $info['from']
-            : 'query';
-        $this->rules = $rules = isset($info [CommentParser::$embeddedDataName])
-            ? $info [CommentParser::$embeddedDataName] : $info;
-        $this->type = isset($info['type']) ? $info ['type'] : 'mixed';
+        $this->from = $info['from'] ?? 'query';
+        $this->rules = $rules = $info [CommentParser::$embeddedDataName] ?? $info;
+        $this->type = $info ['type'] ?? 'mixed';
         $this->rules ['fix'] = $this->fix
             = isset ($rules ['fix']) && $rules ['fix'] == 'true';
         unset ($rules ['fix']);
@@ -200,7 +194,7 @@ class ValidationInfo implements iValueObject
         if (isset ($rules ['choice'])) {
             $this->rules ['choice'] = $this->choice
                 = is_array($rules ['choice'])
-                ? $rules ['choice'] : array($rules ['choice']);
+                ? $rules ['choice'] : [$rules ['choice']];
             unset ($rules ['pattern']);
         }
         foreach ($rules as $key => $value) {

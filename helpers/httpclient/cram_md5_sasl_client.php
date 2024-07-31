@@ -12,8 +12,8 @@ define("SASL_CRAM_MD5_STATE_DONE",              2);
 
 class cram_md5_sasl_client_class
 {
-	var $credentials=array();
-	var $state=SASL_CRAM_MD5_STATE_START;
+	public $credentials=[];
+	public $state=SASL_CRAM_MD5_STATE_START;
 
 	Function Initialize(&$client)
 	{
@@ -33,11 +33,8 @@ class cram_md5_sasl_client_class
 			$client->error="CRAM-MD5 authentication state is not at the start";
 			return(SASL_FAIL);
 		}
-		$this->credentials=array(
-			"user"=>"",
-			"password"=>""
-		);
-		$defaults=array();
+		$this->credentials=["user"=>"", "password"=>""];
+		$defaults=[];
 		$status=$client->GetCredentials($this->credentials,$defaults,$interactions);
 		if($status==SASL_CONTINUE)
 			$this->state=SASL_CRAM_MD5_STATE_RESPOND_CHALLENGE;

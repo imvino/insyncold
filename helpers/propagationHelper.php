@@ -110,10 +110,10 @@ function putFile($target, $tmp_name)
 		ob_flush();
 	
 		// get all intersection IPs
-		$intersectionArr = array();
+		$intersectionArr = [];
 		foreach ($Intersections as $IntIP => $name)
 		{
-			$intersectionArr[] = array("IP"=>$IntIP, "sent"=>false);
+			$intersectionArr[] = ["IP"=>$IntIP, "sent"=>false];
 		
 			$intersectionXML = $statusXML->addChild("intersection");
 			$intersectionXML->addAttribute("ip", $IntIP);
@@ -130,13 +130,7 @@ function putFile($target, $tmp_name)
 			// 5 minute limit per IP before killing script
 			set_time_limit(300);
 		
-			$post = array(
-				'action' => 'receivefile',
-				'u' => base64_encode("PEC"),
-				'p' => base64_encode("lenpec4321"),
-				'target' => $target,
-				'file' => "@" . $tmp_name
-			);
+			$post = ['action' => 'receivefile', 'u' => base64_encode("PEC"), 'p' => base64_encode("lenpec4321"), 'target' => $target, 'file' => "@" . $tmp_name];
 		
 			$result = sendPostCommand($Intersection["IP"], $post);
 		
@@ -160,7 +154,7 @@ function putFile($target, $tmp_name)
 		$fh = @fopen($tmp_name, "r");
 		$blob = fgets($fh, 5);
 		fclose($fh);
-		if (strpos($blob, 'PK') !== false)
+		if (str_contains($blob, 'PK'))
 		{
 			// zip file, unzip contents to $target directory
 		
@@ -214,7 +208,7 @@ function sendPostCommand($ip, $data, $timeout = 60)
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
+	curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-type: multipart/form-data"]);
 	curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (X11; Linux i686; rv:6.0) Gecko/20100101 Firefox/6.0Mozilla/4.0 (compatible;)");
 	
 	$protocol = "http";
@@ -255,7 +249,7 @@ function receiveFile($target, $tmp_name)
 	$fh = @fopen($tmp_name, "r");
 	$blob = fgets($fh, 5);
 	fclose($fh);
-	if (strpos($blob, 'PK') !== false)
+	if (str_contains($blob, 'PK'))
 	{
 		// zip file, unzip contents to $target directory
 		

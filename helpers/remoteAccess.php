@@ -27,7 +27,7 @@ switch($action)
 	{
 		$WshShell->Run($EnableRdp);
 	}
-	catch(Exception $e)
+	catch(Exception)
 	{
 		die("Could not enable RDP using $EnableRdp ");
 	}
@@ -48,7 +48,7 @@ switch($action)
 		$WshShell->Run($DisableRdp);
 		$WshShell->Run("$WriteFilterExe -commit_hklm_system_hive_to_disk");		
 	}
-	catch(Exception $e)
+	catch(Exception)
 	{
 		die("Could not disable RDP using $DisableRdp ");
 	}

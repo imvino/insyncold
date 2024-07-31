@@ -17,96 +17,84 @@ define('HTTP_CLIENT_ERROR_INVALID_PARAMETERS',       6);
 
 class http_class
 {
-	var $host_name="";
-	var $host_port=0;
-	var $proxy_host_name="";
-	var $proxy_host_port=80;
-	var $socks_host_name = '';
-	var $socks_host_port = 1080;
-	var $socks_version = '5';
+	public $host_name="";
+	public $host_port=0;
+	public $proxy_host_name="";
+	public $proxy_host_port=80;
+	public $socks_host_name = '';
+	public $socks_host_port = 1080;
+	public $socks_version = '5';
 
-	var $protocol="http";
-	var $request_method="GET";
-	var $user_agent='httpclient (http://www.phpclasses.org/httpclient $Revision: 1.88 $)';
-	var $accept='';
-	var $authentication_mechanism="";
-	var $user;
-	var $password;
-	var $realm;
-	var $workstation;
-	var $proxy_authentication_mechanism="";
-	var $proxy_user;
-	var $proxy_password;
-	var $proxy_realm;
-	var $proxy_workstation;
-	var $request_uri="";
-	var $request="";
-	var $request_headers=array();
-	var $request_user;
-	var $request_password;
-	var $request_realm;
-	var $request_workstation;
-	var $proxy_request_user;
-	var $proxy_request_password;
-	var $proxy_request_realm;
-	var $proxy_request_workstation;
-	var $request_body="";
-	var $request_arguments=array();
-	var $protocol_version="1.1";
-	var $timeout=0;
-	var $data_timeout=0;
-	var $debug=0;
-	var $log_debug=0;
-	var $debug_response_body=1;
-	var $html_debug=0;
-	var $support_cookies=1;
-	var $cookies=array();
-	var $error="";
-	var $error_code = HTTP_CLIENT_ERROR_NO_ERROR;
-	var $exclude_address="";
-	var $follow_redirect=0;
-	var $redirection_limit=5;
-	var $response_status="";
-	var $response_message="";
-	var $file_buffer_length=8000;
-	var $force_multipart_form_post=0;
-	var $prefer_curl = 0;
-	var $keep_alive = 1;
+	public $protocol="http";
+	public $request_method="GET";
+	public $user_agent='httpclient (http://www.phpclasses.org/httpclient $Revision: 1.88 $)';
+	public $accept='';
+	public $authentication_mechanism="";
+	public $user;
+	public $password;
+	public $realm;
+	public $workstation;
+	public $proxy_authentication_mechanism="";
+	public $proxy_user;
+	public $proxy_password;
+	public $proxy_realm;
+	public $proxy_workstation;
+	public $request_uri="";
+	public $request="";
+	public $request_headers=[];
+	public $request_user;
+	public $request_password;
+	public $request_realm;
+	public $request_workstation;
+	public $proxy_request_user;
+	public $proxy_request_password;
+	public $proxy_request_realm;
+	public $proxy_request_workstation;
+	public $request_body="";
+	public $request_arguments=[];
+	public $protocol_version="1.1";
+	public $timeout=0;
+	public $data_timeout=0;
+	public $debug=0;
+	public $log_debug=0;
+	public $debug_response_body=1;
+	public $html_debug=0;
+	public $support_cookies=1;
+	public $cookies=[];
+	public $error="";
+	public $error_code = HTTP_CLIENT_ERROR_NO_ERROR;
+	public $exclude_address="";
+	public $follow_redirect=0;
+	public $redirection_limit=5;
+	public $response_status="";
+	public $response_message="";
+	public $file_buffer_length=8000;
+	public $force_multipart_form_post=0;
+	public $prefer_curl = 0;
+	public $keep_alive = 1;
 
 	/* private variables - DO NOT ACCESS */
 
-	var $state="Disconnected";
-	var $use_curl=0;
-	var $connection=0;
-	var $content_length=0;
-	var $response="";
-	var $read_response=0;
-	var $read_length=0;
-	var $request_host="";
-	var $next_token="";
-	var $redirection_level=0;
-	var $chunked=0;
-	var $remaining_chunk=0;
-	var $last_chunk_read=0;
-	var $months=array(
-		"Jan"=>"01",
-		"Feb"=>"02",
-		"Mar"=>"03",
-		"Apr"=>"04",
-		"May"=>"05",
-		"Jun"=>"06",
-		"Jul"=>"07",
-		"Aug"=>"08",
-		"Sep"=>"09",
-		"Oct"=>"10",
-		"Nov"=>"11",
-		"Dec"=>"12");
-	var $session='';
-	var $connection_close=0;
-	var $force_close = 0;
-	var $connected_host = '';
-	var $connected_port = -1;
-	var $connected_ssl = 0;
+	public $state="Disconnected";
+	public $use_curl=0;
+	public $connection=0;
+	public $content_length=0;
+	public $response="";
+	public $read_response=0;
+	public $read_length=0;
+	public $request_host="";
+	public $next_token="";
+	public $redirection_level=0;
+	public $chunked=0;
+	public $remaining_chunk=0;
+	public $last_chunk_read=0;
+	public $months=["Jan"=>"01", "Feb"=>"02", "Mar"=>"03", "Apr"=>"04", "May"=>"05", "Jun"=>"06", "Jul"=>"07", "Aug"=>"08", "Sep"=>"09", "Oct"=>"10", "Nov"=>"11", "Dec"=>"12"];
+	public $session='';
+	public $connection_close=0;
+	public $force_close = 0;
+	public $connected_host = '';
+	public $connected_port = -1;
+	public $connected_ssl = 0;
 
 	/* Private methods - DO NOT CALL */
 
@@ -119,7 +107,7 @@ class http_class
 		}
 		for($character=0;$character<strlen($separator);$character++)
 		{
-			if(GetType($position=strpos($string,$separator[$character]))=="integer")
+			if(GetType($position=strpos($string,(string) $separator[$character]))=="integer")
 				$found=(IsSet($found) ? min($found,$position) : $position);
 		}
 		if(IsSet($found))
@@ -418,21 +406,14 @@ class http_class
 		if(($this->connection=($this->timeout ? @fsockopen($ip, $port, $errno, $error, $this->timeout) : @fsockopen($ip, $port, $errno)))==0)
 		{
 			$error_code = HTTP_CLIENT_ERROR_CANNOT_CONNECT;
-			switch($errno)
-			{
-				case -3:
-					return($this->SetError("socket could not be created", $error_code));
-				case -4:
-					return($this->SetError("dns lookup on hostname \"".$host_name."\" failed", $error_code));
-				case -5:
-					return($this->SetError("connection refused or timed out", $error_code));
-				case -6:
-					return($this->SetError("fdopen() call failed", $error_code));
-				case -7:
-					return($this->SetError("setvbuf() call failed", $error_code));
-				default:
-					return($this->SetPHPError($errno." could not connect to the host \"".$host_name."\"",$php_errormsg, $error_code));
-			}
+			return match ($errno) {
+       -3 => $this->SetError("socket could not be created", $error_code),
+       -4 => $this->SetError("dns lookup on hostname \"".$host_name."\" failed", $error_code),
+       -5 => $this->SetError("connection refused or timed out", $error_code),
+       -6 => $this->SetError("fdopen() call failed", $error_code),
+       -7 => $this->SetError("setvbuf() call failed", $error_code),
+       default => $this->SetPHPError($errno." could not connect to the host \"".$host_name."\"",$php_errormsg, $error_code),
+   };
 		}
 		else
 		{
@@ -459,14 +440,9 @@ class http_class
 								$error = $this->SetDataAccessError($receive_error);
 							else
 							{
-								$socks_errors = array(
-									"\x5a"=>'',
-									"\x5b"=>'request rejected',
-									"\x5c"=>'request failed because client is not running identd (or not reachable from the server)',
-									"\x5d"=>'request failed because client\'s identd could not confirm the user ID string in the request',
-								);
+								$socks_errors = ["\x5a"=>'', "\x5b"=>'request rejected', "\x5c"=>'request failed because client is not running identd (or not reachable from the server)', "\x5d"=>'request failed because client\'s identd could not confirm the user ID string in the request'];
 								$error_code = $response[1];
-								$error = (IsSet($socks_errors[$error_code]) ? $socks_errors[$error_code] : 'unknown');
+								$error = ($socks_errors[$error_code] ?? 'unknown');
 								if(strlen($error))
 									$error = 'SOCKS error: '.$error;
 							}
@@ -501,19 +477,9 @@ class http_class
 										$error = $this->SetDataAccessError($receive_error);
 									else
 									{
-										$socks_errors = array(
-											"\x00"=>'',
-											"\x01"=>'general SOCKS server failure',
-											"\x02"=>'connection not allowed by ruleset',
-											"\x03"=>'Network unreachable',
-											"\x04"=>'Host unreachable',
-											"\x05"=>'Connection refused',
-											"\x06"=>'TTL expired',
-											"\x07"=>'Command not supported',
-											"\x08"=>'Address type not supported'
-										);
+										$socks_errors = ["\x00"=>'', "\x01"=>'general SOCKS server failure', "\x02"=>'connection not allowed by ruleset', "\x03"=>'Network unreachable', "\x04"=>'Host unreachable', "\x05"=>'Connection refused', "\x06"=>'TTL expired', "\x07"=>'Command not supported', "\x08"=>'Address type not supported'];
 										$error_code = $response[1];
-										$error = (IsSet($socks_errors[$error_code]) ? $socks_errors[$error_code] : 'unknown');
+										$error = ($socks_errors[$error_code] ?? 'unknown');
 										if(strlen($error))
 											$error = 'SOCKS error: '.$error;
 									}
@@ -572,7 +538,7 @@ class http_class
 	{
 		$this->error = '';
 		$this->error_code = HTTP_CLIENT_ERROR_NO_ERROR;
-		$arguments=array();
+		$arguments=[];
 		$url = str_replace(' ', '%20', $url);
 		$parameters=@parse_url($url);
 		if(!$parameters)
@@ -591,7 +557,7 @@ class http_class
 		if(!IsSet($parameters["host"]))
 			return($this->SetError("it was not specified the connection host argument", HTTP_CLIENT_ERROR_INVALID_PARAMETERS));
 		$arguments["HostName"]=$parameters["host"];
-		$arguments["Headers"]=array("Host"=>$parameters["host"].(IsSet($parameters["port"]) ? ":".$parameters["port"] : ""));
+		$arguments["Headers"]=["Host"=>$parameters["host"].(IsSet($parameters["port"]) ? ":".$parameters["port"] : "")];
 		if(IsSet($parameters["user"]))
 		{
 			$arguments["AuthUser"]=UrlDecode($parameters["user"]);
@@ -612,7 +578,7 @@ class http_class
 		}
 		else
 			$arguments["HostPort"]=0;
-		$arguments["RequestURI"]=(IsSet($parameters["path"]) ? $parameters["path"] : "/").(IsSet($parameters["query"]) ? "?".$parameters["query"] : "");
+		$arguments["RequestURI"]=($parameters["path"] ?? "/").(IsSet($parameters["query"]) ? "?".$parameters["query"] : "");
 		if(strlen($this->user_agent))
 			$arguments["Headers"]["User-Agent"]=$this->user_agent;
 		if(strlen($this->accept))
@@ -657,7 +623,7 @@ class http_class
 			if(strlen($this->host_name)==0)
 				return($this->SetError("it was not specified a valid hostname", HTTP_CLIENT_ERROR_INVALID_PARAMETERS));
 			$host_name=$this->host_name;
-			$host_port=($this->host_port ? $this->host_port : $default_port);
+			$host_port=($this->host_port ?: $default_port);
 			$server_type = 'HTTP';
 		}
 		else
@@ -785,7 +751,7 @@ class http_class
 					{
 						$path=Key($this->cookies[$secure][$domain_pattern]);
 						if(strlen($this->request_uri)>=strlen($path)
-						&& substr($this->request_uri,0,strlen($path))==$path)
+						&& str_starts_with($this->request_uri, $path))
 						{
 							for(Reset($this->cookies[$secure][$domain_pattern][$path]),$cookie=0;$cookie<count($this->cookies[$secure][$domain_pattern][$path]);Next($this->cookies[$secure][$domain_pattern][$path]),$cookie++)
 							{
@@ -829,146 +795,47 @@ class http_class
 					switch($sub_type)
 					{
 						case "name":
-							switch(GetType($dot=strrpos($name,"."))=="integer" ? strtolower(substr($name,$dot)) : "")
-							{
-								case ".xls":
-									$content_type="application/excel";
-									break;
-								case ".hqx":
-									$content_type="application/macbinhex40";
-									break;
-								case ".doc":
-								case ".dot":
-								case ".wrd":
-									$content_type="application/msword";
-									break;
-								case ".pdf":
-									$content_type="application/pdf";
-									break;
-								case ".pgp":
-									$content_type="application/pgp";
-									break;
-								case ".ps":
-								case ".eps":
-								case ".ai":
-									$content_type="application/postscript";
-									break;
-								case ".ppt":
-									$content_type="application/powerpoint";
-									break;
-								case ".rtf":
-									$content_type="application/rtf";
-									break;
-								case ".tgz":
-								case ".gtar":
-									$content_type="application/x-gtar";
-									break;
-								case ".gz":
-									$content_type="application/x-gzip";
-									break;
-								case ".php":
-								case ".php3":
-									$content_type="application/x-httpd-php";
-									break;
-								case ".js":
-									$content_type="application/x-javascript";
-									break;
-								case ".ppd":
-								case ".psd":
-									$content_type="application/x-photoshop";
-									break;
-								case ".swf":
-								case ".swc":
-								case ".rf":
-									$content_type="application/x-shockwave-flash";
-									break;
-								case ".tar":
-									$content_type="application/x-tar";
-									break;
-								case ".zip":
-									$content_type="application/zip";
-									break;
-								case ".mid":
-								case ".midi":
-								case ".kar":
-									$content_type="audio/midi";
-									break;
-								case ".mp2":
-								case ".mp3":
-								case ".mpga":
-									$content_type="audio/mpeg";
-									break;
-								case ".ra":
-									$content_type="audio/x-realaudio";
-									break;
-								case ".wav":
-									$content_type="audio/wav";
-									break;
-								case ".bmp":
-									$content_type="image/bitmap";
-									break;
-								case ".gif":
-									$content_type="image/gif";
-									break;
-								case ".iff":
-									$content_type="image/iff";
-									break;
-								case ".jb2":
-									$content_type="image/jb2";
-									break;
-								case ".jpg":
-								case ".jpe":
-								case ".jpeg":
-									$content_type="image/jpeg";
-									break;
-								case ".jpx":
-									$content_type="image/jpx";
-									break;
-								case ".png":
-									$content_type="image/png";
-									break;
-								case ".tif":
-								case ".tiff":
-									$content_type="image/tiff";
-									break;
-								case ".wbmp":
-									$content_type="image/vnd.wap.wbmp";
-									break;
-								case ".xbm":
-									$content_type="image/xbm";
-									break;
-								case ".css":
-									$content_type="text/css";
-									break;
-								case ".txt":
-									$content_type="text/plain";
-									break;
-								case ".htm":
-								case ".html":
-									$content_type="text/html";
-									break;
-								case ".xml":
-									$content_type="text/xml";
-									break;
-								case ".mpg":
-								case ".mpe":
-								case ".mpeg":
-									$content_type="video/mpeg";
-									break;
-								case ".qt":
-								case ".mov":
-									$content_type="video/quicktime";
-									break;
-								case ".avi":
-									$content_type="video/x-ms-video";
-									break;
-								case ".eml":
-									$content_type="message/rfc822";
-									break;
-								default:
-									$content_type="application/octet-stream";
-									break;
-							}
+							$content_type = match (GetType($dot=strrpos($name,"."))=="integer" ? strtolower(substr($name,$dot)) : "") {
+           ".xls" => "application/excel",
+           ".hqx" => "application/macbinhex40",
+           ".doc", ".dot", ".wrd" => "application/msword",
+           ".pdf" => "application/pdf",
+           ".pgp" => "application/pgp",
+           ".ps", ".eps", ".ai" => "application/postscript",
+           ".ppt" => "application/powerpoint",
+           ".rtf" => "application/rtf",
+           ".tgz", ".gtar" => "application/x-gtar",
+           ".gz" => "application/x-gzip",
+           ".php", ".php3" => "application/x-httpd-php",
+           ".js" => "application/x-javascript",
+           ".ppd", ".psd" => "application/x-photoshop",
+           ".swf", ".swc", ".rf" => "application/x-shockwave-flash",
+           ".tar" => "application/x-tar",
+           ".zip" => "application/zip",
+           ".mid", ".midi", ".kar" => "audio/midi",
+           ".mp2", ".mp3", ".mpga" => "audio/mpeg",
+           ".ra" => "audio/x-realaudio",
+           ".wav" => "audio/wav",
+           ".bmp" => "image/bitmap",
+           ".gif" => "image/gif",
+           ".iff" => "image/iff",
+           ".jb2" => "image/jb2",
+           ".jpg", ".jpe", ".jpeg" => "image/jpeg",
+           ".jpx" => "image/jpx",
+           ".png" => "image/png",
+           ".tif", ".tiff" => "image/tiff",
+           ".wbmp" => "image/vnd.wap.wbmp",
+           ".xbm" => "image/xbm",
+           ".css" => "text/css",
+           ".txt" => "text/plain",
+           ".htm", ".html" => "text/html",
+           ".xml" => "text/xml",
+           ".mpg", ".mpe", ".mpeg" => "video/mpeg",
+           ".qt", ".mov" => "video/quicktime",
+           ".avi" => "video/x-ms-video",
+           ".eml" => "message/rfc822",
+           default => "application/octet-stream",
+       };
 							break;
 						default:
 							return($content_type." is not a supported automatic content type detection method");
@@ -980,10 +847,7 @@ class http_class
 		}
 		else
 			$content_type="application/octet-stream";
-		$definition=array(
-			"Content-Type"=>$content_type,
-			"NAME"=>$name
-		);
+		$definition=["Content-Type"=>$content_type, "NAME"=>$name];
 		if(IsSet($file["FileName"]))
 		{
 			if(GetType($length=@filesize($file["FileName"]))!="integer")
@@ -1008,7 +872,7 @@ class http_class
 
 	Function ConnectFromProxy($arguments, &$headers)
 	{
-		if(!$this->PutLine('CONNECT '.$this->host_name.':'.($this->host_port ? $this->host_port : 443).' HTTP/1.0')
+		if(!$this->PutLine('CONNECT '.$this->host_name.':'.($this->host_port ?: 443).' HTTP/1.0')
 		|| (strlen($this->user_agent)
 		&& !$this->PutLine('User-Agent: '.$this->user_agent))
 		|| (strlen($this->accept)
@@ -1108,10 +972,10 @@ class http_class
 		if(IsSet($arguments["RequestURI"]))
 			$this->request_uri=$arguments["RequestURI"];
 		if(strlen($this->request_uri)==0
-		|| substr($this->request_uri,0,1)!="/")
+		|| !str_starts_with($this->request_uri, "/"))
 			return($this->SetError("it was not specified a valid request URI", HTTP_CLIENT_ERROR_INVALID_PARAMETERS));
 		$this->request_arguments=$arguments;
-		$this->request_headers=(IsSet($arguments["Headers"]) ? $arguments["Headers"] : array());
+		$this->request_headers=($arguments["Headers"] ?? []);
 		$body_length=0;
 		$this->request_body="";
 		$get_body=1;
@@ -1129,7 +993,7 @@ class http_class
 			{
 				$boundary="--".md5(uniqid(time()));
 				$this->request_headers["Content-Type"]="multipart/form-data; boundary=".$boundary.(IsSet($arguments["CharSet"]) ? "; charset=".$arguments["CharSet"] : "");
-				$post_parts=array();
+				$post_parts=[];
 				if(IsSet($arguments["PostValues"]))
 				{
 					$values=$arguments["PostValues"];
@@ -1140,12 +1004,12 @@ class http_class
 						$input=Key($values);
 						$headers="--".$boundary."\r\nContent-Disposition: form-data; name=\"".$input."\"\r\n\r\n";
 						$data=$values[$input];
-						$post_parts[]=array("HEADERS"=>$headers,"DATA"=>$data);
+						$post_parts[]=["HEADERS"=>$headers, "DATA"=>$data];
 						$body_length+=strlen($headers)+strlen($data)+strlen("\r\n");
 					}
 				}
 				$body_length+=strlen("--".$boundary."--\r\n");
-				$files=(IsSet($arguments["PostFiles"]) ? $arguments["PostFiles"] : array());
+				$files=($arguments["PostFiles"] ?? []);
 				Reset($files);
 				$end=(GetType($input=Key($files))!="string");
 				for(;!$end;)
@@ -1154,7 +1018,7 @@ class http_class
 						return("3 ".$error);
 					$headers="--".$boundary."\r\nContent-Disposition: form-data; name=\"".$input."\"; filename=\"".$definition["NAME"]."\"\r\nContent-Type: ".$definition["Content-Type"]."\r\n\r\n";
 					$part=count($post_parts);
-					$post_parts[$part]=array("HEADERS"=>$headers);
+					$post_parts[$part]=["HEADERS"=>$headers];
 					if(IsSet($definition["FILENAME"]))
 					{
 						$post_parts[$part]["FILENAME"]=$definition["FILENAME"];
@@ -1268,7 +1132,7 @@ class http_class
 		}
 		if($this->use_curl)
 		{
-			$version=(GetType($v=curl_version())=="array" ? (IsSet($v["version"]) ? $v["version"] : "0.0.0") : (preg_match("/^libcurl\\/([0-9]+\\.[0-9]+\\.[0-9]+)/",$v,$m) ? $m[1] : "0.0.0"));
+			$version=(GetType($v=curl_version())=="array" ? ($v["version"] ?? "0.0.0") : (preg_match("/^libcurl\\/([0-9]+\\.[0-9]+\\.[0-9]+)/",$v,$m) ? $m[1] : "0.0.0"));
 			$curl_version=100000*intval($this->Tokenize($version,"."))+1000*intval($this->Tokenize("."))+intval($this->Tokenize(""));
 			$protocol_version=($curl_version<713002 ? "1.0" : $this->protocol_version);
 		}
@@ -1278,7 +1142,7 @@ class http_class
 		if($body_length
 		|| ($body_length=strlen($this->request_body)))
 			$this->request_headers["Content-Length"]=$body_length;
-		for($headers=array(),$host_set=0,Reset($this->request_headers),$header=0;$header<count($this->request_headers);Next($this->request_headers),$header++)
+		for($headers=[],$host_set=0,Reset($this->request_headers),$header=0;$header<count($this->request_headers);Next($this->request_headers),$header++)
 		{
 			$header_name=Key($this->request_headers);
 			$header_value=$this->request_headers[$header_name];
@@ -1302,7 +1166,7 @@ class http_class
 		}
 		if(count($this->cookies))
 		{
-			$cookies=array();
+			$cookies=[];
 			$this->PickCookies($cookies,0);
 			if(strtolower($this->protocol)=="https")
 				$this->PickCookies($cookies,1);
@@ -1459,14 +1323,7 @@ class http_class
 			$value=$this->CookieEncode($value,0);
 		}
 		$secure=intval($secure);
-		$this->cookies[$secure][$domain][$path][$name]=array(
-			"name"=>$name,
-			"value"=>$value,
-			"domain"=>$domain,
-			"path"=>$path,
-			"expires"=>$expires,
-			"secure"=>$secure
-		);
+		$this->cookies[$secure][$domain][$path][$name]=["name"=>$name, "value"=>$value, "domain"=>$domain, "path"=>$path, "expires"=>$expires, "secure"=>$secure];
 		return("");
 	}
 
@@ -1508,7 +1365,7 @@ class http_class
 
 	Function ReadReplyHeadersResponse(&$headers)
 	{
-		$headers=array();
+		$headers=[];
 		if(strlen($this->error))
 			return($this->error);
 		switch($this->state)
@@ -1557,7 +1414,7 @@ class http_class
 			if(IsSet($headers[$header_name]))
 			{
 				if(GetType($headers[$header_name])=="string")
-					$headers[$header_name]=array($headers[$header_name]);
+					$headers[$header_name]=[$headers[$header_name]];
 				$headers[$header_name][]=$header_value;
 			}
 			else
@@ -1582,7 +1439,7 @@ class http_class
 							if(GetType($headers[$header_name])=="array")
 								$cookie_headers=$headers[$header_name];
 							else
-								$cookie_headers=array($headers[$header_name]);
+								$cookie_headers=[$headers[$header_name]];
 							for($cookie=0;$cookie<count($cookie_headers);$cookie++)
 							{
 								$cookie_name=trim($this->Tokenize($cookie_headers[$cookie],"="));
@@ -1700,8 +1557,8 @@ class http_class
 			if(GetType($headers[$authenticate_header])=="array")
 				$authenticate=$headers[$authenticate_header];
 			else
-				$authenticate=array($headers[$authenticate_header]);
-			for($response="", $mechanisms=array(),$m=0;$m<count($authenticate);$m++)
+				$authenticate=[$headers[$authenticate_header]];
+			for($response="", $mechanisms=[],$m=0;$m<count($authenticate);$m++)
 			{
 				$mechanism=$this->Tokenize($authenticate[$m]," ");
 				$response=$this->Tokenize("");
@@ -1777,11 +1634,11 @@ class http_class
 						return($this->SetError($error, $this->error_code));
 				}
 				if(!IsSet($headers[$authenticate_header]))
-					$authenticate=array();
+					$authenticate=[];
 				elseif(GetType($headers[$authenticate_header])=="array")
 					$authenticate=$headers[$authenticate_header];
 				else
-					$authenticate=array($headers[$authenticate_header]);
+					$authenticate=[$headers[$authenticate_header]];
 				for($mechanism=0;$mechanism<count($authenticate);$mechanism++)
 				{
 					if(!strcmp($this->Tokenize($authenticate[$mechanism]," "),$sasl->mechanism))
@@ -1851,7 +1708,7 @@ class http_class
 								if(GetType($headers[$authenticate_header])=="array")
 									$authenticate=$headers[$authenticate_header];
 								else
-									$authenticate=array($headers[$authenticate_header]);
+									$authenticate=[$headers[$authenticate_header]];
 								for($response="",$mechanism=0;$mechanism<count($authenticate);$mechanism++)
 								{
 									if(!strcmp($this->Tokenize($authenticate[$mechanism]," "),$sasl->mechanism))
@@ -1993,7 +1850,7 @@ class http_class
 	Function SaveCookies(&$cookies, $domain='', $secure_only=0, $persistent_only=0)
 	{
 		$now=gmdate("Y-m-d H-i-s");
-		$cookies=array();
+		$cookies=[];
 		for($secure_cookies=0,Reset($this->cookies);$secure_cookies<count($this->cookies);Next($this->cookies),$secure_cookies++)
 		{
 			$secure=Key($this->cookies);
@@ -2043,7 +1900,7 @@ class http_class
 
 	Function RestoreCookies($cookies, $clear=1)
 	{
-		$new_cookies=($clear ? array() : $this->cookies);
+		$new_cookies=($clear ? [] : $this->cookies);
 		for($secure_cookies=0, Reset($cookies); $secure_cookies<count($cookies); Next($cookies), $secure_cookies++)
 		{
 			$secure=Key($cookies);
@@ -2069,14 +1926,7 @@ class http_class
 						|| (strlen($expires)
 						&& !preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\$/", $expires)))
 							return($this->SetError("invalid cookie expiry value type (".serialize($expires).")", HTTP_CLIENT_ERROR_INVALID_PARAMETERS));
-						$new_cookies[$secure][$domain_pattern][$path][$cookie_name]=array(
-							"name"=>$cookie_name,
-							"value"=>$value,
-							"domain"=>$domain_pattern,
-							"path"=>$path,
-							"expires"=>$expires,
-							"secure"=>$secure
-						);
+						$new_cookies[$secure][$domain_pattern][$path][$cookie_name]=["name"=>$cookie_name, "value"=>$value, "domain"=>$domain_pattern, "path"=>$path, "expires"=>$expires, "secure"=>$secure];
 					}
 				}
 			}

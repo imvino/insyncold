@@ -165,7 +165,7 @@ class SystemManifest
     public function Load()
     {
         // get the system manifest xml
-        $randNum = rand(1,10000);
+        $randNum = random_int(1,10000);
         $tempFile = TEMP_ROOT . "/system_manifest-$randNum.xml";
 
         // invoke the systemmanifest exec with the filename

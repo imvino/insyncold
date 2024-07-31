@@ -1,6 +1,7 @@
 <?php
 namespace Luracast\Restler\Format;
 
+use Luracast\Restler\Restler;
 /**
  * Abstract class to implement common methods of iFormat
  *
@@ -12,29 +13,26 @@ namespace Luracast\Restler\Format;
  * @link       http://luracast.com/products/restler/
  * @version    3.0.0rc4
  */
-abstract class Format implements iFormat
+abstract class Format implements iFormat, \Stringable
 {
     /**
      * override in the extending class
      */
-    const MIME = 'text/plain';
+    public const MIME = 'text/plain';
     /**
      * override in the extending class
      */
-    const EXTENSION = 'txt';
-
+    public const EXTENSION = 'txt';
     /**
      * @var string charset encoding defaults to UTF8
      */
     protected $charset='utf-8';
-
     /**
      * Injected at runtime
      *
-     * @var \Luracast\Restler\Restler
+     * @var Restler
      */
     public $restler;
-
     /**
      * Get MIME type => Extension mappings as an associative array
      *
@@ -43,11 +41,8 @@ abstract class Format implements iFormat
      */
     public function getMIMEMap()
     {
-        return array(
-            static::MIME =>  static::EXTENSION
-        );
+        return [static::MIME =>  static::EXTENSION];
     }
-
     /**
      * Set the selected MIME type
      *
@@ -58,7 +53,6 @@ abstract class Format implements iFormat
     {
         //do nothing
     }
-
     /**
      * Content-Type field of the HTTP header can send a charset
      * parameter in the HTTP header to specify the character
@@ -75,7 +69,6 @@ abstract class Format implements iFormat
     {
         $this->charset = $charset;
     }
-
     /**
      * Content-Type accepted by the Format class
      *
@@ -85,7 +78,6 @@ abstract class Format implements iFormat
     {
         return $this->charset;
     }
-
     /**
      * Get selected MIME type
      */
@@ -93,7 +85,6 @@ abstract class Format implements iFormat
     {
         return static::MIME;
     }
-
     /**
      * Set the selected file extension
      *
@@ -104,7 +95,6 @@ abstract class Format implements iFormat
     {
         //do nothing;
     }
-
     /**
      * Get the selected file extension
      *
@@ -114,11 +104,9 @@ abstract class Format implements iFormat
     {
         return static::EXTENSION;
     }
-
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getExtension();
     }
-
 }
 

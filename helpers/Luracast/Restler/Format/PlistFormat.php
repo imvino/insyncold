@@ -26,8 +26,8 @@ class PlistFormat extends MultiFormat
      * @var boolean set it to true binary plist is preferred
      */
     public static $compact = null;
-    const MIME = 'application/xml,application/x-plist';
-    const EXTENSION = 'plist';
+    public const MIME = 'application/xml,application/x-plist';
+    public const EXTENSION = 'plist';
 
     public function setMIME($mime)
     {

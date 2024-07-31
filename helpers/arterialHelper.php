@@ -197,14 +197,14 @@ function cleanArchives()
    //Maintain at least 1 Management Group in the archive
    if(is_array($archivefiles) && count($archivefiles) > 1)
    {
-      $creationtimes = array();
+      $creationtimes = [];
       foreach($archivefiles as $filename)
       {
          $creationtimes[$filename] = @filemtime($filename);
       }
       asort($creationtimes, SORT_NUMERIC);
 
-      $deletionlist = array();
+      $deletionlist = [];
 
       foreach ($creationtimes as $name => $date)
       {
@@ -233,7 +233,7 @@ function cleanArchives()
  */
 function getTargetIntersections($intersectionArr, $hash)
 {    
-   $postParams = array("action"=>"checkarchive", "hash"=>$hash, "u" => base64_encode("PEC"), "p" => base64_encode("lenpec4321"));
+   $postParams = ["action"=>"checkarchive", "hash"=>$hash, "u" => base64_encode("PEC"), "p" => base64_encode("lenpec4321")];
     
    $collector = new CheckArchiveCollector();
    return $collector->run($intersectionArr, $postParams, $hash);
@@ -290,9 +290,9 @@ function receiveFile($name, $tmp_name)
 {   
    if($name == "" || $tmp_name == "")
       ErrorExit("Empty parameter");
-   if(strpos($name, '/') !== FALSE)
+   if(str_contains($name, '/'))
       ErrorExit("Illegal character in file name.");
-   if(strpos($name, '\\') !== FALSE)
+   if(str_contains($name, '\\'))
       ErrorExit("Illegal character in file name.");
 
    if (!is_dir(CORRIDOR_CONF_ARCHIVE_ROOT))
@@ -459,9 +459,9 @@ class CheckArchiveCollector
 
    function __construct()
    {
-      $this->rc = new RollingCurl(array($this, 'processResponse'));
+      $this->rc = new RollingCurl([$this, 'processResponse']);
       $this->rc->window_size = 10;
-      $this->statusArr = array();
+      $this->statusArr = [];
    }
 
    function processResponse($response, $info, $request)
@@ -481,7 +481,7 @@ class CheckArchiveCollector
       foreach ($urls as $url)
       {
          $request = new RollingCurlRequest($url);
-         $request->options = array(CURLOPT_POST => true, CURLOPT_SSL_VERIFYPEER => false, CURLOPT_CONNECTTIMEOUT => 15, CURLOPT_SSL_VERIFYHOST => false, CURLOPT_TIMEOUT => 15, CURLOPT_POSTFIELDS => $postParams);
+         $request->options = [CURLOPT_POST => true, CURLOPT_SSL_VERIFYPEER => false, CURLOPT_CONNECTTIMEOUT => 15, CURLOPT_SSL_VERIFYHOST => false, CURLOPT_TIMEOUT => 15, CURLOPT_POSTFIELDS => $postParams];
          $fallback_request = new RollingCurlRequest(preg_replace('/^https:/i', 'http:', $url));
          $fallback_request->options = $request->options;
          $request->fallback_request = $fallback_request;

@@ -30,20 +30,20 @@ class ApiMethodInfo extends ValueObject
     /**
      * @var array parameters to be passed to the api method
      */
-    public $parameters = array();
+    public $parameters = [];
     /**
      * @var array information on parameters in the form of array(name => index)
      */
-    public $arguments = array();
+    public $arguments = [];
     /**
      * @var array default values for parameters if any
      * in the form of array(index => value)
      */
-    public $defaults = array();
+    public $defaults = [];
     /**
      * @var array key => value pair of method meta information
      */
-    public $metadata = array();
+    public $metadata = [];
     /**
      * @var int access level
      * 0 - @public - available for all

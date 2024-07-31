@@ -28,9 +28,7 @@ class Validator implements iValidate
             return null;
         }
 
-        $error = isset ($info->rules ['message'])
-            ? $info->rules ['message']
-            : "invalid value specified for `$info->name`";
+        $error = $info->rules ['message'] ?? "invalid value specified for `$info->name`";
 
         //if a validation method is specified
         if (!empty($info->method)) {
@@ -51,7 +49,7 @@ class Validator implements iValidate
                     if ($r !== false) {
                         return $r;
                     }
-                } catch (RestException $e) {
+                } catch (RestException) {
                     // just continue
                 }
             }
@@ -170,7 +168,7 @@ class Validator implements iValidate
                 if (is_array($input)) {
                     return $input;
                 }
-                return array($input);
+                return [$input];
                 break;
             case 'mixed':
             case 'unknown_type':
@@ -183,7 +181,7 @@ class Validator implements iValidate
                 if (class_exists($info->type)) {
                     $implements = class_implements($info->type);
                     if (is_array($implements)
-                        && in_array('Luracast\\Restler\\Data\\iValueObject',
+                        && in_array(iValueObject::class,
                             $implements)
                     )
                         return call_user_func(

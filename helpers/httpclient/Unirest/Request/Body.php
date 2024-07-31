@@ -52,12 +52,12 @@ class Body
         }
 
         if (!is_array($data)) {
-            return array($data);
+            return [$data];
         }
 
         if ($files !== false) {
             foreach ($files as $name => $file) {
-                $data[$name] = call_user_func(array(__CLASS__, 'File'), $file);
+                $data[$name] = call_user_func([self::class, 'File'], $file);
             }
         }
 

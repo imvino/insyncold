@@ -8,11 +8,12 @@ $title = ": Portal";
 $breadCrumb = "<h1>Management Group <small>Portal</small></h1>";
 $menuCategory = "corridor";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 <link rel="stylesheet" type="text/css" href="/css/portal.css"/>
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP
+;
 
 include("includes/header.php");
 

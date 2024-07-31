@@ -29,7 +29,7 @@ class PropagationCollector
 
     function __construct()
     {
-        $this->rc = new RollingCurl(array($this, 'processResponse'));
+        $this->rc = new RollingCurl([$this, 'processResponse']);
         $this->rc->window_size = 10;
     }
 
@@ -64,7 +64,7 @@ class PropagationCollector
         foreach ($urls as $url)
         {
             $request = new RollingCurlRequest($url);
-            $request->options = array(CURLOPT_POST => true, CURLOPT_SSL_VERIFYPEER => false, CURLOPT_CONNECTTIMEOUT => 25, CURLOPT_SSL_VERIFYHOST => false, CURLOPT_TIMEOUT => 45, CURLOPT_POSTFIELDS => $postParams);
+            $request->options = [CURLOPT_POST => true, CURLOPT_SSL_VERIFYPEER => false, CURLOPT_CONNECTTIMEOUT => 25, CURLOPT_SSL_VERIFYHOST => false, CURLOPT_TIMEOUT => 45, CURLOPT_POSTFIELDS => $postParams];
             $fallback_request = new RollingCurlRequest(preg_replace('/^https:/i', 'http:', $url));
             $fallback_request->options = $request->options;
             $request->fallback_request = $fallback_request;
@@ -143,7 +143,7 @@ switch($action)
 		    $statusXML->addAttribute("status", "working");
 		    
 		    // get all intersection IPs
-		    $intersectionArr = array();
+		    $intersectionArr = [];
 			foreach ($Intersections as $IntIP => $name)
 			{
 	            $intersectionArr[] = $protocol . $IntIP . "/helpers/reipHelper.php";
@@ -159,7 +159,7 @@ switch($action)
 		    
 		    file_put_contents($statusFile, $statusXML->asXML());
 		    
-		    $postParams = array("action"=>"upload", "save"=>"true", "file"=>"@" . REIP_CONF_FILE, "u" => base64_encode("PEC"), "p" => base64_encode("lenpec4321"));
+		    $postParams = ["action"=>"upload", "save"=>"true", "file"=>"@" . REIP_CONF_FILE, "u" => base64_encode("PEC"), "p" => base64_encode("lenpec4321")];
 		    
 		    $collector = new PropagationCollector();
 		    $collector->run($intersectionArr, $postParams, $hash);
@@ -294,7 +294,7 @@ switch($action)
 
 function generateFromReIPXML($reipXML)
 {
-    $jsonData = array();    
+    $jsonData = [];    
 
     foreach($reipXML as $child)
     {
@@ -302,18 +302,18 @@ function generateFromReIPXML($reipXML)
 
         if($type == "intersection")
         {
-            $objDataChild = array();
+            $objDataChild = [];
             $objDataChild["type"] = "intersection";
             $objDataChild["ip"] = (string)$child["ip"];
             $objDataChild["new"] = (string)$child["new"];
             $objDataChild["subnet"] = (string)$child["subnet"];
             $objDataChild["gateway"] = (string)$child["gateway"];
-            $objDataChild["data"] = array();
+            $objDataChild["data"] = [];
 
             foreach($child->children() as $intersectionChild)
             {
                 $type = strtolower($intersectionChild->getName());
-                $objDataChild["data"][] = array("type"=>$type, "new"=>(string)$intersectionChild["new"], "ip"=>(string)$intersectionChild["ip"]);
+                $objDataChild["data"][] = ["type"=>$type, "new"=>(string)$intersectionChild["new"], "ip"=>(string)$intersectionChild["ip"]];
             }
             
             $jsonData[] = $objDataChild;
@@ -325,12 +325,12 @@ function generateFromReIPXML($reipXML)
 
 function generateFromCorridorXML($corridorXML)
 {
-    $jsonData = array();
+    $jsonData = [];
     $count = 0;
 
     foreach($corridorXML->Intersection as $Intersection)
     {
-        $jsonData[$count] = array();
+        $jsonData[$count] = [];
 
         $ip = (string)$Intersection["IP"];
         $gateway = (string)$Intersection["Gateway"];
@@ -340,14 +340,14 @@ function generateFromCorridorXML($corridorXML)
         $jsonData[$count]["type"] = "intersection";
         $jsonData[$count]["gateway"] = $gateway;
         $jsonData[$count]["subnet"] = $subnet;
-        $jsonData[$count]["data"] = array();
+        $jsonData[$count]["data"] = [];
 
         foreach($Intersection->TraVisConfiguration->VideoStreamSettings->VideoStream as $VideoStream)
         {
             $url = (string)$VideoStream["Name"];
             $ip = parse_url($url, PHP_URL_HOST);
 
-            $jsonData[$count]["data"][] = array("type"=>"camera", "ip"=>$ip);
+            $jsonData[$count]["data"][] = ["type"=>"camera", "ip"=>$ip];
         }
 
         $count++;

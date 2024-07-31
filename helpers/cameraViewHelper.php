@@ -75,7 +75,7 @@ function resetView($mode)
 	$username = $permissions['username'];
 	
 	if($result = pg_query_params($db, "DELETE FROM \"camera_view_settings\" WHERE \"user\"=$1 AND \"mode\"=$2",
-                array($username, $mode)))
+                [$username, $mode]))
 	{
                 pg_close($db);
                 die("Success");
@@ -99,19 +99,19 @@ function saveZoom($mode, $zoom)
 	$username = $permissions['username'];
 
 	if($result = pg_query_params($db, "SELECT \"zoom\" FROM \"camera_view_settings\" WHERE \"user\"=$1 AND \"mode\"=$2",
-                array($username, $mode)))
+                [$username, $mode]))
 	{
 		$resultRow = pg_fetch_assoc($result);
 
 		if($resultRow == NULL)
 		{
                         pg_query_params($db, "INSERT INTO \"camera_view_settings\" (\"user\", \"mode\", \"prefs\", \"zoom\") VALUES($1,$2,$3,$4)",
-                            array($username, $mode, '', $zoom));
+                            [$username, $mode, '', $zoom]);
 		}
 		else
 		{
                         pg_query_params($db, "UPDATE \"camera_view_settings\" SET \"zoom\"=$3 WHERE \"user\"=$1 AND \"mode\"=$2",
-                            array($username, $mode, $zoom));
+                            [$username, $mode, $zoom]);
 		}
         
                 pg_close($db);
@@ -142,19 +142,19 @@ function savePrefs($mode, $prefs)
 	$username = $permissions['username'];
 	
 	if($result = pg_query_params($db, "SELECT \"prefs\" FROM \"camera_view_settings\" WHERE \"user\"=$1 AND \"mode\"=$2",
-                array($username, $mode)))
+                [$username, $mode]))
 	{
 		$resultRow = pg_fetch_assoc($result);
 		
 		if($resultRow == NULL)
 		{
                         pg_query_params($db, "INSERT INTO \"camera_view_settings\" (\"user\", \"mode\", \"prefs\") VALUES($1,$2,$3)",
-                            array($username, $mode, $prefs));
+                            [$username, $mode, $prefs]);
 		}
 		else
 		{
                         pg_query_params($db, "UPDATE \"camera_view_settings\" SET \"prefs\"=$3 WHERE \"user\"=$1 AND \"mode\"=$2",
-                            array($username, $mode, $prefs));
+                            [$username, $mode, $prefs]);
 		}
 	}
 	
@@ -175,7 +175,7 @@ function getZoomLevel($username, $mode)
 	$username = $permissions['username'];
 
 	if($result = pg_query_params($db, "SELECT \"zoom\" FROM \"camera_view_settings\" WHERE \"user\"=$1 AND \"mode\"=$2",
-                array($username, $mode)))
+                [$username, $mode]))
 	{
 		$resultRow = pg_fetch_assoc($result);
 
@@ -210,7 +210,7 @@ function getPrefs($username, $mode)
 	$username = $permissions['username'];
 
 	if($result = pg_query_params($db, "SELECT \"prefs\" FROM \"camera_view_settings\" WHERE \"user\"=$1 AND \"mode\"=$2",
-                array($username, $mode)))
+                [$username, $mode]))
 	{
 		$resultRow = pg_fetch_assoc($result);
 

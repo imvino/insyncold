@@ -8,7 +8,7 @@ $title = ": Statistics";
 $breadCrumb = "<h1>Reports <small>Statistics</small></h1>";
 $menuCategory = "reports";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 
 <link rel="stylesheet" type="text/css" href="/css/reporting.css"/>
@@ -26,7 +26,8 @@ $head = <<<HEAD
 <script type="text/javascript" src="/js/intersectionGraphDrawing.js"></script>
 
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP
+;
 
 include("includes/header.php");
 require_once("/helpers/FileIOHelper.php");

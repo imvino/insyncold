@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__) . "/helpers/constants.php");
+require_once(__DIR__ . "/helpers/constants.php");
 
 // set this variable to true, so insyncInterface doesnt try to authenticate
 $loggedIn = true;

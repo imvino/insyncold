@@ -36,7 +36,7 @@ function GetAllCorridorIPs($IncludeSelf)
 {
     require_once("pathDefinitions.php");
     
-	$iplist = array();
+	$iplist = [];
 	if(file_exists(CORRIDOR_CONF_FILE))
 	{
 		$corridorXML = @simplexml_load_file(CORRIDOR_CONF_FILE);
@@ -97,7 +97,7 @@ function private_GetCorridorIntersections($IncludeSelf)
 {
     require_once("pathDefinitions.php");
     
-	$iplist = array();
+	$iplist = [];
 	if(file_exists(CORRIDOR_CONF_FILE))
 	{
 		$corridorXML = @simplexml_load_file(CORRIDOR_CONF_FILE);

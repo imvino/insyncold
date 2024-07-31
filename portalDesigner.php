@@ -8,7 +8,7 @@ $title = ": Portal Designer";
 $breadCrumb = "<h1>Settings <small>Portal Designer</small></h1>";
 $menuCategory = "settings";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 <link rel="stylesheet" type="text/css" href="/css/portalDesigner.css"/>
 <script language="javascript" type="text/javascript" src="/js/jquery/jquery.base64.min.js"></script>
@@ -17,7 +17,8 @@ $head = <<<HEAD
 <script language="javascript" type="text/javascript" src="/js/jquery/jquery.form.js"></script>
 <script language="javascript" type="text/javascript" src="/js/jquery/jquery.hcsticky.js"></script>
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP
+;
 
 include("includes/header.php");
 

@@ -102,7 +102,7 @@ class authSystem
 		if(!$db)
 			return 30;
 			
-		$result = pg_query_params("SELECT s.value FROM users u INNER JOIN user_settings s ON (u.id = s.user_id) WHERE u.name=$1", array($username));
+		$result = pg_query_params("SELECT s.value FROM users u INNER JOIN user_settings s ON (u.id = s.user_id) WHERE u.name=$1", [$username]);
         $resultRow = pg_fetch_assoc($result);
         
         // no key found, default to 30
@@ -146,7 +146,7 @@ class authSystem
 		@session_start();
 		
 		//destroy all session variables
-		$_SESSION = array();
+		$_SESSION = [];
 		session_destroy();
 		@session_write_close();
 	}
@@ -164,7 +164,7 @@ class authSystem
 		if(!$db)
 			return false;
 		
-		$result = pg_query_params($db, "SELECT u.pass, u.salt FROM users u WHERE u.name=$1 AND EXISTS (SELECT name FROM permissions p WHERE p.user_id=u.id AND name='enabled')", array($username));
+		$result = pg_query_params($db, "SELECT u.pass, u.salt FROM users u WHERE u.name=$1 AND EXISTS (SELECT name FROM permissions p WHERE p.user_id=u.id AND name='enabled')", [$username]);
         $resultRow = pg_fetch_assoc($result);
 
         // username not found or user not enabled, return false
@@ -229,7 +229,7 @@ class authSystem
 
         // insert invalid log
         $ip = $_SERVER['REMOTE_ADDR'];
-        pg_query_params($db,'INSERT INTO "invalid_logins" ("timestamp","user","ip") VALUES (now() at time zone \'UTC\', $1, $2)', array($usernameToLog,$ip));
+        pg_query_params($db,'INSERT INTO "invalid_logins" ("timestamp","user","ip") VALUES (now() at time zone \'UTC\', $1, $2)', [$usernameToLog, $ip]);
     }
 	
 	/**
@@ -244,7 +244,7 @@ class authSystem
 		if(!$db)
 			return false;
 			
-		$result = pg_query_params("SELECT p.name FROM users u INNER JOIN permissions p ON u.id = p.user_id WHERE u.name=$1", array($username));
+		$result = pg_query_params("SELECT p.name FROM users u INNER JOIN permissions p ON u.id = p.user_id WHERE u.name=$1", [$username]);
         // username not found or 0 permissions, return false
         if($result == FALSE)
         {
@@ -252,7 +252,7 @@ class authSystem
                 return false;
         }
 
-        $permissionsArray = array();
+        $permissionsArray = [];
 
         while ($resultRow = pg_fetch_assoc($result))
                 $permissionsArray[$resultRow['name']] = true;

@@ -8,11 +8,11 @@ $title = ": Status";
 $breadCrumb = "<h1>Management Group <small>Status</small></h1>";
 $menuCategory = "corridor";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 <link rel="stylesheet" type="text/css" href="/css/corridorStatus.css"/>
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP;
 
 include("includes/header.php");
 require_once("helpers/networkHelper.php");
@@ -46,11 +46,8 @@ if(empty($permissions["reports"]))
 
 	// create a stream context for 5 sec. timeout
 	// of reception of data...we can't wait forever
-	$ctx = stream_context_create(array('http'=>
-		array(
-			'timeout' => 5,
-		)
-	));	
+	$ctx = stream_context_create(['http'=>
+		['timeout' => 5]]);	
 		
 		$Intersections = getCorridorIntersections();
 		//$myfile = fopen("C:\Newfile.txt", "w") or die("Unable to open file!");
@@ -60,7 +57,7 @@ if(empty($permissions["reports"]))
 			foreach ($Intersections as $ip => $name)
 			{
 				$xmlString = file_get_contents("http://" . $ip . "/specialcalls.php", false, $ctx);
-			
+
 				// Did not get a response from the intersection
 				if ($xmlString !== false)
 				{
@@ -71,10 +68,10 @@ if(empty($permissions["reports"]))
 						if ($a == "IP")		
 						{
 							$IPAddr = $b;
-						
+
 							//$txt = $IPAddr . $ip . "\n";
 							//fwrite($myfile, $txt);												
-						
+
 							if ($IPAddr == $ip)
 							{
 								$IntersectionName = $name;
@@ -87,22 +84,22 @@ if(empty($permissions["reports"]))
 								$IPAddress = $ip;
 								$Status = "Offline";
 							}
-						
+
 							echo '<tr>';
 								echo '<td>' . htmlspecialchars($IntersectionName) . '</td>';
 								echo '<td>' . htmlspecialchars($IPAddress) . '</td>';
-								
+
 								if ($Status == "Online")
 									echo '<td>' . htmlspecialchars($Status) . '</td>';
 								else
 									echo '<td style="color:red">'. htmlspecialchars($Status) .'</td>';
-								
+
 							echo '</tr>';	
 
 						}
-						
+
 					}						
-	
+
 				}
 				else
 				{
@@ -112,7 +109,7 @@ if(empty($permissions["reports"]))
 						echo '<td style="color:red">'. htmlspecialchars("Offline") .'</td>';														
 					echo '</tr>';						
 				}
-		
+
 			}
 			//fclose($myfile);						
 		

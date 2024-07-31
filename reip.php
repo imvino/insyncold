@@ -8,7 +8,7 @@ $title = ": Re-IP";
 $breadCrumb = "<h1>Settings <small>Re-IP</small></h1>";
 $menuCategory = "settings";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 <link rel="stylesheet" type="text/css" href="/css/reip.css"/>
 <script language="javascript" type="text/javascript" src="/js/plugins/json2.js"></script>
@@ -16,7 +16,8 @@ $head = <<<HEAD
 <script language="javascript" type="text/javascript" src="/js/jquery/jquery.form.js"></script>
 <script language="javascript" type="text/javascript" src="/js/jquery/jquery.hcsticky.js"></script>
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP
+;
 
 include("includes/header.php");
 

@@ -1,6 +1,7 @@
 <?php
 namespace Luracast\Restler\Data;
 
+use Luracast\Restler\RestException;
 /**
  * Validation classes should implement this interface
  *
@@ -23,10 +24,10 @@ interface iValidate {
      *            information to be used for validation
      * @return boolean false in case of failure or fixed value in the expected
      *         type
-     * @throws \Luracast\Restler\RestException 400 with information about the
+     * @throws RestException 400 with information about the
      * failed
      * validation
      */
-    public static function validate($input, ValidationInfo $info);
+    public static function validate(mixed $input, ValidationInfo $info);
 }
 

@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__) . '/../helpers/constants.php');
+require_once(__DIR__ . '/../helpers/constants.php');
 require_once SITE_DOCUMENT_ROOT . 'auth/authSystem.php';
 require_once(SITE_DOCUMENT_ROOT . "helpers/insyncInterface.php");
 

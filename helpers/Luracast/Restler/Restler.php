@@ -37,7 +37,7 @@ class Restler extends EventEmitter
     //
     // ------------------------------------------------------------------
 
-    const VERSION = '3.0.0rc4';
+    public const VERSION = '3.0.0rc4';
 
     /**
      * URL of the currently mapped service
@@ -69,7 +69,7 @@ class Restler extends EventEmitter
      *
      * @var array
      */
-    public $requestData = array();
+    public $requestData = [];
 
     /**
      * Used in production mode to store the routes and more
@@ -110,19 +110,11 @@ class Restler extends EventEmitter
     protected $baseUrl;
 
     /**
-     * When set to false, it will run in debug mode and parse the
-     * class files every time to map it to the URL
-     *
-     * @var boolean
-     */
-    protected $productionMode;
-
-    /**
      * Associated array that maps formats to their respective format class name
      *
      * @var array
      */
-    protected $formatMap = array();
+    protected $formatMap = [];
 
     /**
      * Instance of the current api service class
@@ -143,22 +135,22 @@ class Restler extends EventEmitter
      *
      * @var array
      */
-    protected $filterClasses = array();
-    protected $filterObjects = array();
+    protected $filterClasses = [];
+    protected $filterObjects = [];
 
     /**
      * list of authentication classes
      *
      * @var array
      */
-    protected $authClasses = array();
+    protected $authClasses = [];
 
     /**
      * list of error handling classes
      *
      * @var array
      */
-    protected $errorClasses = array();
+    protected $errorClasses = [];
 
     /**
      * Caching of url map is enabled or not
@@ -171,7 +163,7 @@ class Restler extends EventEmitter
     protected $requestedApiVersion = 1;
     protected $apiMinimumVersion = 1;
 
-    protected $log = array();
+    protected $log = [];
     protected $startTime;
     protected $authenticated = false;
 
@@ -191,18 +183,21 @@ class Restler extends EventEmitter
      *
      * @param bool    $refreshCache will update the cache when set to true
      */
-    public function __construct($productionMode = false, $refreshCache = false)
+    public function __construct(/**
+     * When set to false, it will run in debug mode and parse the
+     * class files every time to map it to the URL
+     */
+    protected $productionMode = false, $refreshCache = false)
     {
         $this->startTime = time();
         Util::$restler = $this;
-        $this->productionMode = $productionMode;
         if (is_null(Defaults::$cacheDirectory)) {
             Defaults::$cacheDirectory = dirname($_SERVER['SCRIPT_FILENAME']) .
                 DIRECTORY_SEPARATOR . 'cache';
         }
         $this->cache = new Defaults::$cacheClass();
         // use this to rebuild cache every time in production mode
-        if ($productionMode && $refreshCache) {
+        if ($this->productionMode && $refreshCache) {
             $this->cached = false;
         }
     }
@@ -268,7 +263,7 @@ class Restler extends EventEmitter
     public function setSupportedFormats($format = null /*[, $format2...$farmatN]*/)
     {
         $args = func_get_args();
-        $extensions = array();
+        $extensions = [];
         foreach ($args as $className) {
 
             $obj = Util::initialize($className);
@@ -313,7 +308,7 @@ class Restler extends EventEmitter
             $className = Util::$classAliases[$className];
         }
         if (!$this->cached) {
-            $foundClass = array();
+            $foundClass = [];
             if (class_exists($className)) {
                 $foundClass[$className] = $className;
             }
@@ -466,7 +461,7 @@ class Restler extends EventEmitter
                 }
             }
             if (!$found) {
-                if (strpos($_SERVER['HTTP_ACCEPT_CHARSET'], '*') !== false) {
+                if (str_contains($_SERVER['HTTP_ACCEPT_CHARSET'], '*')) {
                     //use default charset
                 } else {
                     $this->handleError(406, 'Content negotiation failed. '
@@ -487,7 +482,7 @@ class Restler extends EventEmitter
                 }
             }
             if (!$found) {
-                if (strpos($_SERVER['HTTP_ACCEPT_LANGUAGE'], '*') !== false) {
+                if (str_contains($_SERVER['HTTP_ACCEPT_LANGUAGE'], '*')) {
                     //use default language
                 } else {
                     //ignore
@@ -624,10 +619,7 @@ class Restler extends EventEmitter
                             = Util::initialize($o->className);
                     }
                     if (method_exists($o->className, $preProcess)) {
-                        call_user_func_array(array(
-                            $object,
-                            $preProcess
-                        ), $o->parameters);
+                        call_user_func_array([$object, $preProcess], $o->parameters);
                     }
                     switch ($accessLevel) {
                         case 3 : //protected method
@@ -642,10 +634,7 @@ class Restler extends EventEmitter
                             );
                             break;
                         default :
-                            $result = call_user_func_array(array(
-                                $object,
-                                $o->methodName
-                            ), $o->parameters);
+                            $result = call_user_func_array([$object, $o->methodName], $o->parameters);
                     }
                 } catch (RestException $e) {
                     $this->handleError($e->getCode(), $e->getMessage());
@@ -671,7 +660,7 @@ class Restler extends EventEmitter
      * @param int         $statusCode
      * @param string|null $statusMessage
      */
-    public function sendData($data, $statusCode = 0, $statusMessage = null)
+    public function sendData(mixed $data, $statusCode = 0, $statusMessage = null)
     {
         //$this->log []= ob_get_clean ();
         //only GET method should be cached if allowed by API developer
@@ -710,9 +699,7 @@ class Restler extends EventEmitter
          * @var iRespond DefaultResponder
          */
         $responder = Util::initialize(
-            Defaults::$responderClass, isset($this->apiMethodInfo->metadata)
-                ? $this->apiMethodInfo->metadata
-                : null
+            Defaults::$responderClass, $this->apiMethodInfo->metadata ?? null
         );
         $this->responseFormat->setCharset(Defaults::$charset);
         $charset = $this->responseFormat->getCharset()
@@ -742,10 +729,7 @@ class Restler extends EventEmitter
                     $postProcess
                 )
             ) {
-                $data = call_user_func(array(
-                    $this->apiClassInstance,
-                    $postProcess
-                ), $data);
+                $data = call_user_func([$this->apiClassInstance, $postProcess], $data);
             }
         } else {
             if (isset(RestException::$codes[$statusCode])) {
@@ -795,7 +779,7 @@ class Restler extends EventEmitter
      */
     public function __get($name)
     {
-        if ($name{0} == '_') {
+        if ($name[0] == '_') {
             $hiddenProperty = substr($name, 1);
             if (isset($this->$hiddenProperty)) {
                 return $this->$hiddenProperty;
@@ -839,7 +823,7 @@ class Restler extends EventEmitter
         $path = preg_replace('/(\/*\?.*$)|(\/$)/', '', $path);
         $path = str_replace($this->formatMap['extensions'], '', $path);
         if (Defaults::$useUrlBasedVersioning
-            && strlen($path) && $path{0} == 'v'
+            && strlen($path) && $path[0] == 'v'
         ) {
             $version = intval(substr($path, 1));
             if ($version && $version <= $this->apiVersion) {
@@ -959,12 +943,12 @@ class Restler extends EventEmitter
             // client accepts all media types.
             $_SERVER['HTTP_ACCEPT'] = '*/*';
         }
-        if (strpos($_SERVER['HTTP_ACCEPT'], '*') !== false) {
-            if (strpos($_SERVER['HTTP_ACCEPT'], 'application/*') !== false) {
+        if (str_contains($_SERVER['HTTP_ACCEPT'], '*')) {
+            if (str_contains($_SERVER['HTTP_ACCEPT'], 'application/*')) {
                 $format = Util::initialize('JsonFormat');
-            } elseif (strpos($_SERVER['HTTP_ACCEPT'], 'text/*') !== false) {
+            } elseif (str_contains($_SERVER['HTTP_ACCEPT'], 'text/*')) {
                 $format = Util::initialize('XmlFormat');
-            } elseif (strpos($_SERVER['HTTP_ACCEPT'], '*/*') !== false) {
+            } elseif (str_contains($_SERVER['HTTP_ACCEPT'], '*/*')) {
                 $format = Util::initialize($this->formatMap['default']);
             }
         }
@@ -1001,15 +985,15 @@ class Restler extends EventEmitter
             try {
                 $r = file_get_contents('php://input');
                 if (is_null($r)) {
-                    return array();
+                    return [];
                 }
                 $r = $this->requestFormat->decode($r);
-                return is_null($r) ? array() : $r;
+                return is_null($r) ? [] : $r;
             } catch (RestException $e) {
                 $this->handleError($e->getCode(), $e->getMessage());
             }
         }
-        return array();
+        return [];
     }
 
     /**
@@ -1020,16 +1004,12 @@ class Restler extends EventEmitter
     public function mapUrlToMethod()
     {
         if (!is_array($this->requestData)) {
-            $this->requestData = array(
-                Defaults::$fullRequestDataName => $this->requestData
-            );
+            $this->requestData = [Defaults::$fullRequestDataName => $this->requestData];
             $this->requestData += $_GET;
             $params = $this->requestData;
         } else {
             $this->requestData += $_GET;
-            $params = array(
-                Defaults::$fullRequestDataName => $this->requestData
-            );
+            $params = [Defaults::$fullRequestDataName => $this->requestData];
             $params = $this->requestData + $params;
 
         }

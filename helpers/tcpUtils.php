@@ -174,7 +174,7 @@ function calcChecksum($szBuffer, $nLen)
 
 function parseInterfaceProperties($szBuffer, &$nOffset)
 {
-    $aReturn = array();
+    $aReturn = [];
     $szTemp = '';
     $szValue = '';
     $nProperty = 0;
@@ -206,7 +206,7 @@ function parseInterfaceProperties($szBuffer, &$nOffset)
                     //echo "\n First Byte:" . $nCRC . "\nSecond Byte:" . ord($szBuffer[$nOffset + $nLength + 4]) . "\n\n";
                     if ($nCRC == ord($szBuffer[$nOffset + $nLength + 4]))
                     {
-                        $aReturn = array('szRaw' => $szTemp, 'nProperty' => $nProperty, 'nLength' => $nLength, 'szValue' => $szValue, 'nCRC' => $nCRC);
+                        $aReturn = ['szRaw' => $szTemp, 'nProperty' => $nProperty, 'nLength' => $nLength, 'szValue' => $szValue, 'nCRC' => $nCRC];
                     }
                 break;
             case TRAVIS_PROP_DIRECTION_DETECTIONZONES:
@@ -224,7 +224,7 @@ function parseInterfaceProperties($szBuffer, &$nOffset)
                     {
 						$nTempOffset = 0;
 						$szValue = parsePropertyArray($szValue, $nTempOffset);
-                        $aReturn = array('szRaw' => $szTemp, 'nProperty' => $nProperty, 'nLength' => $nLength, 'szValue' => $szValue, 'nCRC' => $nCRC);
+                        $aReturn = ['szRaw' => $szTemp, 'nProperty' => $nProperty, 'nLength' => $nLength, 'szValue' => $szValue, 'nCRC' => $nCRC];
                     }
                 break;
             case TRAVIS_PROP_DIRECTION_SEGMENTS:
@@ -242,19 +242,19 @@ function parseInterfaceProperties($szBuffer, &$nOffset)
                     {
 						//$nTempOffset = 0;
 						$szValue = parsePropertyArray($szValue, $nOffset);
-                        $aReturn = array('szRaw' => $szTemp, 'nProperty' => $nProperty, 'nLength' => $nLength, 'szValue' => $szValue, 'nCRC' => $nCRC);
+                        $aReturn = ['szRaw' => $szTemp, 'nProperty' => $nProperty, 'nLength' => $nLength, 'szValue' => $szValue, 'nCRC' => $nCRC];
                     }
                 break;
         }
     }
     $nOffset+=5 + $nLength;
-    $aReturn = array('szRaw' => $szTemp, 'nProperty' => $nProperty, 'nLength' => $nLength, 'szValue' => $szValue, 'nCRC' => $nCRC, 'szDebug'=> $szDebug);
+    $aReturn = ['szRaw' => $szTemp, 'nProperty' => $nProperty, 'nLength' => $nLength, 'szValue' => $szValue, 'nCRC' => $nCRC, 'szDebug'=> $szDebug];
     return $aReturn;
 }
 
 function parsePropertyArray(&$szBuffer, &$nOffset)
 {
-	$aTemp = array();
+	$aTemp = [];
 	$nTempOffset = 0;
     if (ord($szBuffer[$nOffset]) == TRAVIS_ARRAY_HEADER)
     {
@@ -277,7 +277,7 @@ function parsePropertyArray(&$szBuffer, &$nOffset)
 					$nTemp = $nTemp | (ord($szBuffer[$nOffset++]) << 16);
 					$nTemp = $nTemp | (ord($szBuffer[$nOffset++]) << 24);
 					$y0 = $nTemp;
-					array_push($aTemp, array($x0, $y0));
+					array_push($aTemp, [$x0, $y0]);
 				}
 				break;
 			case TRAVIS_ARRAYTYPE_RECT:
@@ -309,7 +309,7 @@ function parsePropertyArray(&$szBuffer, &$nOffset)
 					$nTemp = $nTemp | (ord($szBuffer[$nOffset++]) << 24);
 					$y1 = $nTemp;
 					
-					array_push($aTemp, array($x0, $y0, $x1, $y1));
+					array_push($aTemp, [$x0, $y0, $x1, $y1]);
 				}
 				break;
 			case TRAVIS_ARRAYTYPE_DETECTIONZONE:
@@ -400,7 +400,7 @@ function transmitRequest($szBuffer, $szAddress, $nPort)
                $szReturn .= $out;
             }
             
-            $aFields = array();
+            $aFields = [];
             
             //Validate Packet
             if (ord($szReturn[0]) == TRAVIS_TCP_HEADER)

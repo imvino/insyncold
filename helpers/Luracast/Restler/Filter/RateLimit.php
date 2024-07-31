@@ -1,6 +1,7 @@
 <?php
 namespace Luracast\Restler\Filter;
 
+use Luracast\Restler\Restler;
 use Luracast\Restler\iFilter;
 use Luracast\Restler\iUseAuthentication;
 use Luracast\Restler\User;
@@ -20,7 +21,7 @@ use Luracast\Restler\RestException;
 class RateLimit implements iFilter, iUseAuthentication
 {
     /**
-     * @var \Luracast\Restler\Restler;
+     * @var Restler ;
      */
     public $restler;
     /**
@@ -36,14 +37,17 @@ class RateLimit implements iFilter, iUseAuthentication
      */
     public static $unit = 'hour';
 
-    protected static $units = array(
+    protected static $units = [
         'second' => 1,
         'minute' => 60,
-        'hour' => 3600, // 60*60 seconds
-        'day' => 86400, // 60*60*24 seconds
-        'week' => 604800, // 60*60*24*7 seconds
-        'month' => 2592000, // 60*60*24*30 seconds
-    );
+        'hour' => 3600,
+        // 60*60 seconds
+        'day' => 86400,
+        // 60*60*24 seconds
+        'week' => 604800,
+        // 60*60*24*7 seconds
+        'month' => 2592000,
+    ];
 
 
     /**
@@ -96,7 +100,7 @@ class RateLimit implements iFilter, iUseAuthentication
             : static::$usagePerUnit;
         $id = User::getUniqueId();
         $lastRequest = $this->restler->cache->get($id, true)
-            ? : array('time' => 0, 'used' => 0);
+            ? : ['time' => 0, 'used' => 0];
         $diff = time() - $lastRequest['time']; # in seconds
         $used = $lastRequest['used'];
 
@@ -118,20 +122,15 @@ class RateLimit implements iFilter, iUseAuthentication
         $remainingPerUnit = $maxPerUnit - $used;
         header("X-RateLimit-Remaining: $remainingPerUnit");
         $this->restler->cache->set($id,
-            array('time' => time(), 'used' => $used));
+            ['time' => time(), 'used' => $used]);
         return true;
     }
 
     private function duration($secs)
     {
-        $units = array(
-            'week' => (int)($secs / 86400 / 7),
-            'day' => $secs / 86400 % 7,
-            'hour' => $secs / 3600 % 24,
-            'minute' => $secs / 60 % 60,
-            'second' => $secs % 60);
+        $units = ['week' => (int)($secs / 86400 / 7), 'day' => $secs / 86400 % 7, 'hour' => $secs / 3600 % 24, 'minute' => $secs / 60 % 60, 'second' => $secs % 60];
 
-        $ret = array();
+        $ret = [];
 
         $added = false;
         $unit = 'days';

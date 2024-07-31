@@ -1,5 +1,16 @@
 <?php
 namespace Luracast\Restler;
+
+use Luracast\Restler\Format\AmfFormat;
+use Luracast\Restler\Format\JsFormat;
+use Luracast\Restler\Format\JsonFormat;
+use Luracast\Restler\Format\HtmlFormat;
+use Luracast\Restler\Format\PlistFormat;
+use Luracast\Restler\Format\UrlEncodedFormat;
+use Luracast\Restler\Format\XmlFormat;
+use Luracast\Restler\Format\YamlFormat;
+use Luracast\Restler\Filter\RateLimit;
+use Luracast\Restler\Data\Object;
 /**
  * Describe the purpose of this class/interface/trait
  *
@@ -18,30 +29,25 @@ class Util
      */
     public static $restler;
 
-    public static $classAliases = array(
-
+    public static $classAliases = [
         //Format classes
-        'AmfFormat' => 'Luracast\\Restler\\Format\\AmfFormat',
-        'JsFormat' => 'Luracast\\Restler\\Format\\JsFormat',
-        'JsonFormat' => 'Luracast\\Restler\\Format\\JsonFormat',
-        'HtmlFormat' => 'Luracast\\Restler\\Format\\HtmlFormat',
-        'PlistFormat' => 'Luracast\\Restler\\Format\\PlistFormat',
-        'UrlEncodedFormat' => 'Luracast\\Restler\\Format\\UrlEncodedFormat',
-        'XmlFormat' => 'Luracast\\Restler\\Format\\XmlFormat',
-        'YamlFormat' => 'Luracast\\Restler\\Format\\YamlFormat',
-
+        'AmfFormat' => AmfFormat::class,
+        'JsFormat' => JsFormat::class,
+        'JsonFormat' => JsonFormat::class,
+        'HtmlFormat' => HtmlFormat::class,
+        'PlistFormat' => PlistFormat::class,
+        'UrlEncodedFormat' => UrlEncodedFormat::class,
+        'XmlFormat' => XmlFormat::class,
+        'YamlFormat' => YamlFormat::class,
         //Filter classes
-        'RateLimit' => 'Luracast\\Restler\\Filter\\RateLimit',
-
+        'RateLimit' => RateLimit::class,
         //API classes
-        'Resources' => 'Luracast\\Restler\\Resources',
-
+        'Resources' => Resources::class,
         //Cache classes
-        'HumanReadableCache' => 'Luracast\\Restler\\HumanReadableCache',
-
+        'HumanReadableCache' => HumanReadableCache::class,
         //Utility classes
-        'Object' => 'Luracast\\Restler\\Data\\Object',
-    );
+        'Object' => Object::class,
+    ];
 
     /**
      * verify if the given data type string is scalar or not
@@ -152,10 +158,10 @@ class Util
      */
     public static function sortByPriority($accept)
     {
-        $acceptList = array();
+        $acceptList = [];
         $accepts = explode(',', strtolower($accept));
         if (!is_array($accepts)) {
-            $accepts = array($accepts);
+            $accepts = [$accepts];
         }
         foreach ($accepts as $pos => $accept) {
             $parts = explode(';q=', trim($accept));
@@ -190,7 +196,7 @@ class Util
         if (is_object($classNameOrInstance)) {
             $instance = $classNameOrInstance;
             $instance->restler = self::$restler;
-            $className = get_class($instance);
+            $className = $instance::class;
         } else {
             $className = $classNameOrInstance;
             if (isset(self::$classAliases[$classNameOrInstance])) {

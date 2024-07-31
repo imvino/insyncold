@@ -8,7 +8,7 @@ $title = ": Management Group View Designer";
 $breadCrumb = "<h1>Settings <small>Management Group View Designer</small></h1>";
 $menuCategory = "settings";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 <link rel="stylesheet" type="text/css" href="/css/corridorDesigner.css"/>
 <script language="javascript" type="text/javascript" src="/js/plugins/json2.js"></script>
@@ -16,7 +16,8 @@ $head = <<<HEAD
 <script language="javascript" type="text/javascript" src="/js/jquery/jquery.form.js"></script>
 <script language="javascript" type="text/javascript" src="/js/jquery/jquery.hcsticky.js"></script>
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP
+;
 
 include("includes/header.php");
 
@@ -152,7 +153,7 @@ require_once("helpers/networkHelper.php");
 
 
 $Intersections = getCorridorIntersectionsIncludingSelf();
-$ips = array();
+$ips = [];
 if($Intersections !== FALSE)
 {
     foreach ($Intersections as $ip => $name)

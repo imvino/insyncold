@@ -12,13 +12,6 @@ $Id$
  * Class that represent a single curl request
  */
 class RollingCurlRequest {
-    public $url = false;
-    public $method = 'GET';
-    public $post_data = null;
-    public $headers = null;
-    public $options = null;
-    public $fallback_request = null;
-
     /**
      * @param string $url
      * @param string $method
@@ -27,13 +20,8 @@ class RollingCurlRequest {
      * @param  $options
      * @return void
      */
-    function __construct($url, $method = "GET", $post_data = null, $headers = null, $options = null, $fallback_request = null) {
-        $this->url = $url;
-        $this->method = $method;
-        $this->post_data = $post_data;
-        $this->headers = $headers;
-        $this->options = $options;
-        $this->fallback_request = $fallback_request;
+    function __construct(public $url, public $method = "GET", public $post_data = null, public $headers = null, public $options = null, public $fallback_request = null)
+    {
     }
 
     /**
@@ -76,42 +64,30 @@ class RollingCurl {
     private $timeout = 0.1;
 
     /**
-     * @var string|array
-     *
-     * Callback function to be applied to each result.
-     */
-    private $callback;
-
-    /**
      * @var array
      *
      * Set your base options that you want to be used with EVERY request.
      */
-    protected $options = array(
-        CURLOPT_SSL_VERIFYPEER => 0,
-        CURLOPT_RETURNTRANSFER => 1,
-        CURLOPT_CONNECTTIMEOUT => 30,
-        CURLOPT_TIMEOUT => 30
-    );
+    protected $options = [CURLOPT_SSL_VERIFYPEER => 0, CURLOPT_RETURNTRANSFER => 1, CURLOPT_CONNECTTIMEOUT => 30, CURLOPT_TIMEOUT => 30];
 
     /**
      * @var array
      */
-    private $headers = array();
+    private $headers = [];
 
     /**
      * @var Request[]
      *
      * The request queue
      */
-    private $requests = array();
+    private $requests = [];
 
     /**
      * @var RequestMap[]
      *
      * Maps handles to request indexes
      */
-    private $requestMap = array();
+    private $requestMap = [];
 
     /**
      * @param  $callback
@@ -125,9 +101,17 @@ class RollingCurl {
      * $request is the original request
      *
      * @return void
+     * @param string|mixed[] $callback
      */
-    function __construct($callback = null) {
-        $this->callback = $callback;
+    function __construct(
+        /**
+         * @var string|array
+         *
+         * Callback function to be applied to each result.
+         */
+        private $callback = null
+    )
+    {
     }
 
     /**
@@ -135,15 +119,14 @@ class RollingCurl {
      * @return mixed
      */
     public function __get($name) {
-        return (isset($this->{$name})) ? $this->{$name} : null;
+        return $this->{$name} ?? null;
     }
 
     /**
      * @param string $name
-     * @param mixed $value
      * @return bool
      */
-    public function __set($name, $value) {
+    public function __set($name, mixed $value) {
         // append the base options & headers
         if ($name == "options" || $name == "headers") {
             $this->{$name} = $value + $this->{$name};

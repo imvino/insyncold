@@ -29,7 +29,7 @@ class Defaults
      * @var string of name of the class that implements
      * \Luracast\Restler\iCache the cache class to be used
      */
-    public static $cacheClass = 'Luracast\\Restler\\HumanReadableCache';
+    public static $cacheClass = HumanReadableCache::class;
 
     /**
      * @var string full path of the directory where all the generated files will
@@ -42,13 +42,13 @@ class Defaults
      * @var string of name of the class that implements
      * \Luracast\Restler\Data\iValidate the validator class to be used
      */
-    public static $validatorClass = 'Luracast\\Restler\\Data\\Validator';
+    public static $validatorClass = Validator::class;
 
     /**
      * @var string name of the class that implements \Luracast\Restler\iRespond
      * the responder class to be used
      */
-    public static $responderClass = 'Luracast\\Restler\\Responder';
+    public static $responderClass = Responder::class;
 
     // ==================================================================
     //
@@ -135,8 +135,8 @@ class Defaults
      */
     public static $suppressResponseCode = false;
 
-    public static $supportedCharsets = array('utf-8', 'iso-8859-1');
-    public static $supportedLanguages = array('en', 'en-US');
+    public static $supportedCharsets = ['utf-8', 'iso-8859-1'];
+    public static $supportedLanguages = ['en', 'en-US'];
 
     public static $charset = 'utf-8';
     public static $language = 'en';
@@ -162,15 +162,13 @@ class Defaults
      * value specified. When only one value is specified it will be used for
      * both cases
      */
-    public static $headerCacheControl = array(
+    public static $headerCacheControl = [
         'no-cache, must-revalidate',
-
         /* "public, " or "private, " will be prepended based on api method
          * called (public or protected)
          */
         'max-age={expires}, must-revalidate',
-
-    );
+    ];
 
 
     /**
@@ -221,31 +219,25 @@ class Defaults
      * names that can be used to represent the api method parameters and/or
      * static properties of Defaults
      */
-    public static $aliases = array(
+    public static $aliases = [
         /**
          * suppress_response_codes=true as an URL parameter to force
          * a HTTP 200 status code on all responses
          */
         'suppress_response_codes' => 'suppressResponseCode',
-    );
+    ];
 
     /**
      * @var array determines the defaults that can be overridden by the api
      * user by passing them as URL parameters
      */
-    public static $overridables = array(
-        'suppressResponseCode',
-    );
+    public static $overridables = ['suppressResponseCode'];
 
     /**
      * @var array contains validation details for defaults to be used when
      * set through URL parameters
      */
-    public static $validation = array(
-        'suppressResponseCode' => array('type' => 'bool'),
-        'headerExpires' => array('type' => 'int', 'min' => 0),
-        'headerCacheControl' => array('type' => 'array', 'fix' => true),
-    );
+    public static $validation = ['suppressResponseCode' => ['type' => 'bool'], 'headerExpires' => ['type' => 'int', 'min' => 0], 'headerCacheControl' => ['type' => 'array', 'fix' => true]];
 
     // ==================================================================
     //
@@ -257,8 +249,7 @@ class Defaults
      * @var array determines what are the phpdoc comment tags that will
      * override the Defaults here with their values
      */
-    public static $fromComments = array(
-
+    public static $fromComments = [
         /**
          * use PHPDoc comments such as the following
          * `
@@ -267,7 +258,6 @@ class Defaults
          *        for a specific api method
          */
         'cache' => 'headerCacheControl',
-
         /**
          * use PHPDoc comments such as the following
          * `
@@ -276,7 +266,6 @@ class Defaults
          *          for a specific api method
          */
         'expires' => 'headerExpires',
-
         /**
          * use PHPDoc comments such as the following
          * `
@@ -286,14 +275,13 @@ class Defaults
          *           for a specific api method
          */
         'throttle' => 'throttle',
-
         /**
          * enable or disable smart auto routing from method comments
          * this one is hardwired so cant be turned off
          * it is placed here just for documentation purpose
          */
         'smart-auto-routing' => 'smartAutoRouting',
-    );
+    ];
 
     // ==================================================================
     //
@@ -313,9 +301,9 @@ class Defaults
      *
      * @return bool
      */
-    public static function setProperty($name, $value)
+    public static function setProperty($name, mixed $value)
     {
-        if (!property_exists(__CLASS__, $name)) return false;
+        if (!property_exists(self::class, $name)) return false;
         if (@is_array(Defaults::$validation[$name])) {
             $info = new ValidationInfo(Defaults::$validation[$name]);
             $value = Validator::validate($value, $info);

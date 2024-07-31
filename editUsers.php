@@ -8,14 +8,15 @@ $title = ": Edit Users";
 $breadCrumb = "<h1>Account <small>Edit Users</small></h1>";
 $menuCategory = "account";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 
 <link rel="stylesheet" type="text/css" href="/css/account.css"/>
 <script language="javascript" type="text/javascript" src="/js/editUser.js"></script>
-		
+\t\t
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP
+;
 
 include("includes/header.php");
 

@@ -1,5 +1,7 @@
 <?php
 namespace Luracast\Restler;
+
+use Luracast\Restler\Format\iFormat;
 /**
  * Parses the PHPDoc comments for metadata. Inspired by `Documentor` code base.
  *
@@ -50,12 +52,12 @@ class CommentParser
     /**
      * character sequence used to escape \@
      */
-    const escapedAtChar = '\\@';
+    public const escapedAtChar = '\\@';
 
     /**
      * character sequence used to escape end of comment
      */
-    const escapedCommendEnd = '{@*}';
+    public const escapedCommendEnd = '{@*}';
 
     /**
      * Instance of Restler class injected at runtime.
@@ -68,7 +70,7 @@ class CommentParser
      *
      * @var array
      */
-    private $_data = array();
+    private $_data = [];
 
     /**
      * Parse the comment and extract the data.
@@ -123,13 +125,13 @@ class CommentParser
     {
         //to use @ as part of comment we need to
         $comment = str_replace(
-            array(self::escapedCommendEnd, self::escapedAtChar),
-            array('*/', '@'),
+            [self::escapedCommendEnd, self::escapedAtChar],
+            ['*/', '@'],
             $comment);
 
-        $description = array();
-        $longDescription = array();
-        $params = array();
+        $description = [];
+        $longDescription = [];
+        $params = [];
 
         $mode = 0; // extract short description;
         $comments = preg_split("/(\r?\n)/", $comment);
@@ -146,7 +148,7 @@ class CommentParser
                     $addNewline = true;
                 }
                 continue;
-            } elseif ($line{0} == '@') {
+            } elseif ($line[0] == '@') {
                 $mode = 2;
                 $newParam = true;
             }
@@ -158,7 +160,7 @@ class CommentParser
                         $longDescription = $description;
                         $description[] = array_shift($longDescription);
                         $mode = 1;
-                    } elseif (substr($line, -1) == '.') {
+                    } elseif (str_ends_with($line, '.')) {
                         $mode = 1;
                     }
                     break;
@@ -179,9 +181,9 @@ class CommentParser
         $longDescription = implode(' ', $longDescription);
         $description = preg_replace('/\s+/ms', ' ', $description);
         $longDescription = preg_replace('/\s+/ms', ' ', $longDescription);
-        list($description, $d1)
+        [$description, $d1]
             = $this->parseEmbeddedData($description);
-        list($longDescription, $d2)
+        [$longDescription, $d2]
             = $this->parseEmbeddedData($longDescription);
         $this->_data = compact('description', 'longDescription');
         $d2 += $d1;
@@ -189,9 +191,9 @@ class CommentParser
             $this->_data[self::$embeddedDataName] = $d2;
         }
         foreach ($params as $key => $line) {
-            list(, $param, $value) = preg_split('/\@|\s/', $line, 3)
-                + array('', '', '');
-            list($value, $embedded) = $this->parseEmbeddedData($value);
+            [, $param, $value] = preg_split('/\@|\s/', $line, 3)
+                + ['', '', ''];
+            [$value, $embedded] = $this->parseEmbeddedData($value);
             $value = array_filter(preg_split('/\s+/ms', $value));
             $this->parseParam($param, $value, $embedded);
         }
@@ -219,7 +221,7 @@ class CommentParser
                 break;
             case 'class' :
                 $data = &$data[$param];
-                list ($param, $value) = $this->formatClass($value);
+                [$param, $value] = $this->formatClass($value);
                 break;
             case 'access' :
                 $value = $value [0];
@@ -249,25 +251,20 @@ class CommentParser
         }
         if (!empty($embedded)) {
             if (is_string($value)) {
-                $value = array('description' => $value);
+                $value = ['description' => $value];
             }
             $value[self::$embeddedDataName] = $embedded;
         }
         if (empty ($data[$param])) {
             if ($allowMultiple) {
-                $data[$param] = array(
-                    $value
-                );
+                $data[$param] = [$value];
             } else {
                 $data[$param] = $value;
             }
         } elseif ($allowMultiple) {
             $data[$param][] = $value;
         } elseif ($param == 'param') {
-            $arr = array(
-                $data[$param],
-                $value
-            );
+            $arr = [$data[$param], $value];
             $data[$param] = $arr;
         } else {
             if (!is_string($value) && isset($value[self::$embeddedDataName])
@@ -290,7 +287,7 @@ class CommentParser
      */
     private function parseEmbeddedData($subject)
     {
-        $data = array();
+        $data = [];
 
         while (preg_match('/{@(\w+)\s([^}]*)}/ms', $subject, $matches)) {
             $subject = str_replace($matches[0], '', $subject);
@@ -298,7 +295,7 @@ class CommentParser
                 $matches[2] = $matches[2] == 'true';
             }
             if ($matches[1] != 'pattern'
-                && false !== strpos($matches[2], static::$arrayDelimiter)
+                && str_contains($matches[2], static::$arrayDelimiter)
             ) {
                 $matches[2] = explode(static::$arrayDelimiter, $matches[2]);
             }
@@ -315,14 +312,14 @@ class CommentParser
                 $extension = $matches[1];
                 if (isset ($this->restler->formatMap[$extension])) {
                     /**
-                     * @var \Luracast\Restler\Format\iFormat
+                     * @var iFormat
                      */
                     $format = $this->restler->formatMap[$extension];
                     $format = new $format();
                     $data = $format->decode($str);
                 }
             } else { // auto detect
-                if ($str{0} == '{') {
+                if ($str[0] == '{') {
                     $d = json_decode($str, true);
                     if (json_last_error() != JSON_ERROR_NONE) {
                         throw new Exception('Error parsing embedded JSON data'
@@ -359,14 +356,12 @@ class CommentParser
                 }
             }
         }
-        return array($subject, $data);
+        return [$subject, $data];
     }
 
     private function formatThrows(array $value)
     {
-        $r = array(
-            'exception' => array_shift($value)
-        );
+        $r = ['exception' => array_shift($value)];
         $r['code'] = count($value) && is_numeric($value[0])
             ? intval(array_shift($value)) : 500;
         $reason = implode(' ', $value);
@@ -382,17 +377,14 @@ class CommentParser
             $param = 'Unknown';
         }
         $value = implode(' ', $value);
-        return array(
-            $param,
-            array('description' => $value)
-        );
+        return [$param, ['description' => $value]];
     }
 
     private function formatAuthor(array $value)
     {
-        $r = array();
+        $r = [];
         $email = end($value);
-        if ($email{0} == '<') {
+        if ($email[0] == '<') {
             $email = substr($email, 1, -1);
             array_pop($value);
             $r['email'] = $email;
@@ -404,20 +396,18 @@ class CommentParser
     private function formatReturn(array $value)
     {
         $data = explode('|', array_shift($value));
-        $r = array(
-            'type' => count($data) == 1 ? $data[0] : $data
-        );
+        $r = ['type' => count($data) == 1 ? $data[0] : $data];
         $r['description'] = implode(' ', $value);
         return $r;
     }
 
     private function formatParam(array $value)
     {
-        $r = array();
+        $r = [];
         $data = array_shift($value);
         if (empty($data)) {
             $r['type'] = 'mixed';
-        } elseif ($data{0} == '$') {
+        } elseif ($data[0] == '$') {
             $r['name'] = substr($data, 1);
             $r['type'] = 'mixed';
         } else {
@@ -425,7 +415,7 @@ class CommentParser
             $r['type'] = count($data) == 1 ? $data[0] : $data;
 
             $data = array_shift($value);
-            if (!empty($data) && $data{0} == '$') {
+            if (!empty($data) && $data[0] == '$') {
                 $r['name'] = substr($data, 1);
             }
         }

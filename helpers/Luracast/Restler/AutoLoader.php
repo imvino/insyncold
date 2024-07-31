@@ -18,14 +18,15 @@ class AutoLoader
 {
     protected static $instance, // the singleton instance reference
                      $perfectLoaders, // used to keep the ideal list of loaders
-                     $rogueLoaders = array(), // other auto loaders now unregistered
-                     $classMap = array(), // the class to include file mapping
-                     $aliases = array( // aliases and prefixes instead of null list aliases
+                     $rogueLoaders = [], // other auto loaders now unregistered
+                     $classMap = [], // the class to include file mapping
+                     $aliases = [
+                         // aliases and prefixes instead of null list aliases
                          'Luracast\\Restler' => null,
                          'Luracast\\Restler\\Format' => null,
                          'Luracast\\Restler\\Data' => null,
                          'Luracast\\Restler\\Filter' => null,
-                     );
+                     ];
 
     /**
      * Singleton instance facility.
@@ -122,7 +123,7 @@ class AutoLoader
      */
     protected function __construct()
     {
-        static::$perfectLoaders = array($this);
+        static::$perfectLoaders = [$this];
 
         if (false === static::seen('__include_path')) {
 
@@ -133,12 +134,7 @@ class AutoLoader
             $dir = dirname($source_dir);
 
             foreach (
-                array(
-                    array($source_dir),
-                    array($dir, '..', '..', 'composer'),
-                    array($dir, 'vendor', 'composer'),
-                    array($dir, '..', '..', '..', 'php'),
-                    array($dir, 'vendor', 'php'))
+                [[$source_dir], [$dir, '..', '..', 'composer'], [$dir, 'vendor', 'composer'], [$dir, '..', '..', '..', 'php'], [$dir, 'vendor', 'php']]
                 as $includePath)
                 if (false !== $path = stream_resolve_include_path(
                         implode($slash, $includePath)
@@ -233,8 +229,7 @@ class AutoLoader
         if (preg_match('/(.+)(\\\\\w+$)/U', $className, $parts))
             for (
                 $i = 0,
-                $aliases = isset(static::$aliases[$parts[1]])
-                    ? static::$aliases[$parts[1]] : array(),
+                $aliases = static::$aliases[$parts[1]] ?? [],
                 $count = count($aliases);
                 $i < $count && false === $file;
                 $file = $this->discover(
@@ -299,7 +294,7 @@ class AutoLoader
     private function alias($className, $currentClass)
     {
         if ($className != $currentClass
-            && false !== strpos($className, $currentClass))
+            && str_contains($className, $currentClass))
                 if (!class_exists($currentClass, false)
                     && class_alias($className, $currentClass))
                         static::seen($currentClass, $className);
@@ -341,7 +336,7 @@ class AutoLoader
         if (in_array($file, get_included_files())) {
             if (false !== $sameFile = array_search($file, static::$classMap))
                 if (!$this->exists($className, $file))
-                    if (false !== strpos($sameFile, $className))
+                    if (str_contains($sameFile, $className))
                         $this->alias($sameFile, $className);
 
             return $file;
@@ -357,7 +352,7 @@ class AutoLoader
                 array_merge(get_declared_classes(), get_declared_interfaces()), $state))
                 foreach ($diff as $autoLoaded)
                     if ($this->exists($autoLoaded, $file))
-                        if (false !== strpos($autoLoaded, $className))
+                        if (str_contains($autoLoaded, $className))
                             $this->alias($autoLoaded, $className);
 
             if (!$this->exists($currentClass))

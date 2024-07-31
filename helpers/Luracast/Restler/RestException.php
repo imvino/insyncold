@@ -20,7 +20,7 @@ class RestException extends Exception
      *
      * @var array
      */
-    public static $codes = array(
+    public static $codes = [
         100 => 'Continue',
         101 => 'Switching Protocols',
         200 => 'OK',
@@ -56,14 +56,15 @@ class RestException extends Exception
         415 => 'Unsupported Media Type',
         416 => 'Requested Range Not Satisfiable',
         417 => 'Expectation Failed',
-        429 => 'Too Many Requests', //still in draft but used for rate limiting
+        429 => 'Too Many Requests',
+        //still in draft but used for rate limiting
         500 => 'Internal Server Error',
         501 => 'Not Implemented',
         502 => 'Bad Gateway',
         503 => 'Service Unavailable',
         504 => 'Gateway Timeout',
-        505 => 'HTTP Version Not Supported'
-    );
+        505 => 'HTTP Version Not Supported',
+    ];
 
     public function __construct($httpStatusCode, $errorMessage = null)
     {

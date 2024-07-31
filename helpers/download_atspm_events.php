@@ -62,11 +62,11 @@ switch($action)
 		}
 		else
 		{
-			$json = json_encode(array("Error: Lane detector configuration json file not found."));
+			$json = json_encode(["Error: Lane detector configuration json file not found."]);
 			header("Content-type: application/json");
 			header("Content-Disposition: attachment; filename=ErrorFile.json");
 			echo $json;
-			
+
 			//die("<h3>Error: File not found - C:\InSync\Config\lane_detector_configuration.json. Contact Rhythm Engineering</h3>");
 		}
 	}
@@ -83,11 +83,11 @@ function downloadDataFiles($startDateTime, $endDateTime)
 	$convertedEndDate = date("Ymd_His", $unixDateEnd);
 
 	$atspmFilesTemp = scandir(ATSPM_DATA_ROOT);
-	$atspmFiles = array();
+	$atspmFiles = [];
 	
 	foreach($atspmFilesTemp as $file)
 	{
-		if(strncmp($file, "atspm_events_", 13) == 0)
+		if(str_starts_with($file, "atspm_events_"))
 		{
 			$fileDateTime = substr($file,13,15);
 			
@@ -100,7 +100,7 @@ function downloadDataFiles($startDateTime, $endDateTime)
 
 	if(count($atspmFiles) < 1)
 	{
-		$json = json_encode(array("Error: No Atspm csv files found for this date range."));
+		$json = json_encode(["Error: No Atspm csv files found for this date range."]);
 		header("Content-type: application/json");
 		header("Content-Disposition: attachment; filename=ErrorFile.json");
 		echo $json;						
@@ -108,7 +108,7 @@ function downloadDataFiles($startDateTime, $endDateTime)
 		exit;
 	}
 	
-	$zipFileName = "ATSPM_Events_" . date(Ymd) . "_" . date(His) . ".zip";	// name given to the zip file
+	$zipFileName = "ATSPM_Events_" . date(\YMD) . "_" . date(\HIS) . ".zip";	// name given to the zip file
 	$zip = new ZipArchive;
 	$randFilename = ATSPM_DATA_ROOT . "/" .uniqid() . ".zip";	
 

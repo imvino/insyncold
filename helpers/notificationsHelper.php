@@ -86,142 +86,122 @@ switch($action)
 	//fclose($myfile);				
 		
 		
-		$IOFail = array();
-		$CameraImage = array();		
-		$CameraFailure = array();
-		$NetworkFailure = array();
-		$TimeFail = array();
-		$PedestrianFailure = array();
-		$DetectorFailure = array();
-		$InFlash = array();
-		$LightUnresponsive = array();
-		$LongWait = array();			
+		$IOFail = [];
+		$CameraImage = [];		
+		$CameraFailure = [];
+		$NetworkFailure = [];
+		$TimeFail = [];
+		$PedestrianFailure = [];
+		$DetectorFailure = [];
+		$InFlash = [];
+		$LightUnresponsive = [];
+		$LongWait = [];			
 		
 	foreach ($notificationData as $key => $value)
 	{
 		// I/O Fail
-		if (strpos($value, $IOFailMessageBad) !== false)
+		if (str_contains($value, $IOFailMessageBad))
 		{
 			//$IOFail[] = array('DateTime:'=>$key, 'Event:'=>$value);
-			$IOFail[] = array('DateTime'=>substr($key,0,19),
-						'Event'=>array('State'=>'Failure', 'Message'=>$value));				
+			$IOFail[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];				
 		}
-		else if (strpos($value, $IOFailMessageGood) !== false)
+		else if (str_contains($value, $IOFailMessageGood))
 		{
 			//$IOFail[] = array('DateTime:'=>$key, 'Event:'=>$value);
-			$IOFail[] = array('DateTime'=>substr($key,0,19),
-						'Event'=>array('State'=>'Resolved', 'Message'=>$value));								
+			$IOFail[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Resolved', 'Message'=>$value]];								
 		}
 		// Camera Image
-		else if (strpos($value, $CameraImageMessageBad) !== false)
+		else if (str_contains($value, $CameraImageMessageBad))
 		{
 			//$CameraImage[] = array('DateTime:'=>$key, 'Event:'=>$value);
-			$CameraImage[] = array('DateTime'=>substr($key,0,19),
-							'Event'=>array('State'=>'Failure', 'Message'=>$value));												
+			$CameraImage[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];												
 		}
-		else if (strpos($value, $CameraImageMessageGood) !== false)
+		else if (str_contains($value, $CameraImageMessageGood))
 		{
 			//$CameraImage[] = array('DateTime:'=>$key, 'Event:'=>$value);
-			$CameraImage[] = array('DateTime'=>substr($key,0,19),
-							'Event'=>array('State'=>'Resolved', 'Message'=>$value));																
+			$CameraImage[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Resolved', 'Message'=>$value]];																
 		}
 		// Camera Failure
-		else if (strpos($value, $CameraFailureMessageBad) !== false)
+		else if (str_contains($value, $CameraFailureMessageBad))
 		{
 			//$CameraFailure[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
-			$CameraFailure[] = array('DateTime'=>substr($key,0,19),		
-								'Event'=>array('State'=>'Failure', 'Message'=>$value));																				
+			$CameraFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];																				
 		}
-		else if (strpos($value, $CameraFailureMessageGood) !== false)
+		else if (str_contains($value, $CameraFailureMessageGood))
 		{
 			//$CameraFailure[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
-			$CameraFailure[] = array('DateTime'=>substr($key,0,19),		
-								'Event'=>array('State'=>'Resolved', 'Message'=>$value));																								
+			$CameraFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Resolved', 'Message'=>$value]];																								
 		}						
 		// Network Failure
-		else if (strpos($value, $NetworkFailureMessageBad) !== false)
+		else if (str_contains($value, $NetworkFailureMessageBad))
 		{
 			//$NetworkFailure[] = array('DateTime:'=>$key, 'Event:'=>$value);
-			$NetworkFailure[] = array('DateTime'=>substr($key,0,19),
-								'Event'=>array('State'=>'Failure', 'Message'=>$value));																
+			$NetworkFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];																
 		}
-		else if (strpos($value, $NetworkFailureMessageGood) !== false)
+		else if (str_contains($value, $NetworkFailureMessageGood))
 		{
 			//$NetworkFailure[] = array('DateTime:'=>$key, 'Event:'=>$value);
-			$NetworkFailure[] = array('DateTime'=>substr($key,0,19),
-								'Event'=>array('State'=>'Resolved', 'Message'=>$value));																				
+			$NetworkFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Resolved', 'Message'=>$value]];																				
 		}
 		// Time Fail
-		else if (strpos($value, $TimeFailMessageBad) !== false)
+		else if (str_contains($value, $TimeFailMessageBad))
 		{
 			//$TimeFail[] = array('DateTime:'=>$key, 'Event:'=>$value);
-			$TimeFail[] = array('DateTime'=>substr($key,0,19),
-							'Event'=>array('State'=>'Failure', 'Message'=>$value));																				
+			$TimeFail[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];																				
 		}
-		else if (strpos($value, $TimeFailMessageGood) !== false)
+		else if (str_contains($value, $TimeFailMessageGood))
 		{
 			//$TimeFail[] = array('DateTime:'=>$key, 'Event:'=>$value);
-			$TimeFail[] = array('DateTime'=>substr($key,0,19),
-							'Event'=>array('State'=>'Resolved', 'Message'=>$value));																								
+			$TimeFail[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Resolved', 'Message'=>$value]];																								
 		}
 		// Pedestrian Failure (stuck)
-		else if (strpos($value, $PedestrianFailureMessageBad) !== false)			
+		else if (str_contains($value, $PedestrianFailureMessageBad))			
 		{
-			$PedestrianFailure[] = array('DateTime'=>substr($key,0,19),
-									'Event'=>array('State'=>'Failure', 'Message'=>$value));																								
+			$PedestrianFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];																								
 		}
-		else if (strpos($value, $PedestrianFailureMessageGood) !== false)			
+		else if (str_contains($value, $PedestrianFailureMessageGood))			
 		{
-			$PedestrianFailure[] = array('DateTime'=>substr($key,0,19),
-									'Event'=>array('State'=>'Resolved', 'Message'=>$value));																												
+			$PedestrianFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Resolved', 'Message'=>$value]];																												
 		}	
 		// Detector Failure
-		else if (strpos($value, $DetectorFailureMessageBad) !== false)			
+		else if (str_contains($value, $DetectorFailureMessageBad))			
 		{
-			$DetectorFailure[] = array('DateTime'=>substr($key,0,19),
-								'Event'=>array('State'=>'Failure', 'Message'=>$value));																								
+			$DetectorFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];																								
 		}
-		else if (strpos($value, $DetectorFailureMessageGood) !== false)			
+		else if (str_contains($value, $DetectorFailureMessageGood))			
 		{
-			$DetectorFailure[] = array('DateTime'=>substr($key,0,19),
-								'Event'=>array('State'=>'Resolved', 'Message'=>$value));																												
+			$DetectorFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Resolved', 'Message'=>$value]];																												
 		}
 		// 	In flash
-		else if (strpos($value, $InFlashMessageBad) !== false)			
+		else if (str_contains($value, $InFlashMessageBad))			
 		{
-			$InFlash[] = array('DateTime'=>substr($key,0,19),
-						'Event'=>array('State'=>'Failure', 'Message'=>$value));																								
+			$InFlash[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];																								
 		}
-		else if (strpos($value, $InFlashMessageGood) !== false)			
+		else if (str_contains($value, $InFlashMessageGood))			
 		{
-			$InFlash[] = array('DateTime'=>substr($key,0,19),
-						'Event'=>array('State'=>'Resolved', 'Message'=>$value));																												
+			$InFlash[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Resolved', 'Message'=>$value]];																												
 		}
 		// Light Unresponsive
-		else if (strpos($value, $LightUnresponsiveMessageBad) !== false)			
+		else if (str_contains($value, $LightUnresponsiveMessageBad))			
 		{
-			$LightUnresponsive[] = array('DateTime'=>substr($key,0,19),
-									'Event'=>array('State'=>'Failure', 'Message'=>$value));																								
+			$LightUnresponsive[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];																								
 		}
-		else if (strpos($value, $LightUnresponsiveMessageGood) !== false)			
+		else if (str_contains($value, $LightUnresponsiveMessageGood))			
 		{
-			$LightUnresponsive[] = array('DateTime'=>substr($key,0,19),
-									'Event'=>array('State'=>'Resolved', 'Message'=>$value));																												
+			$LightUnresponsive[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Resolved', 'Message'=>$value]];																												
 		}
 		// Long Wait		
-		else if (strpos($value, $LongWaitMessageBad) !== false)			
+		else if (str_contains($value, $LongWaitMessageBad))			
 		{
-			$LongWait[] = array('DateTime'=>substr($key,0,19),
-							'Event'=>array('State'=>'Failure', 'Message'=>$value));																								
+			$LongWait[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];																								
 		}
-		else if (strpos($value, $LongWaitMessageGood) !== false)			
+		else if (str_contains($value, $LongWaitMessageGood))			
 		{
-			$LongWait[] = array('DateTime'=>substr($key,0,19),
-							'Event'=>array('State'=>'Resolved', 'Message'=>$value));																												
+			$LongWait[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Resolved', 'Message'=>$value]];																												
 		}			
 	}
 		
-		$jsonData = array();
+		$jsonData = [];
 		$jsonData["IOFail"] = $IOFail;
 		$jsonData["CameraImage"] = $CameraImage;
 		$jsonData["CameraFailure"] = $CameraFailure;
@@ -260,132 +240,112 @@ switch($action)
 
 		$notificationData = loadNotificationData($start, $end);        
 		
-		$IOFail = array();
-		$CameraImage = array();		
-		$CameraFailure = array();
-		$NetworkFailure = array();
-		$TimeFail = array();
-		$PedestrianFailure = array();
-		$DetectorFailure = array();
-		$InFlash = array();
-		$LightUnresponsive = array();
-		$LongWait = array();			
+		$IOFail = [];
+		$CameraImage = [];		
+		$CameraFailure = [];
+		$NetworkFailure = [];
+		$TimeFail = [];
+		$PedestrianFailure = [];
+		$DetectorFailure = [];
+		$InFlash = [];
+		$LightUnresponsive = [];
+		$LongWait = [];			
 		
 		foreach ($notificationData as $key => $value)
 		{
 			// I/O Fail
-			if (strpos($value, $IOFailMessageBad) !== false)
+			if (str_contains($value, $IOFailMessageBad))
 			{
-				$IOFail[] = array('DateTime'=>substr($key,0,19),
-							'Event'=>array('State'=>'Failure', 'Message'=>"$value"));				
+				$IOFail[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>"$value"]];				
 			}
-			else if (strpos($value, $IOFailMessageGood) !== false)
+			else if (str_contains($value, $IOFailMessageGood))
 			{
-				$IOFail[] = array('DateTime'=>substr($key,0,19),
-							'Event'=>array('State'=>'Resolved', 'Message'=>"$value"));								
+				$IOFail[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Resolved', 'Message'=>"$value"]];								
 			}
 			// Camera Image
-			else if (strpos($value, $CameraImageMessageBad) !== false)
+			else if (str_contains($value, $CameraImageMessageBad))
 			{
-				$CameraImage[] = array('DateTime'=>substr($key,0,19),
-								'Event'=>array('State'=>'Failure', 'Message'=>"$value"));												
+				$CameraImage[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>"$value"]];												
 			}
-			else if (strpos($value, $CameraImageMessageGood) !== false)
+			else if (str_contains($value, $CameraImageMessageGood))
 			{
-				$CameraImage[] = array('DateTime'=>substr($key,0,19),
-								'Event'=>array('State'=>'Resolved', 'Message'=>"$value"));																
+				$CameraImage[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Resolved', 'Message'=>"$value"]];																
 			}
 			// Camera Failure
-			else if (strpos($value, $CameraFailureMessageBad) !== false)
+			else if (str_contains($value, $CameraFailureMessageBad))
 			{
-				$CameraFailure[] = array('DateTime'=>substr($key,0,19),		
-									'Event'=>array('State'=>'Failure', 'Message'=>"$value"));																				
+				$CameraFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>"$value"]];																				
 			}
-			else if (strpos($value, $CameraFailureMessageGood) !== false)
+			else if (str_contains($value, $CameraFailureMessageGood))
 			{
-				$CameraFailure[] = array('DateTime'=>substr($key,0,19),		
-									'Event'=>array('State'=>'Resolved', 'Message'=>"$value"));																								
+				$CameraFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Resolved', 'Message'=>"$value"]];																								
 			}						
 			// Network Failure
-			else if (strpos($value, $NetworkFailureMessageBad) !== false)
+			else if (str_contains($value, $NetworkFailureMessageBad))
 			{
-				$NetworkFailure[] = array('DateTime'=>substr($key,0,19),
-									'Event'=>array('State'=>'Failure', 'Message'=>"$value"));																
+				$NetworkFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>"$value"]];																
 			}
-			else if (strpos($value, $NetworkFailureMessageGood) !== false)
+			else if (str_contains($value, $NetworkFailureMessageGood))
 			{
-				$NetworkFailure[] = array('DateTime'=>substr($key,0,19),
-									'Event'=>array('State'=>'Resolved', 'Message'=>"$value"));																				
+				$NetworkFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Resolved', 'Message'=>"$value"]];																				
 			}
 			// Time Fail
-			else if (strpos($value, $TimeFailMessageBad) !== false)
+			else if (str_contains($value, $TimeFailMessageBad))
 			{
-				$TimeFail[] = array('DateTime'=>substr($key,0,19),
-								'Event'=>array('State'=>'Failure', 'Message'=>"$value"));																				
+				$TimeFail[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>"$value"]];																				
 			}
-			else if (strpos($value, $TimeFailMessageGood) !== false)
+			else if (str_contains($value, $TimeFailMessageGood))
 			{
-				$TimeFail[] = array('DateTime'=>substr($key,0,19),
-								'Event'=>array('State'=>'Resolved', 'Message'=>"$value"));																								
+				$TimeFail[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Resolved', 'Message'=>"$value"]];																								
 			}
 			// Pedestrian Failure (stuck)
-			else if (strpos($value, $PedestrianFailureMessageBad) !== false)			
+			else if (str_contains($value, $PedestrianFailureMessageBad))			
 			{
-				$PedestrianFailure[] = array('DateTime'=>substr($key,0,19),
-										'Event'=>array('State'=>'Failure', 'Message'=>"$value"));																								
+				$PedestrianFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>"$value"]];																								
 			}
-			else if (strpos($value, $PedestrianFailureMessageGood) !== false)			
+			else if (str_contains($value, $PedestrianFailureMessageGood))			
 			{
-				$PedestrianFailure[] = array('DateTime'=>substr($key,0,19),
-										'Event'=>array('State'=>'Resolved', 'Message'=>"$value"));																												
+				$PedestrianFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Resolved', 'Message'=>"$value"]];																												
 			}	
 			// Detector Failure
-			else if (strpos($value, $DetectorFailureMessageBad) !== false)			
+			else if (str_contains($value, $DetectorFailureMessageBad))			
 			{
-				$DetectorFailure[] = array('DateTime'=>substr($key,0,19),
-									'Event'=>array('State'=>'Failure', 'Message'=>"$value"));																								
+				$DetectorFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>"$value"]];																								
 			}
-			else if (strpos($value, $DetectorFailureMessageGood) !== false)			
+			else if (str_contains($value, $DetectorFailureMessageGood))			
 			{
-				$DetectorFailure[] = array('DateTime'=>substr($key,0,19),
-									'Event'=>array('State'=>'Resolved', 'Message'=>"$value"));																												
+				$DetectorFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Resolved', 'Message'=>"$value"]];																												
 			}
 			// 	In flash
-			else if (strpos($value, $InFlashMessageBad) !== false)			
+			else if (str_contains($value, $InFlashMessageBad))			
 			{
-				$InFlash[] = array('DateTime'=>substr($key,0,19),
-							'Event'=>array('State'=>'Failure', 'Message'=>"$value"));																								
+				$InFlash[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>"$value"]];																								
 			}
-			else if (strpos($value, $InFlashMessageGood) !== false)			
+			else if (str_contains($value, $InFlashMessageGood))			
 			{
-				$InFlash[] = array('DateTime'=>substr($key,0,19),
-							'Event'=>array('State'=>'Resolved', 'Message'=>"$value"));																												
+				$InFlash[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Resolved', 'Message'=>"$value"]];																												
 			}
 			// Light Unresponsive
-			else if (strpos($value, $LightUnresponsiveMessageBad) !== false)			
+			else if (str_contains($value, $LightUnresponsiveMessageBad))			
 			{
-				$LightUnresponsive[] = array('DateTime'=>substr($key,0,19),
-										'Event'=>array('State'=>'Failure', 'Message'=>$value));																								
+				$LightUnresponsive[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];																								
 			}
-			else if (strpos($value, $LightUnresponsiveMessageGood) !== false)			
+			else if (str_contains($value, $LightUnresponsiveMessageGood))			
 			{
-				$LightUnresponsive[] = array('DateTime'=>substr($key,0,19),
-										'Event'=>array('State'=>'Resolved', 'Message'=>$value));																												
+				$LightUnresponsive[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Resolved', 'Message'=>$value]];																												
 			}
 			// Long Wait		
-			else if (strpos($value, $LongWaitMessageBad) !== false)			
+			else if (str_contains($value, $LongWaitMessageBad))			
 			{
-				$LongWait[] = array('DateTime'=>substr($key,0,19),
-								'Event'=>array('State'=>'Failure', 'Message'=>"$value"));																								
+				$LongWait[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>"$value"]];																								
 			}
-			else if (strpos($value, $LongWaitMessageGood) !== false)			
+			else if (str_contains($value, $LongWaitMessageGood))			
 			{
-				$LongWait[] = array('DateTime'=>substr($key,0,19),
-								'Event'=>array('State'=>'Resolved', 'Message'=>"$value"));																												
+				$LongWait[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Resolved', 'Message'=>"$value"]];																												
 			}			
 		}
 		
-		$jsonData = array();
+		$jsonData = [];
 		$jsonData["IOFail"] = $IOFail;
 		$jsonData["CameraImage"] = $CameraImage;
 		$jsonData["CameraFailure"] = $CameraFailure;
@@ -424,16 +384,16 @@ switch($action)
 	//}
 	//fclose($myfile);				
 		
-		$IOFail_tmp = array();
-		$CameraImage_tmp = array();		
-		$CameraFailure_tmp = array();
-		$NetworkFailure_tmp = array();
-		$TimeFail_tmp = array();
-		$PedestrianFailure_tmp = array();
-		$DetectorFailure_tmp = array();
-		$InFlash_tmp = array();
-		$LightUnresponsive_tmp = array();
-		$LongWait_tmp = array();			
+		$IOFail_tmp = [];
+		$CameraImage_tmp = [];		
+		$CameraFailure_tmp = [];
+		$NetworkFailure_tmp = [];
+		$TimeFail_tmp = [];
+		$PedestrianFailure_tmp = [];
+		$DetectorFailure_tmp = [];
+		$InFlash_tmp = [];
+		$LightUnresponsive_tmp = [];
+		$LongWait_tmp = [];			
 		
 		// Reads both good or bad messages from the email. These records are sorted in ascending date time order. 
 		// For example, if you were to select only the bad message the resolved message shown below would not have been selected because we take only the latest message into account.
@@ -444,105 +404,104 @@ switch($action)
 		foreach ($notificationData as $key => $value)
 		{
 			// I/O Fail
-			if (((strpos($value, $IOFailMessageBad) !== false) || 
-				(strpos($value, $IOFailMessageGood) !== false)) &&
+			if (((str_contains($value, $IOFailMessageBad)) || 
+				(str_contains($value, $IOFailMessageGood))) &&
 				(count($IOFail_tmp) == 0))
 			{
-				$IOFail_tmp[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$IOFail_tmp[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 
 			// Camera Image
-			else if (((strpos($value, $CameraImageMessageBad) !== false) || 
-					(strpos($value, $CameraImageMessageGood) !== false)) &&
+			else if (((str_contains($value, $CameraImageMessageBad)) || 
+					(str_contains($value, $CameraImageMessageGood))) &&
 					(count($CameraImage_tmp) == 0))
 			{
-				$CameraImage_tmp[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$CameraImage_tmp[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 
 			// Camera Failure
-			else if (((strpos($value, $CameraFailureMessageBad) !== false) || 
-					(strpos($value, $CameraFailureMessageGood) !== false)) && 
+			else if (((str_contains($value, $CameraFailureMessageBad)) || 
+					(str_contains($value, $CameraFailureMessageGood))) && 
 					 (count($CameraFailure_tmp) == 0))
 			{
-				$CameraFailure_tmp[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$CameraFailure_tmp[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 				
 			// Network Failure
-			else if (((strpos($value, $NetworkFailureMessageBad) !== false) ||
-					(strpos($value, $NetworkFailureMessageGood) !== false)) && 
+			else if (((str_contains($value, $NetworkFailureMessageBad)) ||
+					(str_contains($value, $NetworkFailureMessageGood))) && 
 					(count($NetworkFailure_tmp) == 0))
 			{
-				$NetworkFailure_tmp[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$NetworkFailure_tmp[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 
 			// Time Fail
-			else if (((strpos($value, $TimeFailMessageBad) !== false) || 
-					(strpos($value, $TimeFailMessageGood) !== false)) && 
+			else if (((str_contains($value, $TimeFailMessageBad)) || 
+					(str_contains($value, $TimeFailMessageGood))) && 
 					(count($TimeFail_tmp) == 0))
 			{
-				$TimeFail_tmp[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$TimeFail_tmp[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 
 			// Pedestrian failure (stuck)	
-			else if (((strpos($value, $PedestrianFailureMessageBad) !== false) || 
-					(strpos($value, $PedestrianFailureMessageGood) !== false)) &&
+			else if (((str_contains($value, $PedestrianFailureMessageBad)) || 
+					(str_contains($value, $PedestrianFailureMessageGood))) &&
 					(count($PedestrianFailure_tmp) == 0))		
 			{
-				$PedestrianFailure_tmp[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$PedestrianFailure_tmp[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 			// Detector Failure	
-			else if (((strpos($value, $DetectorFailureMessageBad) !== false) || 
-					(strpos($value, $DetectorFailureMessageGood) !== false)) && 
+			else if (((str_contains($value, $DetectorFailureMessageBad)) || 
+					(str_contains($value, $DetectorFailureMessageGood))) && 
 					(count($DetectorFailure_tmp) == 0))
 			{
-				$DetectorFailure_tmp[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$DetectorFailure_tmp[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 			// In flash
-			else if (((strpos($value, $InFlashMessageBad) !== false) || 
-					(strpos($value, $InFlashMessageGood) !== false)) && 
+			else if (((str_contains($value, $InFlashMessageBad)) || 
+					(str_contains($value, $InFlashMessageGood))) && 
 					(count($InFlash_tmp) == 0))
 			{
-				$InFlash_tmp[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$InFlash_tmp[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 			// 	Light Unresponsive
-			else if (((strpos($value, $LightUnresponsiveMessageBad) !== false) || 
-					(strpos($value, $LightUnresponsiveMessageGood) !== false)) && 
+			else if (((str_contains($value, $LightUnresponsiveMessageBad)) || 
+					(str_contains($value, $LightUnresponsiveMessageGood))) && 
 					(count($LightUnresponsive_tmp) == 0))
 			{
-				$LightUnresponsive_tmp[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$LightUnresponsive_tmp[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 			// Long Wait
-			else if (((strpos($value, $LongWaitMessageBad) !== false) || 
-					(strpos($value, $LongWaitMessageGood) !== false)) && 
+			else if (((str_contains($value, $LongWaitMessageBad)) || 
+					(str_contains($value, $LongWaitMessageGood))) && 
 					(count($LongWait_tmp) == 0))
 			{
-				$LongWait_tmp[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$LongWait_tmp[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}			
 				
 		}
 
 		// Take the value from the array and see if it contains an error. This would be the active error.
 
-		$IOFail = array();
-		$CameraImage = array();		
-		$CameraFailure = array();
-		$NetworkFailure = array();
-		$TimeFail = array();
-		$PedestrianFailure = array();
-		$DetectorFailure = array();
-		$InFlash = array();
-		$LightUnresponsive = array();
-		$LongWait = array();			
+		$IOFail = [];
+		$CameraImage = [];		
+		$CameraFailure = [];
+		$NetworkFailure = [];
+		$TimeFail = [];
+		$PedestrianFailure = [];
+		$DetectorFailure = [];
+		$InFlash = [];
+		$LightUnresponsive = [];
+		$LongWait = [];			
 
-		$jsonData = array();
+		$jsonData = [];
 	
 		if (count($IOFail_tmp) > 0)
 		{
 			$value = $IOFail_tmp[0]['Event:'];
-			if (strpos($value, $IOFailMessageBad) !== false)
+			if (str_contains($value, $IOFailMessageBad))
 			{
-				$IOFail[] = array('DateTime'=>substr($key,0,19),
-							'Event'=>array('State'=>'Failure', 'Message'=>$value));				
+				$IOFail[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];				
 			$jsonData["IOFail"] = $IOFail;
 			}
 		}
@@ -550,10 +509,9 @@ switch($action)
 		if (count($CameraImage_tmp) > 0)
 		{
 			$value = $CameraImage_tmp[0]['Event:'];
-			if (strpos($value, $CameraImageMessageBad) !== false)	
+			if (str_contains($value, $CameraImageMessageBad))	
 			{	
-				$CameraImage[] = array('DateTime'=>substr($key,0,19),
-								'Event'=>array('State'=>'Failure', 'Message'=>$value));		
+				$CameraImage[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];		
 				$jsonData["CameraImage"] = $CameraImage;
 			}
 		}
@@ -561,10 +519,9 @@ switch($action)
 		if (count($CameraFailure_tmp) > 0)
 		{
 			$value = $CameraFailure_tmp[0]['Event:'];
-			if (strpos($value, $CameraFailureMessageBad) !== false)
+			if (str_contains($value, $CameraFailureMessageBad))
 			{
-				$CameraFailure[] = array('DateTime'=>substr($key,0,19),		
-									'Event'=>array('State'=>'Failure', 'Message'=>$value));				
+				$CameraFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];				
 				$jsonData["CameraFailure"] = $CameraFailure;
 			}
 		}		
@@ -572,10 +529,9 @@ switch($action)
 		if (count($NetworkFailure_tmp) > 0)
 		{
 			$value = $NetworkFailure_tmp[0]['Event:'];
-			if (strpos($value, $NetworkFailureMessageBad) !== false)
+			if (str_contains($value, $NetworkFailureMessageBad))
 			{
-				$NetworkFailure[] = array('DateTime'=>substr($key,0,19),
-									'Event'=>array('State'=>'Failure', 'Message'=>$value));				
+				$NetworkFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];				
 				$jsonData["NetworkFailure"] = $NetworkFailure;
 			}
 		}
@@ -583,10 +539,9 @@ switch($action)
 		if (count($TimeFail_tmp) > 0)
 		{
 			$value = $TimeFail_tmp[0]['Event:'];
-			if (strpos($value, $TimeFailMessageBad) !== false)
+			if (str_contains($value, $TimeFailMessageBad))
 			{
-				$TimeFail[] = array('DateTime'=>substr($key,0,19),
-							'Event'=>array('State'=>'Failure', 'Message'=>$value));				
+				$TimeFail[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];				
 				$jsonData["TimeFail"] = $TimeFail;
 			}
 		}
@@ -594,10 +549,9 @@ switch($action)
 		if (count($PedestrianFailure_tmp) > 0)
 		{
 			$value = $PedestrianFailure_tmp[0]['Event:'];
-			if (strpos($value, $PedestrianFailureMessageBad) !== false)
+			if (str_contains($value, $PedestrianFailureMessageBad))
 			{
-				$PedestrianFailure[] = array('DateTime'=>substr($key,0,19),
-									'Event'=>array('State'=>'Failure', 'Message'=>$value));				
+				$PedestrianFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];				
 				$jsonData["PedestrianFailure"] = $PedestrianFailure;
 			}
 		}
@@ -605,10 +559,9 @@ switch($action)
 		if (count($DetectorFailure_tmp) > 0)
 		{
 			$value = $DetectorFailure_tmp[0]['Event:'];
-			if (strpos($value, $DetectorFailureMessageBad) !== false)
+			if (str_contains($value, $DetectorFailureMessageBad))
 			{
-				$DetectorFailure[] = array('DateTime'=>substr($key,0,19),
-									'Event'=>array('State'=>'Failure', 'Message'=>$value));				
+				$DetectorFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];				
 				$jsonData["DetectorFailure"] = $DetectorFailure;
 			}
 		}
@@ -616,10 +569,9 @@ switch($action)
 		if (count($InFlash_tmp) > 0)
 		{
 			$value = $InFlash_tmp[0]['Event:'];
-			if (strpos($value, $InFlashMessageBad) !== false)
+			if (str_contains($value, $InFlashMessageBad))
 			{
-				$InFlash[] = array('DateTime'=>substr($key,0,19),
-							'Event'=>array('State'=>'Failure', 'Message'=>$value));				
+				$InFlash[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];				
 				$jsonData["InFlash"] = $InFlash;
 			}
 		}			
@@ -627,10 +579,9 @@ switch($action)
 		if (count($LightUnresponsive_tmp) > 0)
 		{
 			$value = $LightUnresponsive_tmp[0]['Event:'];
-			if (strpos($value, $LightUnresponsiveMessageBad) !== false)	
+			if (str_contains($value, $LightUnresponsiveMessageBad))	
 			{
-				$LightUnresponsive[] = array('DateTime'=>substr($key,0,19),
-										'Event'=>array('State'=>'Failure', 'Message'=>$value));				
+				$LightUnresponsive[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];				
 				$jsonData["LightUnresponsive"] = $LightUnresponsive;
 			}
 		}
@@ -638,10 +589,9 @@ switch($action)
 		if (count($LongWait_tmp) > 0)
 		{
 			$value = $LongWait_tmp[0]['Event:'];
-			if (strpos($value, $LongWaitMessageBad) !== false)
+			if (str_contains($value, $LongWaitMessageBad))
 			{
-				$LongWait[] = array('DateTime'=>substr($key,0,19),
-							'Event'=>array('State'=>'Failure', 'Message'=>$value));				
+				$LongWait[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];				
 				$jsonData["LongWait"] = $LongWait;
 			}
 		}									
@@ -664,16 +614,16 @@ switch($action)
 	{
 		$notificationData = loadAllNotificationData();        
 		
-		$IOFail_tmp = array();
-		$CameraImage_tmp = array();		
-		$CameraFailure_tmp = array();
-		$NetworkFailure_tmp = array();
-		$TimeFail_tmp = array();
-		$PedestrianFailure_tmp = array();
-		$DetectorFailure_tmp = array();
-		$InFlash_tmp = array();
-		$LightUnresponsive_tmp = array();
-		$LongWait_tmp = array();			
+		$IOFail_tmp = [];
+		$CameraImage_tmp = [];		
+		$CameraFailure_tmp = [];
+		$NetworkFailure_tmp = [];
+		$TimeFail_tmp = [];
+		$PedestrianFailure_tmp = [];
+		$DetectorFailure_tmp = [];
+		$InFlash_tmp = [];
+		$LightUnresponsive_tmp = [];
+		$LongWait_tmp = [];			
 		
 		// Reads both good or bad messages from the email. These records are sorted in ascending date time order. 
 		// For example, if you were to select only the bad message the resolved message shown below would not have been selected because we take only the latest message into account.
@@ -684,105 +634,104 @@ switch($action)
 		foreach ($notificationData as $key => $value)
 		{
 			// I/O Fail
-			if (((strpos($value, $IOFailMessageBad) !== false) || 
-				(strpos($value, $IOFailMessageGood) !== false)) &&
+			if (((str_contains($value, $IOFailMessageBad)) || 
+				(str_contains($value, $IOFailMessageGood))) &&
 				(count($IOFail_tmp) == 0))
 			{
-				$IOFail_tmp[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$IOFail_tmp[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 
 			// Camera Image
-			else if (((strpos($value, $CameraImageMessageBad) !== false) || 
-					(strpos($value, $CameraImageMessageGood) !== false)) &&
+			else if (((str_contains($value, $CameraImageMessageBad)) || 
+					(str_contains($value, $CameraImageMessageGood))) &&
 					(count($CameraImage_tmp) == 0))
 			{
-				$CameraImage_tmp[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$CameraImage_tmp[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 
 			// Camera Failure
-			else if (((strpos($value, $CameraFailureMessageBad) !== false) || 
-					(strpos($value, $CameraFailureMessageGood) !== false)) && 
+			else if (((str_contains($value, $CameraFailureMessageBad)) || 
+					(str_contains($value, $CameraFailureMessageGood))) && 
 					 (count($CameraFailure_tmp) == 0))
 			{
-				$CameraFailure_tmp[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$CameraFailure_tmp[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 				
 			// Network Failure
-			else if (((strpos($value, $NetworkFailureMessageBad) !== false) ||
-					(strpos($value, $NetworkFailureMessageGood) !== false)) && 
+			else if (((str_contains($value, $NetworkFailureMessageBad)) ||
+					(str_contains($value, $NetworkFailureMessageGood))) && 
 					(count($NetworkFailure_tmp) == 0))
 			{
-				$NetworkFailure_tmp[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$NetworkFailure_tmp[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 
 			// Time Fail
-			else if (((strpos($value, $TimeFailMessageBad) !== false) || 
-					(strpos($value, $TimeFailMessageGood) !== false)) && 
+			else if (((str_contains($value, $TimeFailMessageBad)) || 
+					(str_contains($value, $TimeFailMessageGood))) && 
 					(count($TimeFail_tmp) == 0))
 			{
-				$TimeFail_tmp[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$TimeFail_tmp[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 
 			// Pedestrian failure (stuck)	
-			else if (((strpos($value, $PedestrianFailureMessageBad) !== false) || 
-					(strpos($value, $PedestrianFailureMessageGood) !== false)) &&
+			else if (((str_contains($value, $PedestrianFailureMessageBad)) || 
+					(str_contains($value, $PedestrianFailureMessageGood))) &&
 					(count($PedestrianFailure_tmp) == 0))		
 			{
-				$PedestrianFailure_tmp[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$PedestrianFailure_tmp[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 			// Detector Failure	
-			else if (((strpos($value, $DetectorFailureMessageBad) !== false) || 
-					(strpos($value, $DetectorFailureMessageGood) !== false)) && 
+			else if (((str_contains($value, $DetectorFailureMessageBad)) || 
+					(str_contains($value, $DetectorFailureMessageGood))) && 
 					(count($DetectorFailure_tmp) == 0))
 			{
-				$DetectorFailure_tmp[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$DetectorFailure_tmp[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 			// In flash
-			else if (((strpos($value, $InFlashMessageBad) !== false) || 
-					(strpos($value, $InFlashMessageGood) !== false)) && 
+			else if (((str_contains($value, $InFlashMessageBad)) || 
+					(str_contains($value, $InFlashMessageGood))) && 
 					(count($InFlash_tmp) == 0))
 			{
-				$InFlash_tmp[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$InFlash_tmp[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 			// 	Light Unresponsive
-			else if (((strpos($value, $LightUnresponsiveMessageBad) !== false) || 
-					(strpos($value, $LightUnresponsiveMessageGood) !== false)) && 
+			else if (((str_contains($value, $LightUnresponsiveMessageBad)) || 
+					(str_contains($value, $LightUnresponsiveMessageGood))) && 
 					(count($LightUnresponsive_tmp) == 0))
 			{
-				$LightUnresponsive_tmp[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$LightUnresponsive_tmp[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 			// Long Wait
-			else if (((strpos($value, $LongWaitMessageBad) !== false) || 
-					(strpos($value, $LongWaitMessageGood) !== false)) && 
+			else if (((str_contains($value, $LongWaitMessageBad)) || 
+					(str_contains($value, $LongWaitMessageGood))) && 
 					(count($LongWait_tmp) == 0))
 			{
-				$LongWait_tmp[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$LongWait_tmp[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}			
 				
 		}
 
 		// Take the value from the array and see if it contains an error. This would be the active error.
 
-		$IOFail = array();
-		$CameraImage = array();		
-		$CameraFailure = array();
-		$NetworkFailure = array();
-		$TimeFail = array();
-		$PedestrianFailure = array();
-		$DetectorFailure = array();
-		$InFlash = array();
-		$LightUnresponsive = array();
-		$LongWait = array();			
+		$IOFail = [];
+		$CameraImage = [];		
+		$CameraFailure = [];
+		$NetworkFailure = [];
+		$TimeFail = [];
+		$PedestrianFailure = [];
+		$DetectorFailure = [];
+		$InFlash = [];
+		$LightUnresponsive = [];
+		$LongWait = [];			
 
-		$jsonData = array();
+		$jsonData = [];
 	
 		if (count($IOFail_tmp) > 0)
 		{
 			$value = $IOFail_tmp[0]['Event:'];
-			if (strpos($value, $IOFailMessageBad) !== false)
+			if (str_contains($value, $IOFailMessageBad))
 			{
-				$IOFail[] = array('DateTime'=>substr($key,0,19),
-							'Event'=>array('State'=>'Failure', 'Message'=>$value));				
+				$IOFail[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];				
 			$jsonData["IOFail"] = $IOFail;
 			}
 		}
@@ -790,10 +739,9 @@ switch($action)
 		if (count($CameraImage_tmp) > 0)
 		{
 			$value = $CameraImage_tmp[0]['Event:'];
-			if (strpos($value, $CameraImageMessageBad) !== false)	
+			if (str_contains($value, $CameraImageMessageBad))	
 			{	
-				$CameraImage[] = array('DateTime'=>substr($key,0,19),
-								'Event'=>array('State'=>'Failure', 'Message'=>$value));		
+				$CameraImage[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];		
 				$jsonData["CameraImage"] = $CameraImage;
 			}
 		}
@@ -801,10 +749,9 @@ switch($action)
 		if (count($CameraFailure_tmp) > 0)
 		{
 			$value = $CameraFailure_tmp[0]['Event:'];
-			if (strpos($value, $CameraFailureMessageBad) !== false)
+			if (str_contains($value, $CameraFailureMessageBad))
 			{
-				$CameraFailure[] = array('DateTime'=>substr($key,0,19),		
-									'Event'=>array('State'=>'Failure', 'Message'=>$value));				
+				$CameraFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];				
 				$jsonData["CameraFailure"] = $CameraFailure;
 			}
 		}		
@@ -812,10 +759,9 @@ switch($action)
 		if (count($NetworkFailure_tmp) > 0)
 		{
 			$value = $NetworkFailure_tmp[0]['Event:'];
-			if (strpos($value, $NetworkFailureMessageBad) !== false)
+			if (str_contains($value, $NetworkFailureMessageBad))
 			{
-				$NetworkFailure[] = array('DateTime'=>substr($key,0,19),
-									'Event'=>array('State'=>'Failure', 'Message'=>$value));				
+				$NetworkFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];				
 				$jsonData["NetworkFailure"] = $NetworkFailure;
 			}
 		}
@@ -823,10 +769,9 @@ switch($action)
 		if (count($TimeFail_tmp) > 0)
 		{
 			$value = $TimeFail_tmp[0]['Event:'];
-			if (strpos($value, $TimeFailMessageBad) !== false)
+			if (str_contains($value, $TimeFailMessageBad))
 			{
-				$TimeFail[] = array('DateTime'=>substr($key,0,19),
-							'Event'=>array('State'=>'Failure', 'Message'=>$value));				
+				$TimeFail[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];				
 				$jsonData["TimeFail"] = $TimeFail;
 			}
 		}
@@ -834,10 +779,9 @@ switch($action)
 		if (count($PedestrianFailure_tmp) > 0)
 		{
 			$value = $PedestrianFailure_tmp[0]['Event:'];
-			if (strpos($value, $PedestrianFailureMessageBad) !== false)
+			if (str_contains($value, $PedestrianFailureMessageBad))
 			{
-				$PedestrianFailure[] = array('DateTime'=>substr($key,0,19),
-									'Event'=>array('State'=>'Failure', 'Message'=>$value));				
+				$PedestrianFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];				
 				$jsonData["PedestrianFailure"] = $PedestrianFailure;
 			}
 		}
@@ -845,10 +789,9 @@ switch($action)
 		if (count($DetectorFailure_tmp) > 0)
 		{
 			$value = $DetectorFailure_tmp[0]['Event:'];
-			if (strpos($value, $DetectorFailureMessageBad) !== false)
+			if (str_contains($value, $DetectorFailureMessageBad))
 			{
-				$DetectorFailure[] = array('DateTime'=>substr($key,0,19),
-									'Event'=>array('State'=>'Failure', 'Message'=>$value));				
+				$DetectorFailure[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];				
 				$jsonData["DetectorFailure"] = $DetectorFailure;
 			}
 		}
@@ -856,10 +799,9 @@ switch($action)
 		if (count($InFlash_tmp) > 0)
 		{
 			$value = $InFlash_tmp[0]['Event:'];
-			if (strpos($value, $InFlashMessageBad) !== false)
+			if (str_contains($value, $InFlashMessageBad))
 			{
-				$InFlash[] = array('DateTime'=>substr($key,0,19),
-							'Event'=>array('State'=>'Failure', 'Message'=>$value));				
+				$InFlash[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];				
 				$jsonData["InFlash"] = $InFlash;
 			}
 		}			
@@ -867,10 +809,9 @@ switch($action)
 		if (count($LightUnresponsive_tmp) > 0)
 		{
 			$value = $LightUnresponsive_tmp[0]['Event:'];
-			if (strpos($value, $LightUnresponsiveMessageBad) !== false)	
+			if (str_contains($value, $LightUnresponsiveMessageBad))	
 			{
-				$LightUnresponsive[] = array('DateTime'=>substr($key,0,19),
-										'Event'=>array('State'=>'Failure', 'Message'=>$value));				
+				$LightUnresponsive[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];				
 				$jsonData["LightUnresponsive"] = $LightUnresponsive;
 			}
 		}
@@ -878,10 +819,9 @@ switch($action)
 		if (count($LongWait_tmp) > 0)
 		{
 			$value = $LongWait_tmp[0]['Event:'];
-			if (strpos($value, $LongWaitMessageBad) !== false)
+			if (str_contains($value, $LongWaitMessageBad))
 			{
-				$LongWait[] = array('DateTime'=>substr($key,0,19),
-							'Event'=>array('State'=>'Failure', 'Message'=>$value));				
+				$LongWait[] = ['DateTime'=>substr($key,0,19), 'Event'=>['State'=>'Failure', 'Message'=>$value]];				
 				$jsonData["LongWait"] = $LongWait;
 			}
 		}									
@@ -921,85 +861,85 @@ switch($action)
 
 		$notificationData = loadNotificationData($start, $end);        
 		
-		$IOFail = array();
-		$CameraImage = array();
-		$CameraFailure = array();
-		$NetworkFailure = array();
-		$TimeFail = array();
-		$PedestrianFailure = array();
-		$DetectorFailure = array();
-		$InFlash = array();
-		$LightUnresponsive = array();
-		$LongWait = array();			
+		$IOFail = [];
+		$CameraImage = [];
+		$CameraFailure = [];
+		$NetworkFailure = [];
+		$TimeFail = [];
+		$PedestrianFailure = [];
+		$DetectorFailure = [];
+		$InFlash = [];
+		$LightUnresponsive = [];
+		$LongWait = [];			
 
 		
 	foreach ($notificationData as $key => $value)
 	{
 
 		// I/O Fail
-		if ((strpos($value, $IOFailMessageBad) !== false) || 
-			(strpos($value, $IOFailMessageGood) !== false))
+		if ((str_contains($value, $IOFailMessageBad)) || 
+			(str_contains($value, $IOFailMessageGood)))
 		{
-			$IOFail[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+			$IOFail[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 		}
 
 		// Camera Image
-		else if ((strpos($value, $CameraImageMessageBad) !== false) || 
-				(strpos($value, $CameraImageMessageGood) !== false))
+		else if ((str_contains($value, $CameraImageMessageBad)) || 
+				(str_contains($value, $CameraImageMessageGood)))
 		{
-			$CameraImage[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+			$CameraImage[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 		}
 		
 		// Camera Failure
-		else if ((strpos($value, $CameraFailureMessageBad) !== false) || 
-				(strpos($value, $CameraFailureMessageGood) !== false))
+		else if ((str_contains($value, $CameraFailureMessageBad)) || 
+				(str_contains($value, $CameraFailureMessageGood)))
 		{
-			$CameraFailure[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+			$CameraFailure[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 		}
 	
 		// Network Failure
-		else if ((strpos($value, $NetworkFailureMessageBad) !== false) ||
-				(strpos($value, $NetworkFailureMessageGood) !== false))
+		else if ((str_contains($value, $NetworkFailureMessageBad)) ||
+				(str_contains($value, $NetworkFailureMessageGood)))
 		{
-			$NetworkFailure[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+			$NetworkFailure[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 		}
 
 		// Time Fail
-		else if ((strpos($value, $TimeFailMessageBad) !== false) || 
-				(strpos($value, $TimeFailMessageGood) !== false))
+		else if ((str_contains($value, $TimeFailMessageBad)) || 
+				(str_contains($value, $TimeFailMessageGood)))
 		{
-			$TimeFail[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+			$TimeFail[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 		}
 
 		// Pedestrian failure (stuck)	
-		else if ((strpos($value, $PedestrianFailureMessageBad) !== false) || 
-				(strpos($value, $PedestrianFailureMessageGood) !== false))
+		else if ((str_contains($value, $PedestrianFailureMessageBad)) || 
+				(str_contains($value, $PedestrianFailureMessageGood)))
 		{
-			$PedestrianFailure[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+			$PedestrianFailure[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 		}
 		// Detector Failure	
-		else if ((strpos($value, $DetectorFailureMessageBad) !== false) || 
-				(strpos($value, $DetectorFailureMessageGood) !== false))
+		else if ((str_contains($value, $DetectorFailureMessageBad)) || 
+				(str_contains($value, $DetectorFailureMessageGood)))
 		{
-			$DetectorFailure[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+			$DetectorFailure[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 		}
 		// In flash
-		else if ((strpos($value, $InFlashMessageBad) !== false) || 
-				(strpos($value, $InFlashMessageGood) !== false))
+		else if ((str_contains($value, $InFlashMessageBad)) || 
+				(str_contains($value, $InFlashMessageGood)))
 		{
-			$InFlash[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+			$InFlash[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 		}
 		// 	Light Unresponsive
-		else if ((strpos($value, $LightUnresponsiveMessageBad) !== false) || 
-				(strpos($value, $LightUnresponsiveMessageGood) !== false))
+		else if ((str_contains($value, $LightUnresponsiveMessageBad)) || 
+				(str_contains($value, $LightUnresponsiveMessageGood)))
 		{
-			$LightUnresponsive[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+			$LightUnresponsive[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 		}
 		// Long Wait
-		else if ((strpos($value, $LongWaitMessageBad) !== false) || 
-				(strpos($value, $LongWaitMessageGood) !== false))
+		else if ((str_contains($value, $LongWaitMessageBad)) || 
+				(str_contains($value, $LongWaitMessageGood)))
 		{
-			$LongWait[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+			$LongWait[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 		}			
 	}
 	
@@ -1012,7 +952,7 @@ switch($action)
 	//}
 	//fclose($myfile);				
 		
-		$jsonData = array();
+		$jsonData = [];
 		if (count($IOFail) > 0)
 		{
 			$jsonData["IOFail"] = $IOFail;
@@ -1077,105 +1017,105 @@ switch($action)
 	{
 		$notificationData = loadAllNotificationData();        
 		
-		$IOFail = array();
-		$CameraImage = array();
-		$CameraFailure = array();
-		$NetworkFailure = array();
-		$TimeFail = array();
-		$PedestrianFailure = array();
-		$DetectorFailure = array();
-		$InFlash = array();
-		$LightUnresponsive = array();
-		$LongWait = array();			
+		$IOFail = [];
+		$CameraImage = [];
+		$CameraFailure = [];
+		$NetworkFailure = [];
+		$TimeFail = [];
+		$PedestrianFailure = [];
+		$DetectorFailure = [];
+		$InFlash = [];
+		$LightUnresponsive = [];
+		$LongWait = [];			
 
 		foreach ($notificationData as $key => $value)
 		{
 			// I/O Fail
-			if (((strpos($value, $IOFailMessageBad) !== false) || 
-				(strpos($value, $IOFailMessageGood) !== false)) &&
+			if (((str_contains($value, $IOFailMessageBad)) || 
+				(str_contains($value, $IOFailMessageGood))) &&
 				(count($IOFail) == 0))
 			{
-				$IOFail[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$IOFail[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 
 			// Camera Image
-			else if (((strpos($value, $CameraImageMessageBad) !== false) || 
-					(strpos($value, $CameraImageMessageGood) !== false)) &&
+			else if (((str_contains($value, $CameraImageMessageBad)) || 
+					(str_contains($value, $CameraImageMessageGood))) &&
 					(count($CameraImage) == 0))
 			{
-				$CameraImage[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$CameraImage[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 
 			// Camera Failure
-			else if (((strpos($value, $CameraFailureMessageBad) !== false) || 
-					(strpos($value, $CameraFailureMessageGood) !== false)) && 
+			else if (((str_contains($value, $CameraFailureMessageBad)) || 
+					(str_contains($value, $CameraFailureMessageGood))) && 
 					 (count($CameraFailure) == 0))
 			{
-				$CameraFailure[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$CameraFailure[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 				
 			// Network Failure
-			else if (((strpos($value, $NetworkFailureMessageBad) !== false) ||
-					(strpos($value, $NetworkFailureMessageGood) !== false)) && 
+			else if (((str_contains($value, $NetworkFailureMessageBad)) ||
+					(str_contains($value, $NetworkFailureMessageGood))) && 
 					(count($NetworkFailure) == 0))
 			{
-				$NetworkFailure[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$NetworkFailure[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 
 			// Time Fail
-			else if (((strpos($value, $TimeFailMessageBad) !== false) || 
-					(strpos($value, $TimeFailMessageGood) !== false)) && 
+			else if (((str_contains($value, $TimeFailMessageBad)) || 
+					(str_contains($value, $TimeFailMessageGood))) && 
 					(count($TimeFail) == 0))
 			{
-				$TimeFail[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$TimeFail[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 
 			// Pedestrian failure (stuck)	
-			else if (((strpos($value, $PedestrianFailureMessageBad) !== false) || 
-					(strpos($value, $PedestrianFailureMessageGood) !== false)) &&
+			else if (((str_contains($value, $PedestrianFailureMessageBad)) || 
+					(str_contains($value, $PedestrianFailureMessageGood))) &&
 					(count($PedestrianFailure) == 0))		
 			{
-				$PedestrianFailure[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$PedestrianFailure[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 			// Detector Failure	
-			else if (((strpos($value, $DetectorFailureMessageBad) !== false) || 
-					(strpos($value, $DetectorFailureMessageGood) !== false)) && 
+			else if (((str_contains($value, $DetectorFailureMessageBad)) || 
+					(str_contains($value, $DetectorFailureMessageGood))) && 
 					(count($DetectorFailure) == 0))
 			{
-				$DetectorFailure[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$DetectorFailure[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 			// In flash
-			else if (((strpos($value, $InFlashMessageBad) !== false) || 
-					(strpos($value, $InFlashMessageGood) !== false)) && 
+			else if (((str_contains($value, $InFlashMessageBad)) || 
+					(str_contains($value, $InFlashMessageGood))) && 
 					(count($InFlash) == 0))
 			{
-				$InFlash[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$InFlash[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 			// 	Light Unresponsive
-			else if (((strpos($value, $LightUnresponsiveMessageBad) !== false) || 
-					(strpos($value, $LightUnresponsiveMessageGood) !== false)) && 
+			else if (((str_contains($value, $LightUnresponsiveMessageBad)) || 
+					(str_contains($value, $LightUnresponsiveMessageGood))) && 
 					(count($LightUnresponsive) == 0))
 			{
-				$LightUnresponsive[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$LightUnresponsive[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}
 			// Long Wait
-			else if (((strpos($value, $LongWaitMessageBad) !== false) || 
-					(strpos($value, $LongWaitMessageGood) !== false)) && 
+			else if (((str_contains($value, $LongWaitMessageBad)) || 
+					(str_contains($value, $LongWaitMessageGood))) && 
 					(count($LongWait) == 0))
 			{
-				$LongWait[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+				$LongWait[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 			}			
 				
 		}
 
 		// Take the value from the array and see if it contains an error. This would be active error.
 
-		$jsonData = array();
+		$jsonData = [];
 	
 		if (count($IOFail) > 0)
 		{
 			$value = $IOFail[0]['Event:'];
-			if (strpos($value, $IOFailMessageBad) !== false)
+			if (str_contains($value, $IOFailMessageBad))
 			{			
 				$jsonData["IOFail"] = $IOFail;
 			}
@@ -1184,7 +1124,7 @@ switch($action)
 		if (count($CameraImage) > 0)
 		{
 			$value = $CameraImage[0]['Event:'];
-			if (strpos($value, $CameraImageMessageBad) !== false)	
+			if (str_contains($value, $CameraImageMessageBad))	
 			{		
 				$jsonData["CameraImage"] = $CameraImage;
 			}
@@ -1193,7 +1133,7 @@ switch($action)
 		if (count($CameraFailure) > 0)
 		{
 			$value = $CameraFailure[0]['Event:'];
-			if (strpos($value, $CameraFailureMessageBad) !== false)
+			if (str_contains($value, $CameraFailureMessageBad))
 			{
 				$jsonData["CameraFailure"] = $CameraFailure;
 			}
@@ -1202,7 +1142,7 @@ switch($action)
 		if (count($NetworkFailure) > 0)
 		{
 			$value = $NetworkFailure[0]['Event:'];
-			if (strpos($value, $NetworkFailureMessageBad) !== false)
+			if (str_contains($value, $NetworkFailureMessageBad))
 			{
 				$jsonData["NetworkFailure"] = $NetworkFailure;
 			}
@@ -1211,7 +1151,7 @@ switch($action)
 		if (count($TimeFail) > 0)
 		{
 			$value = $TimeFail[0]['Event:'];
-			if (strpos($value, $TimeFailMessageBad) !== false)
+			if (str_contains($value, $TimeFailMessageBad))
 			{
 				$jsonData["TimeFail"] = $TimeFail;
 			}
@@ -1220,7 +1160,7 @@ switch($action)
 		if (count($PedestrianFailure) > 0)
 		{
 			$value = $PedestrianFailure[0]['Event:'];
-			if (strpos($value, $PedestrianFailureMessageBad) !== false)
+			if (str_contains($value, $PedestrianFailureMessageBad))
 			{		
 				$jsonData["PedestrianFailure"] = $PedestrianFailure;
 			}
@@ -1229,7 +1169,7 @@ switch($action)
 		if (count($DetectorFailure) > 0)
 		{
 			$value = $DetectorFailure[0]['Event:'];
-			if (strpos($value, $DetectorFailureMessageBad) !== false)
+			if (str_contains($value, $DetectorFailureMessageBad))
 			{			
 				$jsonData["DetectorFailure"] = $DetectorFailure;
 			}
@@ -1238,7 +1178,7 @@ switch($action)
 		if (count($InFlash ) > 0)
 		{
 			$value = $InFlash[0]['Event:'];
-			if (strpos($value, $InFlashMessageBad) !== false)
+			if (str_contains($value, $InFlashMessageBad))
 			{		
 				$jsonData["InFlash"] = $InFlash ;
 			}
@@ -1247,7 +1187,7 @@ switch($action)
 		if (count($LightUnresponsive ) > 0)
 		{
 			$value = $LightUnresponsive[0]['Event:'];
-			if (strpos($value, $LightUnresponsiveMessageBad) !== false)	
+			if (str_contains($value, $LightUnresponsiveMessageBad))	
 			{		
 				$jsonData["LightUnresponsive"] = $LightUnresponsive ;
 			}
@@ -1256,7 +1196,7 @@ switch($action)
 		if (count($LongWait ) > 0)
 		{
 			$value = $LongWait[0]['Event:'];
-			if (strpos($value, $LongWaitMessageBad) !== false)
+			if (str_contains($value, $LongWaitMessageBad))
 			{		
 				$jsonData["LongWait"] = $LongWait ;
 			}
@@ -1284,7 +1224,7 @@ function loadNotificationData($startDateTime, $endDateTime)
 	$endTimestamp = strtotime($endDateTime);
 	
 	// Get all files from C:\InSync\Logs\Notifications
-	$notificationFiles = array();
+	$notificationFiles = [];
 	if (file_exists(NOTIFICATION_LOG))
 	{
 		$path = @opendir(NOTIFICATION_LOG);
@@ -1307,11 +1247,11 @@ function loadNotificationData($startDateTime, $endDateTime)
 	
 	// Select files from C:\InSync\Logs\Notifications for the date range entered. Default would be the current date
 	
-	$notificationList = array();
+	$notificationList = [];
 	foreach($notificationFiles as $file)
 	{
 		// notification file
-		if(substr($file, 0, 3) == "IS_")
+		if(str_starts_with($file, "IS_"))
 		{
 			// file DATE is within our range
 			if(in_array(substr($file, 3, 8), $validDates))
@@ -1332,7 +1272,7 @@ function loadNotificationData($startDateTime, $endDateTime)
 	if(count($notificationList) == 0)
 		return false;
 		
-	$notificationData = array();
+	$notificationData = [];
 	foreach($notificationList as $file)
 	{
 		$fullPath = NOTIFICATION_LOG."/".$file;
@@ -1352,7 +1292,7 @@ function loadNotificationData($startDateTime, $endDateTime)
 					$stringMessage = $lineParts[2];
 					$formattedString = substr($stringMessage, 14);
 					
-					if (strpos($contents, 'MESSAGE_SENT:') !== false)
+					if (str_contains($contents, 'MESSAGE_SENT:'))
 					{
 						$notificationData[$stringdateandtime] = $formattedString;
 					}
@@ -1381,7 +1321,7 @@ function loadAllNotificationData()
 	if (file_exists(NOTIFICATION_LOG))
 	{
 		$path = @opendir(NOTIFICATION_LOG);
-		$notificationFiles = array();
+		$notificationFiles = [];
 		$notificationFiles = fileList($path);
 	}
 	
@@ -1412,7 +1352,7 @@ function loadAllNotificationData()
 
 function fileList($path)
 {
-	$filelist = array();
+	$filelist = [];
 	while($file = readdir($path))
 	{
 		if ($file != '.' and $file != '..')
@@ -1427,7 +1367,7 @@ function fileList($path)
    closedir($path);
    krsort($filelist);
 
-	$datalist = array();
+	$datalist = [];
 	foreach ($filelist as $file)
 	{
 		$fullPath = NOTIFICATION_LOG."/".$file;
@@ -1443,7 +1383,7 @@ function fileList($path)
 				$stringMessage = $lineParts[2];					
 				$formattedString = substr($stringMessage, 14);
 				
-				if (strpos($contents, 'MESSAGE_SENT:') !== false)
+				if (str_contains($contents, 'MESSAGE_SENT:'))
 				{
 					$datalist[$stringdateandtime] = $formattedString;
 					//$datalist[$stringdateandtime] = $stringdateandtime . "/" . $stringMessage;
@@ -1461,7 +1401,7 @@ function createDateRange($startDate, $endDate, $outputFormat)
 	$startTimestamp = strtotime($startDate) - 86400;
 	$endTimestamp = strtotime($endDate) + 86400;
 	
-	$dateArray = array();
+	$dateArray = [];
 	
 	for($date = $startTimestamp; $date <= $endTimestamp; $date += 86400)
 		$dateArray[] = date($outputFormat, $date);

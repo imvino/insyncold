@@ -31,7 +31,7 @@ class Object
      *                          will be converted to integers intval function
      *      'password'=> null   will remove all the password entries
      */
-    public static $fix = array();
+    public static $fix = [];
     /**
      * @var string character that is used to identify sub objects
      *
@@ -70,7 +70,7 @@ class Object
      *
      * @return array
      */
-    public static function toArray($object,
+    public static function toArray(mixed $object,
                                    $forceObjectTypeWhenEmpty = false)
     {
         //if ($object instanceof JsonSerializable) { //wont work on PHP < 5.4
@@ -93,7 +93,7 @@ class Object
                 $object = $object->jsonSerialize();
             } elseif (method_exists($object, '__sleep')) {
                 $properties = $object->__sleep();
-                $array = array();
+                $array = [];
                 foreach ($properties as $key) {
                     $value = self::toArray($object->{$key},
                         $forceObjectTypeWhenEmpty);
@@ -109,10 +109,10 @@ class Object
         }
         if (is_array($object) || is_object($object)) {
             $count = 0;
-            $array = array();
+            $array = [];
             foreach ($object as $key => $value) {
-                if (false !== strpos($key, self::$separatorChar)) {
-                    list($key, $obj) = explode(self::$separatorChar, $key, 2);
+                if (str_contains($key, self::$separatorChar)) {
+                    [$key, $obj] = explode(self::$separatorChar, $key, 2);
                     $object[$key][$obj] = $value;
                     $value = $object[$key];
                 }
@@ -145,7 +145,7 @@ class Object
 
     public function __get($name)
     {
-        isset(self::$fix[$name]) ? self::$fix[$name] : null;
+        self::$fix[$name] ?? null;
     }
 
     public function __set($name, $function)

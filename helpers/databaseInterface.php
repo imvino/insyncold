@@ -54,7 +54,7 @@ function getFileByHash($hash)
 {	
 	$db = openDB();
 	
-	if($result = pg_query_params($db, "SELECT contents FROM configurations WHERE hash=$1", array($hash)))
+	if($result = pg_query_params($db, "SELECT contents FROM configurations WHERE hash=$1", [$hash]))
 	{
 		$resultRow = pg_fetch_assoc($result);		
 		if($resultRow == FALSE)
@@ -90,7 +90,7 @@ function getHash($names)
 	
 	foreach($nameArray as $name)
 	{		
-		if($result = pg_query_params($db, "SELECT hash FROM configurations WHERE name=$1", array($name)))
+		if($result = pg_query_params($db, "SELECT hash FROM configurations WHERE name=$1", [$name]))
 		{
 			$resultRow = pg_fetch_assoc($result);
 
@@ -125,9 +125,9 @@ function putFileFromString($targetName, $contents)
 	// update existing (single transaction per request
         pg_query($db, "BEGIN TRANSACTION");
         pg_query_params($db, "UPDATE configurations set hash = $2, contents = $3 where name = $1;",
-                array($targetName, $hash, $base64));
+                [$targetName, $hash, $base64]);
         pg_query_params($db, "INSERT INTO configurations (name, hash, contents) select $1,$2,$3 where not exists (select 1 from configurations where name = $4);",
-                array($targetName, $hash, $base64, $targetName));
+                [$targetName, $hash, $base64, $targetName]);
         
         pg_query($db, "COMMIT TRANSACTION");
 
@@ -156,9 +156,9 @@ function putFile($name, $tmp_name)
 		if($name[$i] == "" || $tmp_name[$i] == "")
 			continue;
 			
-		if(strpos($name[$i], '/') !== FALSE)
+		if(str_contains($name[$i], '/'))
 			continue;
-		if(strpos($name[$i], '\\') !== FALSE)
+		if(str_contains($name[$i], '\\'))
 			continue;
 		
 		$targetName = $name[$i];
@@ -174,9 +174,9 @@ function putFile($name, $tmp_name)
                 // update existing (single transaction per request
                 pg_query($db, "BEGIN TRANSACTION");
                 pg_query_params($db, "UPDATE configurations set hash = $2, contents = $3 where name = $1;",
-                        array($targetName, $hash, $base64));
+                        [$targetName, $hash, $base64]);
                 pg_query_params($db, "INSERT INTO configurations (name, hash, contents) select $1,$2,$3 where not exists (select 1 from configurations where name = $1::character varying);",
-                        array($targetName, $hash, $base64));
+                        [$targetName, $hash, $base64]);
                 pg_query($db, "COMMIT TRANSACTION");
 		
                 $hashOutput .= $hash . ",";
@@ -197,7 +197,7 @@ function getFile($name)
 {	
 	$db = openDB();
 	
-	if($result = pg_query_params($db, "SELECT contents FROM configurations WHERE name=$1", array($name)))
+	if($result = pg_query_params($db, "SELECT contents FROM configurations WHERE name=$1", [$name]))
 	{
 		$resultRow = pg_fetch_assoc($result);
 

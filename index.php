@@ -7,13 +7,14 @@
 $title = ": Home";
 $breadCrumb = "<h1>Home</h1>";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 
 <link rel="stylesheet" type="text/css" href="/css/dashboard.css"/>
 
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP
+;
 
 include("includes/header.php");
 

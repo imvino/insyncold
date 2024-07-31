@@ -49,16 +49,16 @@ switch($action)
         //if($endStamp-$startStamp >= 172800)
         //    die('{"error":"The requested time span was too large. Please choose a timespan of <48 hours."}');
 
-		$notificationData = loadNotificationData($start, $end, $filter);        
+		$notificationData = loadNotificationData($start, $end);        
 		
-		$RadarError = array();
+		$RadarError = [];
 		
 		foreach ($notificationData as $key => $value)
 		{
-			$RadarError[] = array('DateTime:'=>substr($key,0,19), 'Event:'=>$value);
+			$RadarError[] = ['DateTime:'=>substr($key,0,19), 'Event:'=>$value];
 		}
 
-		$jsonData = array();
+		$jsonData = [];
 		if (count($RadarError) > 0)
 		{
 			$jsonData["RadarError"] = $RadarError;
@@ -78,7 +78,7 @@ function loadNotificationData($startDateTime, $endDateTime, $filterText)
 	
 	// Get all files from C:\hawkeye\log\RadarErrors
 	$directoryPath = "C:\hawkeye\log\RadarErrors";
-	$notificationFiles = array();
+	$notificationFiles = [];
 	if (file_exists($directoryPath))
 	{
 		$path = @opendir($directoryPath);
@@ -102,7 +102,7 @@ function loadNotificationData($startDateTime, $endDateTime, $filterText)
 	// Select files from C:\hawkeye\log\RadarErrors for the date range entered. Default would be the current date
 	// Logic is copied from another implementation.
 	
-	$notificationList = array();
+	$notificationList = [];
 	foreach($notificationFiles as $file)
 	{
 		$notificationList[] = $file;
@@ -111,7 +111,7 @@ function loadNotificationData($startDateTime, $endDateTime, $filterText)
 	if(count($notificationList) == 0)
 		return false;
 		
-	$notificationData = array();
+	$notificationData = [];
 	foreach($notificationList as $file)
 	{
 		$fullPath = $directoryPath."/".$file;
@@ -138,7 +138,7 @@ function loadNotificationData($startDateTime, $endDateTime, $filterText)
 					}
 					else
 					{
-						if (stripos($formattedString, $filterText) !== false)
+						if (stripos($formattedString, (string) $filterText) !== false)
 						{
 							$notificationData[$stringdateandtime] = $formattedString;
 						}
@@ -169,7 +169,7 @@ function createDateRange($startDate, $endDate, $outputFormat)
 	$startTimestamp = strtotime($startDate) - 86400;
 	$endTimestamp = strtotime($endDate) + 86400;
 	
-	$dateArray = array();
+	$dateArray = [];
 	
 	for($date = $startTimestamp; $date <= $endTimestamp; $date += 86400)
 		$dateArray[] = date($outputFormat, $date);

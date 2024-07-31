@@ -414,11 +414,8 @@ switch ($action)
  */
 class InSyncInterface 
 {
-	public $ip = "127.0.0.1";
-	
-	function __construct($ip = "127.0.0.1")
+	function __construct(public $ip = "127.0.0.1")
 	{
-		$this->ip = $ip;
 		$this->persistent = TRUE;
 	}
 	
@@ -560,7 +557,7 @@ class InSyncInterface
           
         $xmlList = simplexml_load_string($xmlData);
 
-        $ipList = array();
+        $ipList = [];
 
         foreach($xmlList->children() as $intersection)
                 $ipList[] = (string)$intersection["IP"];
@@ -708,7 +705,7 @@ class InSyncInterface
         
         $cameraList = $intersectionUtil->getCameraNames();
         
-        $arrayData = array();
+        $arrayData = [];
         $arrayData["name"] = (string)$intersectionUtil->getReadOnlySimpleXml()->Intersection["name"];
         $arrayData["list"] = $cameraList;
         
@@ -825,10 +822,10 @@ class InSyncInterface
         require_once($_SERVER['DOCUMENT_ROOT'] ."/helpers/pathDefinitions.php");
 
        
-        $emArray = array();   
+        $emArray = [];   
         foreach($message as $key=>$value)
         {
-            if (substr($key, 0,1) == "E")
+            if (str_starts_with($key, "E"))
             {
                 $jsonObject["Emergency" . substr($key,1,2)] = $value;
                 $contents = json_encode($jsonObject);

@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__) . "/../helpers/constants.php");
+require_once(__DIR__ . "/../helpers/constants.php");
 require_once(SITE_DOCUMENT_ROOT . "helpers/getcameralist.php");
 
 // NOTE: this reads static copy of cameralist.php for efficiency reasons, since it is not called from a session

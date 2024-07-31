@@ -12,7 +12,7 @@ require_once("../helpers/pathDefinitions.php");
 
 if(file_exists(CORRIDOR_CONF_FILE))
 {
-    $head = <<<HEAD
+    $head = <<<HEAD_WRAP
     <!-- HEADER -->
 
     <link href="stylesheets/site.css" media="screen, projection" rel="stylesheet" type="text/css" />
@@ -25,7 +25,7 @@ if(file_exists(CORRIDOR_CONF_FILE))
     <script src="javascripts/application.js" type="text/javascript"></script>   
 
     <!-- END HEADER -->
-HEAD;
+HEAD_WRAP;
 }
 
 include("../includes/header.php");

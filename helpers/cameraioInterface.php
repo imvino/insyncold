@@ -206,7 +206,7 @@ function syncWithVideoProcessor()
 	$videoDetectionDevices = $intersectionObject->xpath("//VideoDetectionDevice");
 
 	// Find all remote processors
-	$aMachines = array();
+	$aMachines = [];
 	foreach ($videoDetectionDevices as $vdd)
 	{
 		$machine = (string)($vdd->attributes()['machine']);		// Either an IP address or "."

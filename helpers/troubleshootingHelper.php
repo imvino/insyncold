@@ -1,4 +1,5 @@
 <?php
+use Unirest\Request;
 require_once("pathDefinitions.php");
 session_start();
 if(!isset($_SESSION["username"]) || ($_SESSION["username"] != "PEC" && $_SESSION["username"] != "kiosk" && $_SESSION["username"] != "ADMIN"))
@@ -51,7 +52,7 @@ if($action == "gettestips")
    if($intersectionXML === FALSE)
       die('{"error":"Could not load configuration"}');
 
-   $cameras = array();
+   $cameras = [];
 
    foreach($intersectionXML->VideoStreamSettings->VideoStream as $stream)
    {
@@ -66,7 +67,7 @@ if($action == "gettestips")
 
    $testData["cameras"] = $cameras;
 
-   $contextcameras = array();
+   $contextcameras = [];
    foreach($intersectionXML->VideoStreamSettings->VideoStream as $stream)
    {
 	   $url = parse_url((string)$stream["URL"], PHP_URL_HOST);
@@ -80,7 +81,7 @@ if($action == "gettestips")
    }
    $testData["contextcameras"] = $contextcameras;
 
-   $cyclopsdetector = array();
+   $cyclopsdetector = [];
    foreach($intersectionXML->VideoStreamSettings->VideoStream as $stream)
    {
 	   $url = parse_url((string)$stream["URL"], PHP_URL_HOST);
@@ -141,7 +142,7 @@ if ($action == "testsmtp")
 
       fclose($fp);
 
-      if(substr($return, 0, 3) == "220")
+      if(str_starts_with($return, "220"))
          die("PASSED");
       else
          die("FAILED");
@@ -186,8 +187,8 @@ if ($action == "testcamera")
 		require_once("getcameralist.php");
 		require_once(SITE_DOCUMENT_ROOT . "helpers/httpclient/Unirest.php");
 
-		Unirest\Request::auth($username, $password, CURLAUTH_DIGEST);
-		$response = Unirest\Request::get($cameraURL, $headers, $query);    
+		Request::auth($username, $password, CURLAUTH_DIGEST);
+		$response = Request::get($cameraURL, $headers, $query);    
 	
 		if (($response->code / 100) > 2)
 		{
@@ -421,7 +422,7 @@ if($action == "diskstatus")
    for($i = 100; $i >= 0; $i--)
       $output = str_replace("$i percent completed. ", "", $output);
 
-   $output = str_replace(array("\r\n", "\n"), "<br />", $output);
+   $output = str_replace(["\r\n", "\n"], "<br />", $output);
 
    echo $output;
 }
@@ -485,7 +486,7 @@ if($action == "getvideos")
    if($fileList == FALSE)
       die("Unable to load video list.");
 
-   $validDir = array();
+   $validDir = [];
 
    foreach($fileList as $file)
    {
@@ -569,8 +570,8 @@ if($action == "gettasks")
    require_once("pathDefinitions.php");
    require_once("insyncInterface.php");
 
-   $descriptorspec = array(1 => array("pipe", "w"));
-   $process = proc_open(TOOLS_ROOT . "/ProcessQuery.exe", $descriptorspec, $pipes, NULL, NULL, array("bypass_shell"=>TRUE));
+   $descriptorspec = [1 => ["pipe", "w"]];
+   $process = proc_open(TOOLS_ROOT . "/ProcessQuery.exe", $descriptorspec, $pipes, NULL, NULL, ["bypass_shell"=>TRUE]);
 
    $queryData = "";
 
@@ -597,7 +598,7 @@ if($action == "gettasks")
    if($perfXML === FALSE)
       exit;
 
-   $cpu = array();
+   $cpu = [];
    $count = 0;
 
    foreach($perfXML->CPU->Load as $load)
@@ -666,7 +667,7 @@ if($action == "clearstorage")
     {
         $WshShell->Run("$InSync /clearstorage", 1, true); 
     }
-    catch(Exception $e)
+    catch(Exception)
     {
         die("Could not execute $InSync /clearstorage");
     }
@@ -687,36 +688,7 @@ if($action == "download")
 
    require_once("pathDefinitions.php");
 
-   $logDirs = array(
-            APP_MON_LOG => "Application Monitor",
-            BOOT_LOG => "Boot",
-            CAMERAIO_LOG => "CameraIO",
-            SUPERVISION_LOG => "SuperVision",
-            CONFIG_SETUP_LOG => "Config Wizard",
-            EVENT_LOG => "Eventlog",
-            INSTALL_LOG => "Install",           
-            INSYNC_LOG => "InSync", 
-            INTERSECTIONMODEL_LOG => "IntersectionModel", 
-            OPTIMIZER_LOG => "Optimizer",
-            DEVICE_MANAGER_LOG => "DeviceManager",
-            INSYNCUI_LOG => "InSyncUI",
-            IOBOARD_PINGER_LOG => "IOBoard Pinger",
-            KIOSK_LOG => "Kiosk",
-            MANAGE_IP_CONF_LOG => "ManageIP",
-            MASTER_CONTROL_LOG => "Master Control",
-            NOTIFICATION_LOG => "Notifications",
-            NETWORK_DEVICE_MANAGER_LOG => "Network Device Manager",
-            NTP_LOG => "NTP", 
-            STARTUP_LOG => "Startup",
-            PROG_VALID_LOG => "Validator",
-            RHYTHM_TIME_SERVICE_LOG => "TimeService", 
-            SYSTEM_RESET_WD_LOG => "Watchdog", 
-            WOLFIO_LOG => "WolfIO", 
-            WRITE_FILTER_LOG => "Write Filter",           
-            HISTORY_STATS_ROOT => "History",
-			VIDEO_STREAMER_LOG => "Video Streamer",
-			DETECTOR_COMM_SERVICE_LOG => "Detector Comm Service",			
-			INTRAFFIC_SYNC_LOG => "InTrafficSyncs");
+   $logDirs = [APP_MON_LOG => "Application Monitor", BOOT_LOG => "Boot", CAMERAIO_LOG => "CameraIO", SUPERVISION_LOG => "SuperVision", CONFIG_SETUP_LOG => "Config Wizard", EVENT_LOG => "Eventlog", INSTALL_LOG => "Install", INSYNC_LOG => "InSync", INTERSECTIONMODEL_LOG => "IntersectionModel", OPTIMIZER_LOG => "Optimizer", DEVICE_MANAGER_LOG => "DeviceManager", INSYNCUI_LOG => "InSyncUI", IOBOARD_PINGER_LOG => "IOBoard Pinger", KIOSK_LOG => "Kiosk", MANAGE_IP_CONF_LOG => "ManageIP", MASTER_CONTROL_LOG => "Master Control", NOTIFICATION_LOG => "Notifications", NETWORK_DEVICE_MANAGER_LOG => "Network Device Manager", NTP_LOG => "NTP", STARTUP_LOG => "Startup", PROG_VALID_LOG => "Validator", RHYTHM_TIME_SERVICE_LOG => "TimeService", SYSTEM_RESET_WD_LOG => "Watchdog", WOLFIO_LOG => "WolfIO", WRITE_FILTER_LOG => "Write Filter", HISTORY_STATS_ROOT => "History", VIDEO_STREAMER_LOG => "Video Streamer", DETECTOR_COMM_SERVICE_LOG => "Detector Comm Service", INTRAFFIC_SYNC_LOG => "InTrafficSyncs"];
 
    $zip = new ZipArchive();
 
@@ -770,8 +742,8 @@ if($action == "download")
       closedir($dirHandle);
    }
 
-   $descriptorspec = array(1 => array("pipe", "w"));
-   $process = proc_open(EVENT_LOG_DUMP_EXE . " $startTimestamp $endTimestamp", $descriptorspec, $pipes, NULL, NULL, array("bypass_shell"=>TRUE));
+   $descriptorspec = [1 => ["pipe", "w"]];
+   $process = proc_open(EVENT_LOG_DUMP_EXE . " $startTimestamp $endTimestamp", $descriptorspec, $pipes, NULL, NULL, ["bypass_shell"=>TRUE]);
 
    $queryData = "";
 

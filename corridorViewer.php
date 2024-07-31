@@ -9,14 +9,15 @@ $breadCrumb = "<h1>Management Group <small>Management Group View</small></h1>";
 $hideHeader = true;
 $menuCategory = "corridor";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 <link rel="stylesheet" type="text/css" href="/css/corridorViewer.css"/>
 <script language="javascript" type="text/javascript" src="/js/plugins/json2.js"></script>
 <script language="javascript" type="text/javascript" src="/js/corridorViewer.js"></script>
 <script language="javascript" type="text/javascript" src="/js/refreshView.js"></script>
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP
+;
 
 $fullscreen = false;
 if(isset($_REQUEST["fullscreen"]))

@@ -20,8 +20,8 @@ use ZendAmf\Parser\Amf3\Deserializer;
 
 class AmfFormat extends Format
 {
-    const MIME = 'application/x-amf';
-    const EXTENSION = 'amf';
+    public const MIME = 'application/x-amf';
+    public const EXTENSION = 'amf';
 
     public function encode($data, $humanReadable = false)
     {

@@ -1,12 +1,12 @@
 <?php
-require_once (dirname(__FILE__) . '/../helpers/constants.php');
+require_once (__DIR__ . '/../helpers/constants.php');
 require_once (SITE_DOCUMENT_ROOT . 'helpers/pathDefinitions.php');
 
 // this module reads the Intersection.xml file and loads data into the arrays that other pages use
 // pages that update the configuration files set UpdateConfiguration
 // global variables
 
-$aCameras = array();
+$aCameras = [];
 
 // first make sure an xml file exists
 $FileNameXml = INTERSECTION_CONF_FILE;
@@ -70,7 +70,7 @@ if (!file_exists($FileNameXml))
 		$lastByte = $pieces[3];
 		$shortName = str_replace(' ', '_', $longName);
 		// put into aCameras
-		$entry = array('Name' => $shortName, 'LongName'=>$longName, 'Address' => $ipAddress, 'LastByte'=>$lastByte, 'Port' =>$port, 'Path' => $path);
+		$entry = ['Name' => $shortName, 'LongName'=>$longName, 'Address' => $ipAddress, 'LastByte'=>$lastByte, 'Port' =>$port, 'Path' => $path];
 		$aCameras[] = $entry;
 	}
 
@@ -110,7 +110,7 @@ if (!file_exists($FileNameXml))
 				}
 				
 				// put into aCameras
-				$entry = array('Name' => $shortName, 'LongName'=>$longName, 'Address' => $ipAddress, 'LastByte'=>$lastByte, 'Port' =>$port, 'Path' => $path);
+				$entry = ['Name' => $shortName, 'LongName'=>$longName, 'Address' => $ipAddress, 'LastByte'=>$lastByte, 'Port' =>$port, 'Path' => $path];
 				$aCameras[] = $entry;
 			}
 			
@@ -150,7 +150,7 @@ if (!file_exists($FileNameXml))
 					$port = 80;
 					
 					// put into aCameras
-					$entry = array('Name' => $shortName, 'LongName'=>$longName, 'Address' => $ipAddress, 'LastByte'=>$lastByte, 'Port' =>$port, 'Path' => $path);
+					$entry = ['Name' => $shortName, 'LongName'=>$longName, 'Address' => $ipAddress, 'LastByte'=>$lastByte, 'Port' =>$port, 'Path' => $path];
 					$aCameras[] = $entry;
 				}
 			}
@@ -181,7 +181,7 @@ if (!file_exists($FileNameXml))
 				$lastByte = $pieces[3];
 				$shortName = str_replace(' ', '_', $longName);
 				// put into aCameras
-				$entry = array('Name' => $shortName, 'LongName'=>$longName, 'Address' => $ipAddress, 'LastByte'=>$lastByte, 'Port' =>$port, 'Path' => $path);
+				$entry = ['Name' => $shortName, 'LongName'=>$longName, 'Address' => $ipAddress, 'LastByte'=>$lastByte, 'Port' =>$port, 'Path' => $path];
 				$aCameras[] = $entry;
 			} 
 		}

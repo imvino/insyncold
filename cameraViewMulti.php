@@ -9,7 +9,7 @@ $breadCrumb = "<h1>Views <small>Multi Camera View</small></h1>";
 $hideHeader= true;
 $menuCategory = "views";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 
 <link rel="stylesheet" type="text/css" href="/css/cameraViews.css"/>
@@ -21,7 +21,8 @@ $head = <<<HEAD
 <script language="javascript" type="text/javascript" src="js/manualControls.js"></script>
 
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP
+;
 
 $fullscreen = false;
 if(isset($_REQUEST["fullscreen"]))
@@ -241,13 +242,13 @@ if ($cameraView == "wide-quad") {
 				$name = $result[$r];
 				
 				// use actual camera names instead of hard coded standard names. Select only one per approach.
-				if (strpos($name, "East Bound") !== false && $ebName === "")
+				if (str_contains($name, "East Bound") && $ebName === "")
 					$ebName = $name;
-				else if (strpos($name, "South Bound") !== false && $sbName === "")
+				else if (str_contains($name, "South Bound") && $sbName === "")
 					$sbName = $name;
-				else if (strpos($name, "North Bound") !== false && $nbName === "")
+				else if (str_contains($name, "North Bound") && $nbName === "")
 					$nbName = $name;			
-				else if (strpos($name, "West Bound") !== false  && $wbName === "")
+				else if (str_contains($name, "West Bound")  && $wbName === "")
 					$wbName = $name;
 			}
 		}

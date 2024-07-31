@@ -12,8 +12,8 @@ define('SASL_DIGEST_STATE_DONE',              2);
 
 class digest_sasl_client_class
 {
-	var $credentials=array();
-	var $state=SASL_DIGEST_STATE_START;
+	public $credentials=[];
+	public $state=SASL_DIGEST_STATE_START;
 
 	Function unq($string)
 	{
@@ -42,14 +42,8 @@ class digest_sasl_client_class
 			$client->error='Digest authentication state is not at the start';
 			return(SASL_FAIL);
 		}
-		$this->credentials=array(
-			'user'=>'',
-			'password'=>'',
-			'uri'=>'',
-			'method'=>'',
-			'session'=>''
-		);
-		$defaults=array();
+		$this->credentials=['user'=>'', 'password'=>'', 'uri'=>'', 'method'=>'', 'session'=>''];
+		$defaults=[];
 		$status=$client->GetCredentials($this->credentials,$defaults,$interactions);
 		if($status==SASL_CONTINUE)
 			$this->state=SASL_DIGEST_STATE_RESPOND_CHALLENGE;
@@ -63,7 +57,7 @@ class digest_sasl_client_class
 		{
 			case SASL_DIGEST_STATE_RESPOND_CHALLENGE:
 				$values=explode(',',$response);
-				$parameters=array();
+				$parameters=[];
 				for($v=0; $v<count($values); $v++)
 					$parameters[strtok(trim($values[$v]), '=')]=strtok('');
 

@@ -29,7 +29,7 @@ class PropagationCollector
 
     function __construct()
     {
-        $this->rc = new RollingCurl(array($this, 'processResponse'));
+        $this->rc = new RollingCurl([$this, 'processResponse']);
         $this->rc->window_size = 10;
     }
 
@@ -64,7 +64,7 @@ class PropagationCollector
         foreach ($urls as $url)
         {
             $request = new RollingCurlRequest($url);
-            $request->options = array(CURLOPT_POST => true, CURLOPT_SSL_VERIFYPEER => false, CURLOPT_CONNECTTIMEOUT => 25, CURLOPT_SSL_VERIFYHOST => false, CURLOPT_TIMEOUT => 45, CURLOPT_POSTFIELDS => $postParams);
+            $request->options = [CURLOPT_POST => true, CURLOPT_SSL_VERIFYPEER => false, CURLOPT_CONNECTTIMEOUT => 25, CURLOPT_SSL_VERIFYHOST => false, CURLOPT_TIMEOUT => 45, CURLOPT_POSTFIELDS => $postParams];
             $fallback_request = new RollingCurlRequest(preg_replace('/^https:/i', 'http:', $url));
             $fallback_request->options = $request->options;
             $request->fallback_request = $fallback_request;
@@ -155,7 +155,7 @@ switch($action)
 		    $statusXML->addAttribute("status", "working");
 		    
 		    // get all intersection IPs
-		    $intersectionArr = array();
+		    $intersectionArr = [];
 			foreach ($Intersections as $IntIP => $name)
 			{
 				$intersectionArr[] = $protocol . $IntIP . "/helpers/portalDesignerHelper.php";
@@ -171,7 +171,7 @@ switch($action)
 		    
 		    file_put_contents($statusFile, $statusXML->asXML());
 		    
-		    $postParams = array("action"=>"upload", "save"=>"true", "file"=>"@" . PORTAL_CONF_FILE, "u" => base64_encode("PEC"), "p" => base64_encode("lenpec4321"));
+		    $postParams = ["action"=>"upload", "save"=>"true", "file"=>"@" . PORTAL_CONF_FILE, "u" => base64_encode("PEC"), "p" => base64_encode("lenpec4321")];
 		    
 		    $collector = new PropagationCollector();
 		    $collector->run($intersectionArr, $postParams, $hash);
@@ -250,7 +250,7 @@ switch($action)
             {            
                 $jsonData = generateFromCorridorXML($xml);
 
-                $returnArray = array();
+                $returnArray = [];
                 $returnArray["type"] = "corridor";
                 $returnArray["data"] = $jsonData;
 
@@ -260,7 +260,7 @@ switch($action)
             {
                 $jsonData = generateFromPortalXML($xml);
 
-                $returnArray = array();
+                $returnArray = [];
                 $returnArray["type"] = "portal";
                 $returnArray["data"] = $jsonData;
 
@@ -283,7 +283,7 @@ switch($action)
             if($jsonData === FALSE)
                 die("Error: Could not parse uploaded CSV file.");
             
-            $returnArray = array();
+            $returnArray = [];
             $returnArray["type"] = "csv";
             $returnArray["data"] = $jsonData;
             
@@ -353,9 +353,9 @@ function generateFromCSV($filename)
     
     $lineCount = count($lines);
     
-    $jsonData = array();
+    $jsonData = [];
     $jsonData["title"] = "Imported Portal";
-    $jsonData["data"] = array();
+    $jsonData["data"] = [];
     
     $corridorCount = 0;
     
@@ -374,7 +374,7 @@ function generateFromCSV($filename)
         if($line == "corridor:")
         {            
             $corridorName = trim($lines[++$i]);
-            $jsonData["data"][$corridorCount] = array();
+            $jsonData["data"][$corridorCount] = [];
             $corridor = &$jsonData["data"][$corridorCount];
             $corridor["name"] = trim($corridorName, ',');
             $corridor["type"] = "corridor";
@@ -389,7 +389,7 @@ function generateFromCSV($filename)
                 
                 if($line == "intersection:")
                 {
-                    $corridor["data"][$intersectionCount] = array();
+                    $corridor["data"][$intersectionCount] = [];
                     $intersection = &$corridor["data"][$intersectionCount];
                     
                     $intersectionNameIP = explode(",", trim($lines[++$j]));
@@ -397,7 +397,7 @@ function generateFromCSV($filename)
                     $intersection["name"] = $intersectionNameIP[0];
                     $intersection["ip"] = $intersectionNameIP[1];
                     $intersection["type"] = "intersection";
-                    $intersection["data"] = array();
+                    $intersection["data"] = [];
                     
                     // add all camera/relay data
                     for($k = $j+1; $k < $lineCount; $k++)
@@ -414,9 +414,9 @@ function generateFromCSV($filename)
                             continue;
                         
                         if(strtolower($line[0]) == "din relay")
-                            $intersection["data"][] = array("type"=>"relay", "name"=>"DIN Relay", "ip"=>$line[1]);
+                            $intersection["data"][] = ["type"=>"relay", "name"=>"DIN Relay", "ip"=>$line[1]];
                         else
-                            $intersection["data"][] = array("type"=>"camera", "name"=>$line[0], "ip"=>$line[1]);
+                            $intersection["data"][] = ["type"=>"camera", "name"=>$line[0], "ip"=>$line[1]];
                     }
                     
                     $intersectionCount++;
@@ -438,11 +438,11 @@ function generateFromCSV($filename)
 
 function generateFromPortalXML($corridorXML)
 {
-    $jsonData = array();
+    $jsonData = [];
     $count = 0;
     
     $jsonData["title"] = (string)$corridorXML["title"];
-    $jsonData["data"] = array();
+    $jsonData["data"] = [];
     
     foreach($corridorXML as $node)
     {
@@ -450,7 +450,7 @@ function generateFromPortalXML($corridorXML)
        
         if($type == "map")
         {
-            $objData = array();
+            $objData = [];
             $objData["type"] = "map";
             $objData["name"] = (string)$node["name"];
             $objData["url"] = (string)$node["url"];
@@ -459,10 +459,10 @@ function generateFromPortalXML($corridorXML)
         }
         else if($type == "corridor")
         {
-            $objData = array();
+            $objData = [];
             $objData["type"] = "corridor";
             $objData["name"] = (string)$node["name"];
-            $objData["data"] = array();
+            $objData["data"] = [];
             
             foreach($node->children() as $child)
             {
@@ -470,7 +470,7 @@ function generateFromPortalXML($corridorXML)
                 
                 if($type == "map")
                 {
-                    $objDataChild = array();
+                    $objDataChild = [];
                     $objDataChild["type"] = "map";
                     $objDataChild["name"] = (string)$child["name"];
                     $objDataChild["url"] = (string)$child["url"];
@@ -479,16 +479,16 @@ function generateFromPortalXML($corridorXML)
                 }
                 else if($type == "intersection")
                 {
-                    $objDataChild = array();
+                    $objDataChild = [];
                     $objDataChild["type"] = "intersection";
                     $objDataChild["name"] = (string)$child["name"];
                     $objDataChild["ip"] = (string)$child["ip"];
-                    $objDataChild["data"] = array();
+                    $objDataChild["data"] = [];
                     
                     foreach($child->children() as $intersectionChild)
                     {
                         $type = strtolower($intersectionChild->getName());
-                        $objDataChild["data"][] = array("type"=>$type, "name"=>(string)$intersectionChild["name"], "ip"=>(string)$intersectionChild["ip"]);
+                        $objDataChild["data"][] = ["type"=>$type, "name"=>(string)$intersectionChild["name"], "ip"=>(string)$intersectionChild["ip"]];
                     }
                     
                     $objData["data"][] = $objDataChild;
@@ -504,7 +504,7 @@ function generateFromPortalXML($corridorXML)
 
 function generateFromCorridorXML($corridorXML)
 {
-    $jsonData = array();
+    $jsonData = [];
     $count = 0;
 
     foreach($corridorXML->Intersection as $Intersection)
@@ -512,7 +512,7 @@ function generateFromCorridorXML($corridorXML)
         require_once("libraries/intersectionUtil.php");
         $intersectionUtil = new IntersectionUtil($Intersection->TraVisConfiguration);
 
-        $jsonData[$count] = array();
+        $jsonData[$count] = [];
 
         $name = (string)$Intersection->TraVisConfiguration->Intersection["name"];
         $ip = (string)$Intersection["IP"];
@@ -520,7 +520,7 @@ function generateFromCorridorXML($corridorXML)
         $jsonData[$count]["ip"] = $ip;
         $jsonData[$count]["name"] = $name;
         $jsonData[$count]["type"] = "intersection";
-        $jsonData[$count]["data"] = array();
+        $jsonData[$count]["data"] = [];
 
         $cameras = $intersectionUtil->getCameras();
 
@@ -533,7 +533,7 @@ function generateFromCorridorXML($corridorXML)
                     $name = $cameras[$cameraName]->name;
                     $ip = parse_url($url, PHP_URL_HOST);
 
-                    $jsonData[$count]["data"][] = array("type"=>"camera", "name"=>$name, "ip"=>$ip);
+                    $jsonData[$count]["data"][] = ["type"=>"camera", "name"=>$name, "ip"=>$ip];
                 } else {
                     $emit_panomorph = true;
                     $panomorph_ip = parse_url($cameras[$cameraName]->cameraUrl, PHP_URL_HOST);
@@ -541,7 +541,7 @@ function generateFromCorridorXML($corridorXML)
         }
 
         if ($emit_panomorph) {
-            $jsonData[$count]["data"][] = array("type"=>"camera", "name"=>"Panomorph", "ip"=>$panomorph_ip);
+            $jsonData[$count]["data"][] = ["type"=>"camera", "name"=>"Panomorph", "ip"=>$panomorph_ip];
         }
 
         $count++;

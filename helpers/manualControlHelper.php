@@ -131,7 +131,7 @@ function getHTML($readOnly)
 	}
    
    // get active phases
-   $activePhases = array();
+   $activePhases = [];
    foreach($intersectionObject->Intersection->Direction as $Directions)
       foreach($Directions->Phases->Phase as $Phase)
          array_push($activePhases, $Phase["name"]);
@@ -142,7 +142,7 @@ function getHTML($readOnly)
    $xml = simplexml_load_string($pedInfoData);
 
    // get active peds
-   $pedNumbers = array();
+   $pedNumbers = [];
    foreach($xml->PedPhase as $pedPhase)
    {
       $number = (int)$pedPhase["Number"];
@@ -321,7 +321,7 @@ function acquireLock($override)
       {
                     pg_query_params($db,
                             "INSERT INTO manualcalls (key, value, \"timestamp\") values ('lock_holder', $1, transaction_timestamp() at time zone 'UTC')",
-                            array($sessionID));
+                            [$sessionID]);
                     pg_query($db, "UPDATE manualcalls set value='0', \"timestamp\"=transaction_timestamp() at time zone 'UTC' where key='increment'");
                     pg_query($db, "INSERT INTO manualcalls (key, value, \"timestamp\") select 'increment', '0', transaction_timestamp() at time zone 'UTC' where not exists (select 1 from manualcalls where key='increment')");
       }
@@ -338,7 +338,7 @@ function acquireLock($override)
                         else
                         {
                             // you're taking over from nothing?                    
-                            pg_query_params($db, "UPDATE manualcalls set value=$1, \"timestamp\"=transaction_timestamp() at time zone 'UTC' where key='lock_holder'", array($sessionID));
+                            pg_query_params($db, "UPDATE manualcalls set value=$1, \"timestamp\"=transaction_timestamp() at time zone 'UTC' where key='lock_holder'", [$sessionID]);
                             pg_query($db, "UPDATE manualcalls set value='0', \"timestamp\"=transaction_timestamp() at time zone 'UTC' where key='increment'");
                             pg_query($db, "INSERT INTO manualcalls (key, value, \"timestamp\") select 'increment', '0', transaction_timestamp() at time zone 'UTC' where not exists (select 1 from manualcalls where key='increment')");
                         }
@@ -404,17 +404,17 @@ function getStateInSync()
             {
                                     continue;
             }
-            else if(substr($row["key"], 0, 9) == 'PedButton')
+            else if(str_starts_with($row["key"], 'PedButton'))
             {
-                                    pg_query_params($db, "DELETE FROM manualcalls WHERE key=$1", array($row["key"]));
+                                    pg_query_params($db, "DELETE FROM manualcalls WHERE key=$1", [$row["key"]]);
             }
             else
             {
                                     if(($time->getTimestamp() - $entryTime->getTimestamp()) >= 60)
-                                        pg_query_params($db, "DELETE FROM manualcalls WHERE key=$1", array($row["key"]));
+                                        pg_query_params($db, "DELETE FROM manualcalls WHERE key=$1", [$row["key"]]);
                                     // handles negative times for DST / NTP updates
                                     else if(($time->getTimestamp() - $entryTime->getTimestamp()) <= -5)
-                                        pg_query_params($db, "DELETE FROM manualcalls WHERE key=$1", array($row["key"]));
+                                        pg_query_params($db, "DELETE FROM manualcalls WHERE key=$1", [$row["key"]]);
             }
 
             $xmlDoc .= "<row key=\"" . $row['key']. "\" value=\"" . $row['value']. "\" />";
@@ -456,7 +456,7 @@ function getManualCallState()
    }
         pg_query($db, "BEGIN TRANSACTION");
    
-   $jsonObj = array();
+   $jsonObj = [];
    $xmlDoc = "<manualCalls>";
    
    if(isset($_REQUEST['initial']))
@@ -518,10 +518,10 @@ function setManualCalls()
    if(isset($_REQUEST['message']))
    $message = $_REQUEST['message'];
    
-   $emArray = array();   
+   $emArray = [];   
    		foreach($message as $key=>$value)
 		{
-			if (substr($key, 0,9) == "Emergency")
+			if (str_starts_with($key, "Emergency"))
 			{
 				$jsonObject[$key] = $value;
 				$contents = json_encode($jsonObject);

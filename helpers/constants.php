@@ -1,6 +1,6 @@
 <?php
 define('SITE_DOCUMENT_ROOT',
-	str_replace('\\','/',substr(dirname(__FILE__), 0, strlen(dirname(__FILE__)) - strlen('/helpers')))
+	str_replace('\\','/',substr(__DIR__, 0, strlen(__DIR__) - strlen('/helpers')))
 	.'/');
 define('SITE_PREFIX',
 	preg_replace('/^.*\\/www(\\/?[^\\/]*)\\/helpers\\/constants.php$/', '${1}', str_replace('\\', '/', __FILE__))

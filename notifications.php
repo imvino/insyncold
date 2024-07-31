@@ -8,7 +8,7 @@ $title = ": Notifications Viewer";
 $breadCrumb = "<h1>Notifications <small>Email Notifications</small></h1>";
 $menuCategory = "reports";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 <link rel="stylesheet" type="text/css" href="/css/history.css"/>
 <script language="javascript" type="text/javascript" src="/js/jquery/jquery.stickytableheaders.js"></script> 
@@ -17,7 +17,7 @@ $head = <<<HEAD
 <script language="javascript" type="text/javascript" src="/js/jquery/jquery.keysequencedetector.js"></script>
 <script language="javascript" type="text/javascript" src="/js/plugins/date.js"></script>
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP;
 
 if($permissions["username"] == "kiosk")
     include("includes/header_lite.php");

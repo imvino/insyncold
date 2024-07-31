@@ -8,14 +8,15 @@ $title = ": Troubleshooting";
 $breadCrumb = "<h1>Settings <small>Troubleshooting</small></h1>";
 $menuCategory = "settings";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 
 <script language="javascript" type="text/javascript" src="/js/troubleshooting.js"></script>
 <script language="javascript" type="text/javascript" src="/js/jquery/jquery.timepicker.js"></script>
 
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP
+;
 
 if($permissions["username"] == "kiosk")
     include("includes/header_lite.php");
@@ -93,7 +94,7 @@ if($contents !== FALSE)
 	if (file_exists(INTRAFFIC_SYNC_LOG))
 	{
 		$path = @opendir(INTRAFFIC_SYNC_LOG);
-		$list = array();
+		$list = [];
 		$list = fileList($path);
 		foreach ($list as $item)
 	    {
@@ -258,7 +259,7 @@ else
 <?php
 	function fileList($path)
 	{
-		$filelist = array();
+		$filelist = [];
 		while($file = readdir($path))
 		{
 			if ($file != '.' and $file != '..')
@@ -273,7 +274,7 @@ else
 	   closedir($path);
 	   krsort($filelist);
 
-		$datalist = array();
+		$datalist = [];
 		foreach ($filelist as $file)
 		{
 			$fullPath = INTRAFFIC_SYNC_LOG."/".$file;

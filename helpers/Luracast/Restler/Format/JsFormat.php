@@ -15,8 +15,8 @@ namespace Luracast\Restler\Format;
  */
 class JsFormat extends JsonFormat
 {
-    const MIME = 'text/javascript';
-    const EXTENSION = 'js';
+    public const MIME = 'text/javascript';
+    public const EXTENSION = 'js';
 
     public static $callbackMethodName = 'parseResponse';
     public static $callbackOverrideQueryString = 'callback';
@@ -24,11 +24,11 @@ class JsFormat extends JsonFormat
 
     public function encode($data, $human_readable = false)
     {
-        $r = array();
+        $r = [];
         if (static::$includeHeaders) {
-            $r['meta'] = array();
+            $r['meta'] = [];
             foreach (headers_list() as $header) {
-                list($h, $v) = explode(': ', $header, 2);
+                [$h, $v] = explode(': ', $header, 2);
                 $r['meta'][$h] = $v;
             }
         }

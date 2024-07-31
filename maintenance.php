@@ -8,7 +8,7 @@ $title = ": Maintenance";
 $breadCrumb = "<h1>Settings <small>Maintenance</small></h1>";
 $menuCategory = "settings";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->     
 
 <link rel="stylesheet" type="text/css" href="/css/maintenance.css"/>
@@ -17,7 +17,8 @@ $head = <<<HEAD
 <script language="javascript" type="text/javascript" src="/js/jquery/jquery.ui.progressbar.js"></script>
 
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP
+;
 
 if(strcasecmp($permissions["username"],"kiosk") == 0)
     include("includes/header_lite.php");
@@ -39,7 +40,7 @@ require_once("/helpers/maintenanceHelper.php");
 require_once("/helpers/pathDefinitions.php");
 
 // Gather restore archive info
-$autoRestoreFiles = array();
+$autoRestoreFiles = [];
 
 if (file_exists(INSYNC_CONF_ARCHIVE_ROOT)) 
 {

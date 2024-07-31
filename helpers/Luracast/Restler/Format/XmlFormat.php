@@ -22,8 +22,8 @@ class XmlFormat extends Format
     public static $importRootNameAndAttributesFromXml = false;
     public static $parseAttributes = true;
     public static $parseNamespaces = false;
-    public static $attributeNames = array('xmlns');
-    public static $nameSpaces = array();
+    public static $attributeNames = ['xmlns'];
+    public static $nameSpaces = [];
     /**
      * Default name for the root node.
      *
@@ -31,8 +31,8 @@ class XmlFormat extends Format
      */
     public static $rootName = 'response';
     public static $defaultTagName = 'item';
-    const MIME = 'application/xml';
-    const EXTENSION = 'xml';
+    public const MIME = 'application/xml';
+    public const EXTENSION = 'xml';
 
       public function encode($data, $humanReadable = false)
     {
@@ -49,7 +49,7 @@ class XmlFormat extends Format
     {
         try {
             if ($data == '') {
-                return array();
+                return [];
             }
             return $this->toArray($data);
         } catch (\RuntimeException $e) {
@@ -177,7 +177,7 @@ class XmlFormat extends Format
     {
         try {
             $xml = new SimpleXMLElement($xml);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return (string) $xml;
         }
         $hasChildren = false;
@@ -199,11 +199,11 @@ class XmlFormat extends Format
 
             return $r;
         }
-        $arr = array();
+        $arr = [];
         if ($firstCall) {
             if(self::$importRootNameAndAttributesFromXml){
                 // reset the attribute names list
-                self::$attributeNames = array();
+                self::$attributeNames = [];
                 self::$rootName = $xml->getName();
             }
             if (self::$parseNamespaces) {
@@ -256,9 +256,7 @@ class XmlFormat extends Format
             // if the node is already set, put it into an array
             if (isset($arr [$key])) {
                 if (!is_array($arr [$key]) || @$arr [$key] [0] == null) {
-                    $arr [$key] = array(
-                            $arr [$key]
-                    );
+                    $arr [$key] = [$arr [$key]];
                 }
                 $arr [$key] [] = $node;
             } else {
@@ -283,9 +281,7 @@ class XmlFormat extends Format
                     if (isset($arr [$key])) {
                         if (!is_array($arr [$key])
                                 || @$arr [$key] [0] == null) {
-                            $arr [$key] = array(
-                                    $arr [$key]
-                            );
+                            $arr [$key] = [$arr [$key]];
                         }
                         $arr [$key] [] = $node;
                     } else {

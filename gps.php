@@ -8,16 +8,17 @@ $title = ": GPS Coordinates";
 $breadCrumb = "<h1>Settings <small>GPS Coordinates</small></h1>";
 $menuCategory = "settings";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 
-<link rel="stylesheet" type="text/css" href="/css/gpsCoordinates.css"/>		
+<link rel="stylesheet" type="text/css" href="/css/gpsCoordinates.css"/>\t\t
 <script type="text/javascript" src="/js/jquery/jquery.mousewheel.js"></script> 
 <script type="text/javascript" src="/js/jquery/jquery.mapbox.js"></script> 
 <script type="text/javascript" src="/js/gps.js"></script>
 
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP
+;
 
 if($permissions["username"] == "kiosk")
     include("includes/header_lite.php");

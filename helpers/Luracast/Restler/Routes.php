@@ -18,7 +18,7 @@ use ReflectionMethod;
  */
 class Routes
 {
-    protected static $routes = array();
+    protected static $routes = [];
 
     /**
      * Route the public and protected methods of an Api class
@@ -47,7 +47,7 @@ class Routes
         foreach ($methods as $method) {
             $methodUrl = strtolower($method->getName());
             //method name should not begin with _
-            if ($methodUrl{0} == '_') {
+            if ($methodUrl[0] == '_') {
                 continue;
             }
             $doc = $method->getDocComment();
@@ -58,8 +58,8 @@ class Routes
             ) {
                 continue;
             }
-            $arguments = array();
-            $defaults = array();
+            $arguments = [];
+            $defaults = [];
             $params = $method->getParameters();
             $position = 0;
             $ignorePathTill = false;
@@ -76,7 +76,7 @@ class Routes
                     = $classMetadata['longDescription'];
             }
             if (!isset($metadata['param'])) {
-                $metadata['param'] = array();
+                $metadata['param'] = [];
             }
             foreach ($params as $param) {
                 $type =
@@ -88,7 +88,7 @@ class Routes
                 $defaults[$position] = $param->isDefaultValueAvailable() ?
                     $param->getDefaultValue() : null;
                 if (!isset($metadata['param'][$position])) {
-                    $metadata['param'][$position] = array();
+                    $metadata['param'][$position] = [];
                 }
                 $m = & $metadata ['param'] [$position];
                 if (isset($type)) {
@@ -136,16 +136,7 @@ class Routes
             */
 
             // take note of the order
-            $call = array(
-                'url' => null,
-                'className' => $className,
-                'path' => rtrim($resourcePath, '/'),
-                'methodName' => $method->getName(),
-                'arguments' => $arguments,
-                'defaults' => $defaults,
-                'metadata' => $metadata,
-                'accessLevel' => $accessLevel,
-            );
+            $call = ['url' => null, 'className' => $className, 'path' => rtrim($resourcePath, '/'), 'methodName' => $method->getName(), 'arguments' => $arguments, 'defaults' => $defaults, 'metadata' => $metadata, 'accessLevel' => $accessLevel];
             // if manual route
             if (preg_match_all(
                 '/@url\s+(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS)'
@@ -161,9 +152,7 @@ class Routes
                             $match = trim($matches[0], '{}:');
                             $index = $call['arguments'][$match];
                             return '{' .
-                                Routes::typeChar(isset($call['metadata']['param'][$index]['type'])
-                                    ? $call['metadata']['param'][$index]['type']
-                                    : null)
+                                Routes::typeChar($call['metadata']['param'][$index]['type'] ?? null)
                                 . $index . '}';
                         }, $url);
                     static::addPath($url, $call, $httpMethod);
@@ -208,9 +197,7 @@ class Routes
                     //$call['metadata']['url'] = "$httpMethod $url{"
                     //. $param->getName() . '}';
                     $url .= '{' .
-                        static::typeChar(isset($call['metadata']['param'][$position - 1]['type'])
-                            ? $call['metadata']['param'][$position - 1]['type']
-                            : null)
+                        static::typeChar($call['metadata']['param'][$position - 1]['type'] ?? null)
                         . ($position - 1) . '}';
                     if ($allowAmbiguity || $position == $ignorePathTill) {
                         static::addPath($url, $call, $httpMethod);
@@ -229,25 +216,21 @@ class Routes
         if (!$type) {
             return 's';
         }
-        switch ($type{0}) {
-            case 'i':
-            case 'f':
-                return 'n';
-        }
-        return 's';
+        return match ($type[0]) {
+            'i', 'f' => 'n',
+            default => 's',
+        };
     }
 
     protected static function addPath($path, array $call, $httpMethod = 'GET')
     {
         $call['url'] = preg_replace_callback(
             "/\{\S(\d+)\}/",
-            function ($matches) use ($call) {
-                return '{' . $call['metadata']['param'][$matches[1]]['name'] . '}';
-            },
+            fn($matches) => '{' . $call['metadata']['param'][$matches[1]]['name'] . '}',
             $path
         );
         //check for wildcard routes
-        if (substr($path, -1, 1) == '*') {
+        if (str_ends_with($path, '*')) {
             $path = rtrim($path, '/*');
             static::$routes['*'][$path][$httpMethod] = $call;
         } else {
@@ -265,26 +248,24 @@ class Routes
      * @return ApiMethodInfo
      * @throws RestException
      */
-    public static function find($path, $httpMethod, array $data = array())
+    public static function find($path, $httpMethod, array $data = [])
     {
         $p =& static::$routes;
         $status = 404;
         $message = null;
-        $methods = array();
+        $methods = [];
         if (isset($p[$path][$httpMethod])) {
             //static route
             return static::populate($p[$path][$httpMethod], $data);
         } elseif (isset($p['*'])) {
             //wildcard routes
-            uksort($p['*'], function ($a, $b) {
-                return strlen($b) - strlen($a);
-            });
+            uksort($p['*'], fn($a, $b) => strlen($b) - strlen($a));
             foreach ($p['*'] as $key => $value) {
-                if (strpos($path, $key) === 0 && isset($value[$httpMethod])) {
+                if (str_starts_with($path, $key) && isset($value[$httpMethod])) {
                     //path found, convert rest of the path to parameters
                     $path = substr($path, strlen($key) + 1);
                     $call = ApiMethodInfo::__set_state($value[$httpMethod]);
-                    $call->parameters = empty($path) ? array() : explode('/', $path);
+                    $call->parameters = empty($path) ? [] : explode('/', $path);
                     return $call;
                 }
             }
@@ -295,8 +276,8 @@ class Routes
             if (!isset($value[$httpMethod])) {
                 continue;
             }
-            $regex = str_replace(array('{', '}'),
-                array('(?P<', '>[^/]+)'), $key);
+            $regex = str_replace(['{', '}'],
+                ['(?P<', '>[^/]+)'], $key);
             if (preg_match_all(":^$regex$:i", $path, $matches, PREG_SET_ORDER)) {
                 $matches = $matches[0];
                 $found = true;
@@ -307,7 +288,7 @@ class Routes
                     }
                     $index = intval(substr($k, 1));
                     $details = $value[$httpMethod]['metadata']['param'][$index];
-                    if ($k{0} == 's' || strpos($k, static::typeOf($v)) === 0) {
+                    if ($k[0] == 's' || str_starts_with($k, static::typeOf($v))) {
                         $data[$details['name']] = $v;
                     } else {
                         $status = 400;

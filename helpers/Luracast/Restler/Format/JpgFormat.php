@@ -15,11 +15,11 @@ namespace Luracast\Restler\Format;
  */
 class JpgFormat extends Format {
 
-	const MIME = 'image/jpeg';
-	const EXTENSION = 'jpg';
+	public const MIME = 'image/jpeg';
+	public const EXTENSION = 'jpg';
 
 	public function encode($data, $humanReadable = false) {
-		if (isset($data) && is_string($data) && strlen($data) > 4 && substr($data, 0, 4) == "\xff\xd8\xff\xe0") {
+		if (isset($data) && is_string($data) && strlen($data) > 4 && str_starts_with($data, "\xff\xd8\xff\xe0")) {
 			return $data;
 		} else {
 			if ($humanReadable)

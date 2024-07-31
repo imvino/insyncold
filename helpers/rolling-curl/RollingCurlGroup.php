@@ -54,11 +54,6 @@ abstract class RollingCurlGroupRequest extends RollingCurlRequest {
  */
 class RollingCurlGroup {
     /**
-     * @var string group name
-     */
-    protected $name;
-
-    /**
      * @var int total number of requests in a group
      */
     protected $num_requests = 0;
@@ -71,14 +66,14 @@ class RollingCurlGroup {
     /**
      * @var array requests array
      */
-    private $requests = array();
+    private $requests = [];
 
     /**
      * @param string $name group name
      * @return void
      */
-    function __construct($name) {
-        $this->name = $name;
+    function __construct(protected $name)
+    {
     }
 
     /**
@@ -161,11 +156,6 @@ class RollingCurlGroup {
 class GroupRollingCurl extends RollingCurl {
 
     /**
-     * @var mixed common callback for all groups
-     */
-    private $group_callback = null;
-
-    /**
      * @param string $output received page body
      * @param array $info holds various information about response such as HTTP response code, content type, time taken to make request etc.
      * @param RollingCurlRequest $request request used
@@ -180,13 +170,11 @@ class GroupRollingCurl extends RollingCurl {
     }
 
     /**
-     * @param mixed $callback common callback for all groups
+     * @param mixed $group_callback common callback for all groups
      * @return void
      */
-    function __construct($callback = null) {
-        $this->group_callback = $callback;
-
-        parent::__construct(array(&$this, "process"));
+    function __construct(private $group_callback = null) {
+        parent::__construct([&$this, "process"]);
     }
 
     /**

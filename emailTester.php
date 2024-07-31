@@ -8,10 +8,10 @@ $title = ": Email Tester";
 $breadCrumb = "<h1>Settings <small>Email Tester</small></h1>";
 $menuCategory = "settings";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP;
 
 include("includes/header.php");
 
@@ -37,7 +37,7 @@ if (empty($permissions["configure"])) {
 <!-- <h2>PHP Form Validation Example</h2> -->
 <p><span class="error" style="color:red">* required field</span></p>
 <form method="post" id="form" name="form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">  
-  
+
 	<table>
 	<tr>
 		<td align="right">Mail To:</td>
@@ -110,7 +110,7 @@ if (empty($permissions["configure"])) {
 
 </body>
 </html>
-            
+
     <!-- These need to stay OUTSIDE of the form -->
     <div class="form-horizontal">
         <div class="control-group">
@@ -144,7 +144,7 @@ $(document).ready(function() {
             "Yes": function() {
                 $.post("helpers/phaseHelper.php?action=reset", function(data) {
                     console.log(data);
-                    
+
                     if (data == "Success")
                         location.reload();
                     else {
@@ -180,7 +180,7 @@ $(document).ready(function() {
 <script type="text/javascript">
     $("#send").button().click(function() {
         //var fieldsArray = $("form").serialize();
-		
+
 		var to = document.getElementById("to").value;
 		var from = document.getElementById("from").value;
 		var server = document.getElementById("server").value;
@@ -190,18 +190,18 @@ $(document).ready(function() {
 		var usessl = document.getElementById("usessl").checked;
 		var user = document.getElementById("user").value;
 		var pass = document.getElementById("pass").value;
-		
+
 		if (to != "" && from != "" && server != "")
 		{
 			var fields = "toadd=" + to + "&fromadd=" + from + "&server=" + server + "&port=" + port + "&tryall=" + tryall
 								  + "&useauth=" + useauth + "&usessl=" + usessl + "&user=" + user + "&pass=" + pass;
 			//alert(fields);
 			$("#result").html("Sending email, please wait...");
-			
+
 			$.post('helpers/emailTesterHelper.php?action=send&' + fields,
 				function(data) {
 					document.getElementById("result").innerHTML = data;
-					
+
 					//if (data == "Success")
 						//popupNotification(data, 3000, "notice");
 					//else
@@ -213,12 +213,12 @@ $(document).ready(function() {
 			popupNotification("* Mandatory fields does not have valid data", 3000);
 		}
     });
-	
+
 $("#reset").button().click(function() {
 			document.getElementById("form").reset();
 			document.getElementById("result").innerHTML = "";
     });	
-	
+
 </script>
 
 

@@ -8,11 +8,12 @@ $title = ": Status";
 $breadCrumb = "<h1>Management Group <small>Status</small></h1>";
 $menuCategory = "corridor";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 <link rel="stylesheet" type="text/css" href="/css/corridorStatus.css"/>
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP
+;
 
 include("includes/header.php");
 

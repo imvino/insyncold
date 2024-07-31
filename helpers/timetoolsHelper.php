@@ -2,7 +2,7 @@
 
 require_once($_SERVER['DOCUMENT_ROOT'] . "/helpers/networkHelper.php");
 
-$specialdataArray = array();
+$specialdataArray = [];
 $jsondata = "";
 
 if (isset($_REQUEST["action"]))
@@ -73,11 +73,8 @@ switch($action)
                 
                 // create a stream context for 20 sec. timeout
                 // of reception of data...we can't wait forever
-                $ctx = stream_context_create(array('http'=>
-                    array(
-                        'timeout' => 20,
-                    )
-                ));
+                $ctx = stream_context_create(['http'=>
+                    ['timeout' => 20]]);
                 
 		$response = file_get_contents($url, false, $ctx);
 		
@@ -100,11 +97,8 @@ switch($action)
 
 		// create a stream context for 20 sec. timeout
                 // of reception of data...we can't wait forever
-                $ctx = stream_context_create(array('http'=>
-                    array(
-                        'timeout' => 20,
-                    )
-                ));
+                $ctx = stream_context_create(['http'=>
+                    ['timeout' => 20]]);
                 
 		if (isValidIP($altServerIP)===true)
 		{
@@ -151,11 +145,8 @@ function getDatafromXmlandLoad($key_IP, $specialdataArray)
 {
     // create a stream context for 4 sec. timeout
     // of reception of data...we can't wait forever
-    $ctx = stream_context_create(array('http'=>
-        array(
-            'timeout' => 4,
-        )
-    ));
+    $ctx = stream_context_create(['http'=>
+        ['timeout' => 4]]);
 
     $xmlString = file_get_contents("http://" . $key_IP . "/specialcalls.php", false, $ctx);
     
@@ -202,7 +193,7 @@ function getDatafromXmlandLoad($key_IP, $specialdataArray)
         }
     }
 
-    $specialCallsDataArray = array("time" => $ProcessorTime, "ntp_server" => $NtpServer, "ntp_status" => $NtpStatus);
+    $specialCallsDataArray = ["time" => $ProcessorTime, "ntp_server" => $NtpServer, "ntp_status" => $NtpStatus];
     $specialdataArray[$key_IP] = $specialCallsDataArray;
 
     return $specialdataArray;
@@ -253,9 +244,9 @@ function getoffsetfromArray($lines)
 {
 	foreach ($lines as $value)
 	{
-		if (strpos($value, 'ntp offset') !== false) {
+		if (str_contains($value, 'ntp offset')) {
 		}
-		elseif (strpos($value, 'offset ') !== false)  {
+		elseif (str_contains($value, 'offset '))  {
 			$val = substr($value, 7);
 			return $val;
 		}

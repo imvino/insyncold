@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__) . "/helpers/constants.php");
+require_once(__DIR__ . "/helpers/constants.php");
 ob_start();
 require_once(SITE_DOCUMENT_ROOT . "helpers/tcpUtils.php");
 
@@ -32,10 +32,10 @@ else
 if (strcmp($_SERVER['REQUEST_METHOD'], 'POST')==0)
 { // produce JSONP output from array of IP addresses
     // array of IPs
-    $ipList = array();
+    $ipList = [];
     foreach($_POST as $key=>$value)
     {
-        if (strncmp($key, 'ip', 2)!=0) { continue; }
+        if (!str_starts_with($key, 'ip')) { continue; }
         if (empty($value)) { continue; }
         $ipList[] = $value;
     }
@@ -66,7 +66,7 @@ if (strcmp($_SERVER['REQUEST_METHOD'], 'POST')==0)
            $szReturn .= $out;
         }
         socket_close($objSocket);
-        $values = array();
+        $values = [];
         for($phase=1; $phase<=8; $phase++)
         {
             $ch = $szReturn[$phase+2];
@@ -117,7 +117,7 @@ else if (isset($_REQUEST['all']))
     		{
     		   $szReturn .= $out;
     		}
-            $values = array();
+            $values = [];
             for($phase=1; $phase<=8; $phase++)
             {
                 $ch = $szReturn[$phase+2];
@@ -212,8 +212,8 @@ else
     		   $szReturn .= $out;
     		}
     		// $szReturn is state number; figure out which of sig_thru and sig_turn it is in
-    		$thruGreen = strpos($sig_thru, $szReturn) !== FALSE;
-    		$turnGreen = strpos($sig_turn, $szReturn) !== FALSE;
+    		$thruGreen = str_contains($sig_thru, $szReturn);
+    		$turnGreen = str_contains($sig_turn, $szReturn);
     		$sig_thruReturn = $thruGreen ? $szReturn : '0';
     		$sig_turnReturn = $turnGreen ? $szReturn : '0';
     		$replyMessage = $callback . '({"signal":' . $szReturn . ',"sig_thru":"' . $sig_thruReturn . '","sig_turn":"' . $sig_turnReturn . '"})';

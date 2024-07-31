@@ -47,12 +47,12 @@ switch($action)
 		if(isset($_REQUEST['waitFilter']))
 			$waitFilter = $_REQUEST['waitFilter'];
         
-        $incArray = array();
+        $incArray = [];
 		if(isset($_REQUEST['incArray']))
             if($_REQUEST['incArray'] != "null")
                 $incArray = explode(",", $_REQUEST['incArray']);
         
-        $moveArray = array();
+        $moveArray = [];
 		if(isset($_REQUEST['moveArray']))
             if($_REQUEST['moveArray'] != "null")
                 $moveArray = explode(",", $_REQUEST['moveArray']);
@@ -100,20 +100,11 @@ switch($action)
 			ksort($combinedData);
 		}
         
-        $indexedData = array();
+        $indexedData = [];
         foreach($combinedData as $timestamp => $data)
-            $indexedData[] = array("timestamp" => $timestamp, "data" => $data);
+            $indexedData[] = ["timestamp" => $timestamp, "data" => $data];
         
-        $internalPhaseMap = array(
-            "SouthBoundLeftTurn" => 1,
-            "NorthBoundThrough" => 2,
-            "EastBoundLeftTurn" => 3,
-            "WestBoundThrough" => 4,
-            "NorthBoundLeftTurn" => 5,
-            "SouthBoundThrough" => 6,
-            "WestBoundLeftTurn" => 7,
-            "EastBoundThrough" => 8
-        );
+        $internalPhaseMap = ["SouthBoundLeftTurn" => 1, "NorthBoundThrough" => 2, "EastBoundLeftTurn" => 3, "WestBoundThrough" => 4, "NorthBoundLeftTurn" => 5, "SouthBoundThrough" => 6, "WestBoundLeftTurn" => 7, "EastBoundThrough" => 8];
         
         $phaseMap = getIntExtPhaseMap();
         
@@ -148,7 +139,7 @@ switch($action)
                     $matchCount = 0;     
                     
                     for($j=0; $j<count($moveArray);$j++)
-                        if(strpos($movements, $moveArray[$j]) !== FALSE)
+                        if(str_contains($movements, $moveArray[$j]))
                             $matchCount++;
 
                     if($matchCount == 0)
@@ -271,7 +262,7 @@ switch($action)
                     
                     $unscheduled = false;
                     
-                    if(strpos($parts[1], "Unscheduled") !== FALSE)
+                    if(str_contains($parts[1], "Unscheduled"))
                         $unscheduled = true;
                     
                     $phase = 0;
@@ -279,7 +270,7 @@ switch($action)
                     if(isset($parts[2]))
                         $phase = substr(trim($parts[2]), -1);
                     
-                    if(strpos($parts[1], "sent") !== FALSE)
+                    if(str_contains($parts[1], "sent"))
                         $line .= "Pedestrian Sent (Phase " . $phase . "),0,";
                     else if ($unscheduled)
                         $line .= "Unexpected Walk! (Phase " . $phase . "),0,";
@@ -338,7 +329,7 @@ switch($action)
 		$activePhases = getActivePhases();		
 		$phaseNames = getPhaseNames();
 		
-		$activePhaseArr = array();
+		$activePhaseArr = [];
 		foreach($activePhases as $key => $value)
 		{
 			$activePhaseArr[$value]["short"] = $phaseNames[$value]["short"];
@@ -365,7 +356,7 @@ switch($action)
 			ksort($combinedData);
 		}
 
-		$jsonData = array();
+		$jsonData = [];
 		$jsonData["activePhases"] = $activePhaseArr;
 		$jsonData["data"] = $combinedData;
 		
@@ -384,7 +375,7 @@ function getMovementPhaseAssociation()
 	$intersectionXML = getFile("Intersection.xml");	
 	$intersectionObject = simplexml_load_string($intersectionXML);
 	
-	$associationArray = array();	
+	$associationArray = [];	
 
 	foreach($intersectionObject->Intersection->Direction as $Directions)
 	{
@@ -453,12 +444,12 @@ function loadHistoryData($startDateTime, $endDateTime, $activePhases)
 	if($historyFiles == FALSE)
 		die('{"error": "Unable to find any history files"}');
 	
-	$historyList = array();
+	$historyList = [];
 	
 	foreach($historyFiles as $file)
 	{
 		// history file
-		if(substr($file, 0, 3) == "HY_")
+		if(str_starts_with($file, "HY_"))
 		{
 			// file DATE is within our range
 			if(in_array(substr($file, 3, 8), $validDates))
@@ -466,7 +457,7 @@ function loadHistoryData($startDateTime, $endDateTime, $activePhases)
 		}
 	}
 	
-	$historyData = array();
+	$historyData = [];
 	// add all valid entries to array
 	foreach($historyList as $file)
 	{
@@ -475,7 +466,7 @@ function loadHistoryData($startDateTime, $endDateTime, $activePhases)
 		{
 			while (($buffer = fgets($handle, 8096)) !== false) 
 			{
-				if(substr($buffer, 0, 8) == "Starting")
+				if(str_starts_with($buffer, "Starting"))
 					continue;
 				
 				$lineParts = explode("\t", $buffer);
@@ -496,9 +487,9 @@ function loadHistoryData($startDateTime, $endDateTime, $activePhases)
                         $dataParts = explode(",", $lineParts[2]);
                         
                         if($dataParts[0] == "Tunnels")
-                            $historyData[$index] = array("t"=>"T","d"=>$dataParts[1],"p"=>"");
+                            $historyData[$index] = ["t"=>"T", "d"=>$dataParts[1], "p"=>""];
                         else
-                            $historyData[$index] = array("t"=>$lineParts[1],"d"=>$lineParts[2],"p"=>"");
+                            $historyData[$index] = ["t"=>$lineParts[1], "d"=>$lineParts[2], "p"=>""];
                     }
 					else if($lineParts[1] == "I")
 					{
@@ -506,13 +497,13 @@ function loadHistoryData($startDateTime, $endDateTime, $activePhases)
 
 						if($dataParts[0] == "LightState")
 						{							
-							$element = array();
+							$element = [];
 							$element["t"] = $lineParts[1];							
-							$element["md"] = array();
+							$element["md"] = [];
 
 							$element["md"]["v"] = $dataParts[0];
 							$element["md"]["m"] = trim($dataParts[1], " \r\n");
-							$element["md"]["pd"] = array();
+							$element["md"]["pd"] = [];
 
 							for($i=2; $i < count($dataParts); $i+=3)
 							{
@@ -567,10 +558,10 @@ function loadHistoryData($startDateTime, $endDateTime, $activePhases)
 							$historyData[$index] = $element;
 						} 
                         else
-                            $historyData[$index] = array("t"=>"E","d"=>trim($lineParts[2], "\r\n"),"p"=>"");
+                            $historyData[$index] = ["t"=>"E", "d"=>trim($lineParts[2], "\r\n"), "p"=>""];
 					}
 					else
-						$historyData[$index] = array("t"=>$lineParts[1],"d"=>trim($lineParts[2], "\r\n"),"p"=>"");
+						$historyData[$index] = ["t"=>$lineParts[1], "d"=>trim($lineParts[2], "\r\n"), "p"=>""];
 				}
 			}
 			fclose($handle);
@@ -588,7 +579,7 @@ function loadPeriodData($startDateTime, $endDateTime)
 	$endTimestamp = strtotime($endDateTime);
 	
 	// remove dates with no log files
-	$validDates = array();
+	$validDates = [];
 	foreach($dateRangeArray as $date)
 		if(file_exists(PERIOD_STATS_ROOT . "/" . "PD_" . $date . "_000000.txt"))
 			$validDates[] = $date;
@@ -596,7 +587,7 @@ function loadPeriodData($startDateTime, $endDateTime)
 	if(count($validDates) == 0)
 		return false;
 	
-	$periodData = array();
+	$periodData = [];
 	
 	foreach($validDates as $date)
 	{
@@ -616,9 +607,9 @@ function loadPeriodData($startDateTime, $endDateTime)
 				continue;
 			
 			if($line[1] == "TUNNELLESS")
-				$periodData[(string)($lineTime*1000)] = array("t"=>"P","p"=>-1);
+				$periodData[(string)($lineTime*1000)] = ["t"=>"P", "p"=>-1];
 			else	
-				$periodData[(string)($lineTime*1000)] = array("t"=>"P","p"=>(int)$line[1]);
+				$periodData[(string)($lineTime*1000)] = ["t"=>"P", "p"=>(int)$line[1]];
 		}
 		
 		fclose($file);
@@ -632,7 +623,7 @@ function createDateRange($startDate, $endDate, $outputFormat)
 	$startTimestamp = strtotime($startDate) - 86400;
 	$endTimestamp = strtotime($endDate) + 86400;
 	
-	$dateArray = array();
+	$dateArray = [];
 	
 	for($date = $startTimestamp; $date <= $endTimestamp; $date += 86400)
 		$dateArray[] = date($outputFormat, $date);

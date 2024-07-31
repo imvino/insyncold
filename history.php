@@ -8,7 +8,7 @@ $title = ": History Viewer";
 $breadCrumb = "<h1>Reports <small>History Viewer</small></h1>";
 $menuCategory = "reports";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 <link rel="stylesheet" type="text/css" href="/css/history.css"/>
 <script language="javascript" type="text/javascript" src="/js/jquery/jquery.stickytableheaders.js"></script> 
@@ -17,7 +17,8 @@ $head = <<<HEAD
 <script language="javascript" type="text/javascript" src="/js/jquery/jquery.keysequencedetector.js"></script>
 <script language="javascript" type="text/javascript" src="/js/plugins/date.js"></script>
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP
+;
 
 if($permissions["username"] == "kiosk")
     include("includes/header_lite.php");
@@ -71,7 +72,7 @@ else echo $_REQUEST['endDateTime']; ?>" placeholder="End Date/Time"/>
 	<select id="optionMovements" class="chosen-multiselect multi-select" data-placeholder="" multiple>
 		<optgroup label="Movements">
 <?php
-$associationArray = array();
+$associationArray = [];
 
 require_once("helpers/databaseInterface.php");
 $intersection = getFile("Intersection.xml");

@@ -15,7 +15,7 @@ use Closure;
 
 class EventEmitter
 {
-    private $listeners = array();
+    private $listeners = [];
 
     public static $self;
 
@@ -25,13 +25,13 @@ class EventEmitter
 
     public static function __callStatic($eventName, $params)
     {
-        return call_user_func_array(array(static::$self, $eventName), $params);
+        return call_user_func_array([static::$self, $eventName], $params);
     }
 
     public function __call($eventName, $params)
     {
         if (!@is_array($this->listeners[$eventName]))
-            $this->listeners[$eventName] = array();
+            $this->listeners[$eventName] = [];
         $this->listeners[$eventName][] = $params[0];
         return $this;
     }
@@ -57,7 +57,7 @@ class EventEmitter
                 $i = 0;
             $i < $count;
             call_user_func(
-                array($this, "on{$events[$i]}"),
+                [$this, "on{$events[$i]}"],
                 $eventHandlers[$keys[$i++]]
             )
         );

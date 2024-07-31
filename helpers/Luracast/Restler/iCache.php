@@ -19,11 +19,10 @@ interface iCache
      * @abstract
      *
      * @param string $name
-     * @param mixed  $data
      *
      * @return boolean true if successful
      */
-    public function set($name, $data);
+    public function set($name, mixed $data);
 
     /**
      * retrieve data from the cache

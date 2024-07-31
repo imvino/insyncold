@@ -8,7 +8,7 @@ $title = "Multiple Camera View";
 $breadCrumb = "<h1>Views <small>Multiple Cameras</small></h1>";
 $menuCategory = "views";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 
 <link rel="stylesheet" type="text/css" href="/css/cameraViewsKiosk.css"/>
@@ -18,7 +18,8 @@ $head = <<<HEAD
 <script language="javascript" type="text/javascript" src="/js/jquery/jquery.ui.touch-punch.min.js"></script>
 
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP
+;
 
 $cameraView = "two-column";
 if(isset($_REQUEST["cameraView"]))

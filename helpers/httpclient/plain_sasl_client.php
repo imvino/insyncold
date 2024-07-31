@@ -16,8 +16,8 @@ define("SASL_PLAIN_EXIM_DOCUMENTATION_MODE", 2);
 
 class plain_sasl_client_class
 {
-	var $credentials=array();
-	var $state=SASL_PLAIN_STATE_START;
+	public $credentials=[];
+	public $state=SASL_PLAIN_STATE_START;
 
 	Function Initialize(&$client)
 	{
@@ -31,31 +31,16 @@ class plain_sasl_client_class
 			$client->error="PLAIN authentication state is not at the start";
 			return(SASL_FAIL);
 		}
-		$this->credentials=array(
-			"user"=>"",
-			"password"=>"",
-			"realm"=>"",
-			"mode"=>""
-		);
-		$defaults=array(
-			"realm"=>"",
-			"mode"=>""
-		);
+		$this->credentials=["user"=>"", "password"=>"", "realm"=>"", "mode"=>""];
+		$defaults=["realm"=>"", "mode"=>""];
 		$status=$client->GetCredentials($this->credentials,$defaults,$interactions);
 		if($status==SASL_CONTINUE)
 		{
-			switch($this->credentials["mode"])
-			{
-				case SASL_PLAIN_EXIM_MODE:
-					$message=$this->credentials["user"]."\0".$this->credentials["password"]."\0";
-					break;
-				case SASL_PLAIN_EXIM_DOCUMENTATION_MODE:
-					$message="\0".$this->credentials["user"]."\0".$this->credentials["password"];
-					break;
-				default:
-					$message=$this->credentials["user"]."\0".$this->credentials["user"].(strlen($this->credentials["realm"]) ? "@".$this->credentials["realm"] : "")."\0".$this->credentials["password"];
-					break;
-			}
+			$message = match ($this->credentials["mode"]) {
+       SASL_PLAIN_EXIM_MODE => $this->credentials["user"]."\0".$this->credentials["password"]."\0",
+       SASL_PLAIN_EXIM_DOCUMENTATION_MODE => "\0".$this->credentials["user"]."\0".$this->credentials["password"],
+       default => $this->credentials["user"]."\0".$this->credentials["user"].(strlen($this->credentials["realm"]) ? "@".$this->credentials["realm"] : "")."\0".$this->credentials["password"],
+   };
 			$this->state=SASL_PLAIN_STATE_DONE;
 		}
 		else

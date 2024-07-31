@@ -9,15 +9,15 @@ use Luracast\Restler\Util;
 
 class HtmlFormat extends Format
 {
-    const MIME = 'text/html';
-    const EXTENSION = 'html';
+    public const MIME = 'text/html';
+    public const EXTENSION = 'html';
     public static $view = 'debug';
     public static $format = 'php';
     /**
      * @var array global key value pair to be supplied to the templates. All
      * keys added here will be available as a variable inside the template
      */
-    public static $data = array();
+    public static $data = [];
     /**
      * @var string set it to the location of your the view files. Defaults to
      * views folder which is same level as vendor directory.
@@ -59,10 +59,8 @@ class HtmlFormat extends Format
     public function encode($data, $humanReadable = false)
     {
 
-        $data = array(
-            'response' => DataUtil::objectToArray($data)
-        ) + static::$data;
-        $params = array();
+        $data = ['response' => DataUtil::objectToArray($data)] + static::$data;
+        $params = [];
         //print_r($this->restler);
         if (isset($this->restler->apiMethodInfo->metadata)) {
             $info = $data['info'] = $this->restler->apiMethodInfo;
@@ -102,10 +100,7 @@ class HtmlFormat extends Format
                 break;
             case 'twig':
                 $loader = new \Twig_Loader_Filesystem(static::$viewPath);
-                $twig = new \Twig_Environment($loader, array(
-                    'cache' => Defaults::$cacheDirectory,
-                    'debug' => true,
-                ));
+                $twig = new \Twig_Environment($loader, ['cache' => Defaults::$cacheDirectory, 'debug' => true]);
                 $template = $twig->loadTemplate(self::$view);
                 return $template->render($data);
             case 'handlebar':

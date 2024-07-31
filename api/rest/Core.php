@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__) . '/../../helpers/constants.php');
+require_once(__DIR__ . '/../../helpers/constants.php');
 require_once SITE_DOCUMENT_ROOT . 'helpers/libraries/corridorParser.php';
 require_once SITE_DOCUMENT_ROOT . 'helpers/rolling-curl/RollingCurl.php';
 
@@ -28,7 +28,7 @@ class Core {
         private $results_node;
 
         private function getIntersectionList($intersections) {
-            $list = array();
+            $list = [];
             if ($intersections == 'all') {
                 global $corridorIPs;
                 $list = $corridorIPs;
@@ -55,7 +55,7 @@ class Core {
             $new_result->setAttribute('http_code', $info['http_code']);
             $updated_response = false;
             try {
-                if (strlen(trim($response)) > 0 && substr(trim($response), 0, 1) == '<') {
+                if (strlen(trim($response)) > 0 && str_starts_with(trim($response), '<')) {
                     $result_doc = new DOMDocument("1.0", "UTF-8");
                     if ($result_doc->loadXML($response)) {
                         if ($result_doc->documentElement != null) {
@@ -66,7 +66,7 @@ class Core {
                     }
                 }
             }
-            catch (Exception $ex) {
+            catch (Exception) {
                 $result_text = $this->result_dom->createCDATASection($response);
                 $new_result->appendChild($result_text);
                 $updated_response = true;
@@ -84,23 +84,14 @@ class Core {
             $this->result_dom = new DOMDocument("1.0", "UTF-8");
             $this->results_node = $this->result_dom->createElement('results');
             $this->result_dom->appendChild($this->results_node);
-            $rc = new RollingCurl(array($this, "request_callback"));
-            $rc->options = array(CURLOPT_USERPWD => 'insync:keC2eswe',
-                CURLOPT_HTTPAUTH => CURLAUTH_DIGEST,
-                CURLOPT_CONNECTTIMEOUT => 1,
-                CURLOPT_TIMEOUT => 5
-                );
+            $rc = new RollingCurl([$this, "request_callback"]);
+            $rc->options = [CURLOPT_USERPWD => 'insync:keC2eswe', CURLOPT_HTTPAUTH => CURLAUTH_DIGEST, CURLOPT_CONNECTTIMEOUT => 1, CURLOPT_TIMEOUT => 5];
             $rc->window_size = 10;
 
             foreach ($list as $intersection) {
                 if (preg_match('/^\d{1,3}(\.\d{1,3}){3}$/', $intersection)) {
                     $request = new RollingCurlRequest('https://' . $intersection . SITE_PREFIX . '/corridor_api/CorridorAPI.php');
-                    $request->options = array(CURLOPT_PRIVATE => $intersection,
-                        CURLOPT_POST => TRUE,
-                        CURLOPT_POSTFIELDS => array_merge(array('action' => $action), $params),
-                        CURLOPT_SSL_VERIFYHOST => FALSE,
-                        CURLOPT_SSL_VERIFYPEER => FALSE
-                        );
+                    $request->options = [CURLOPT_PRIVATE => $intersection, CURLOPT_POST => TRUE, CURLOPT_POSTFIELDS => array_merge(['action' => $action], $params), CURLOPT_SSL_VERIFYHOST => FALSE, CURLOPT_SSL_VERIFYPEER => FALSE];
                     $fallback_request = new RollingCurlRequest('http://' . $intersection . SITE_PREFIX . '/corridor_api/CorridorAPI.php');
                     $fallback_request->options = $request->options;
                     $request->fallback_request = $fallback_request;
@@ -125,7 +116,7 @@ class Core {
             if (strlen($intersections) == 0) {
                 return file_get_contents(SITE_DOCUMENT_ROOT . "includes/version.txt");
             } else {
-                return $this->distributeRequest($intersections, "webuiversion", array());
+                return $this->distributeRequest($intersections, "webuiversion", []);
             }
 	}
     
@@ -156,7 +147,7 @@ class Core {
                 return "Error: Unable to load name";
         }
         else 
-            return $this->distributeRequest($intersections, "intersectionname", array());
+            return $this->distributeRequest($intersections, "intersectionname", []);
 	}
 
 	/**
@@ -201,14 +192,7 @@ class Core {
 			return $insync->drawErrorImage("Authorization Required.", $width, $height);
 		}
             } else {
-                $images = $this->distributeRequest($intersections, "cameraimage", array(
-                    'camera_name' => $camera_name,
-                    'filter' => $filter,
-                    'quality' => $quality,
-                    'width' => $width,
-                    'height' => $height,
-                    'mode' => $mode
-                ));
+                $images = $this->distributeRequest($intersections, "cameraimage", ['camera_name' => $camera_name, 'filter' => $filter, 'quality' => $quality, 'width' => $width, 'height' => $height, 'mode' => $mode]);
                 if (count(explode(',', $intersections)) == 1
                         && $intersections != 'all') {
                     return base64_decode((string)$images->result);
@@ -237,11 +221,11 @@ class Core {
                             return simplexml_load_string('<Error>Authentication Required</Error>');
                     }
                 }
-                catch (Exception $ex) {
+                catch (Exception) {
                     return simplexml_load_string('<Error>Unexpected error</Error>');
                 }
             } else {
-                return $this->distributeRequest($intersections, "lightstate", array());
+                return $this->distributeRequest($intersections, "lightstate", []);
             }
 	}
 
@@ -265,11 +249,11 @@ class Core {
                             return '<Error>Authentication Required</Error>';
                     }
                 }
-                catch (Exception $ex) {
+                catch (Exception) {
                     return simplexml_load_string('<Error>Unexpected error</Error>');
                 }
             } else {
-                return $this->distributeRequest($intersections, "lightstate", array());
+                return $this->distributeRequest($intersections, "lightstate", []);
             }
 	}
 }

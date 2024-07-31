@@ -17,8 +17,8 @@ use Luracast\Restler\RestException;
  */
 class UploadFormat extends Format
 {
-    const MIME = 'multipart/form-data';
-    const EXTENSION = 'post';
+    public const MIME = 'multipart/form-data';
+    public const EXTENSION = 'post';
 
     /**
      * use it if you need to restrict uploads based on file type
@@ -27,7 +27,7 @@ class UploadFormat extends Format
      *
      * @var array
      */
-    public static $allowedMimeTypes = array('image/jpeg', 'image/png');
+    public static $allowedMimeTypes = ['image/jpeg', 'image/png'];
 
     /**
      * use it to restrict uploads based on file size

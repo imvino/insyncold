@@ -1,6 +1,6 @@
 <?php
 use \Exception;
-require_once dirname(__FILE__) . '/../constants.php';
+require_once __DIR__ . '/../constants.php';
 require_once SITE_DOCUMENT_ROOT . 'helpers/pathDefinitions.php';
 
 class CorridorParser {
@@ -15,7 +15,7 @@ class CorridorParser {
 	
     function getIntersectionIPs() {
 	// get all intersection IPs
-	$intersectionArr = array();
+	$intersectionArr = [];
 	foreach($this->corridor->Intersection as $Intersection) 
     {
         if((string)$Intersection["IP"] != "" && (string)$Intersection["IP"] != "127.0.0.1" && ip2long((string)$Intersection["IP"]) !== false)

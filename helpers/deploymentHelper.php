@@ -109,7 +109,7 @@ switch($action)
         
         $listCopy = $fileList;
         unset($fileList);
-        $fileList = array();
+        $fileList = [];
         
         foreach($listCopy as $file)
             if($file != "." && $file != "..")
@@ -270,7 +270,7 @@ function executeAll($hash)
     $protocol = "https://";
 
 	// get all intersection IPs
-	$intersectionArr = array();
+	$intersectionArr = [];
 	foreach ($Intersections as $IntIP => $name)
 	{
     
@@ -287,7 +287,7 @@ function executeAll($hash)
         die("Error: Unable to write propagation status file.");
     }
 	
-	$postParams = array("action"=>"execute", "hash"=>$hash, "u" => base64_encode("PEC"), "p" => base64_encode("lenpec4321"), "session" => "false");
+	$postParams = ["action"=>"execute", "hash"=>$hash, "u" => base64_encode("PEC"), "p" => base64_encode("lenpec4321"), "session" => "false"];
 	$collector = new ExecutionCollector();
 	$collector->run($intersectionArr, $postParams, $hash);
 }
@@ -317,7 +317,7 @@ function propagateFile($hash)
     $protocol = "https://";
 	
 	// get all intersection IPs
-	$intersectionArr = array();
+	$intersectionArr = [];
 	foreach($corridor->Intersection as $Intersection)
 	{
         if((string)$Intersection["IP"] == "" || (string)$Intersection["IP"] == "127.0.0.1" || ip2long((string)$Intersection["IP"]) === false)
@@ -340,13 +340,13 @@ function propagateFile($hash)
     {
         writeDebug("deploymentLog-$hash.txt", __LINE__, "Found more than 1 intersection");
         
-        $postParams = array("action"=>"fileexists", "hash"=>$hash, "u" => base64_encode("PEC"), "p" => base64_encode("lenpec4321"), "session" => "false");
+        $postParams = ["action"=>"fileexists", "hash"=>$hash, "u" => base64_encode("PEC"), "p" => base64_encode("lenpec4321"), "session" => "false"];
         $collector = new CheckExistanceCollector();
         $IPResults = $collector->run($intersectionArr, $postParams, $hash);
         
         writeDebug("deploymentLog-$hash.txt", __LINE__, "Returned fine from CheckExistanceCollector()");
 
-        $sendArr = array();
+        $sendArr = [];
         foreach($IPResults as $ip => $value)
             if(!$value)
                 $sendArr[] = $protocol . $ip . "/helpers/deploymentHelper.php";
@@ -364,7 +364,7 @@ function propagateFile($hash)
             
             writeDebug("deploymentLog-$hash.txt", __LINE__, "Attempting to run PropagationCollector()");
 
-            $postParams = array("action"=>"putfile", "deployFile"=>"@$filePath", "u" => base64_encode("PEC"), "p" => base64_encode("lenpec4321"), "session" => "false");
+            $postParams = ["action"=>"putfile", "deployFile"=>"@$filePath", "u" => base64_encode("PEC"), "p" => base64_encode("lenpec4321"), "session" => "false"];
             $collector = new PropagationCollector();
             $collector->run($sendArr, $postParams, $hash);
             
@@ -416,7 +416,7 @@ function sendToVideoProc($hash, $ip)
 
     writeDebug("deploymentLog-$hash.txt", __LINE__, "Attempting to run VideoPropagationCollector() to send to video processor");
 
-    $postParams = array("action"=>"putfile", "deployFile"=>"@$filePath", "u" => base64_encode("PEC"), "p" => base64_encode("lenpec4321"), "session" => "false");
+    $postParams = ["action"=>"putfile", "deployFile"=>"@$filePath", "u" => base64_encode("PEC"), "p" => base64_encode("lenpec4321"), "session" => "false"];
     $collector = new VideoPropagationCollector();
     $result = $collector->run($sendArr, $postParams, $hash);
 
@@ -480,12 +480,12 @@ function putFile($name, $tmp_name)
         writeDebug("deploymentLog.txt", __LINE__, "Empty parameter \$name or \$tmp_name");
 		die("Error: Empty parameter");
     }
-	if(strpos($name, '/') !== FALSE)
+	if(str_contains($name, '/'))
     {
         writeDebug("deploymentLog.txt", __LINE__, "Error: Illegal character in $name.");
 		die("Error: Illegal character in file name.");
     }
-	if(strpos($name, '\\') !== FALSE)
+	if(str_contains($name, '\\'))
     {
         writeDebug("deploymentLog.txt", __LINE__, "Error: Illegal character in $name.");
 		die("Error: Illegal character in file name.");
@@ -497,7 +497,7 @@ function putFile($name, $tmp_name)
     if(!is_dir(TEMP_ROOT . "/Installers"))
 		@mkdir(TEMP_ROOT . "/Installers");
     
-    $outarray = array();
+    $outarray = [];
     $return_var = -1;
     
     exec(PROG_VALID_EXE . " " . $tmp_name, $outarray, $return_var);
@@ -585,7 +585,7 @@ function getVideoProcessorChildren()
         die("Error: Could not open Intersection.xml.");
     }
     
-    $ipList = array();
+    $ipList = [];
 
     foreach($Intersection->xpath("//VideoDetectionDevice") as $vdd)
     {                  
@@ -610,7 +610,7 @@ class ExecutionCollector
 
     function __construct()
     {
-        $this->rc = new RollingCurl(array($this, 'processResponse'));
+        $this->rc = new RollingCurl([$this, 'processResponse']);
         $this->rc->window_size = 10;
         $this->statusHash = "";
         $this->error = false;
@@ -666,7 +666,7 @@ class ExecutionCollector
         foreach ($urls as $url)
         {
             $request = new RollingCurlRequest($url);
-            $request->options = array(CURLOPT_POST => true, CURLOPT_SSL_VERIFYPEER => false, CURLOPT_CONNECTTIMEOUT => 15, CURLOPT_SSL_VERIFYHOST => false, CURLOPT_POSTFIELDS => $postParams);
+            $request->options = [CURLOPT_POST => true, CURLOPT_SSL_VERIFYPEER => false, CURLOPT_CONNECTTIMEOUT => 15, CURLOPT_SSL_VERIFYHOST => false, CURLOPT_POSTFIELDS => $postParams];
             $fallback_request = new RollingCurlRequest(preg_replace('/^https:/i', 'http:', $url));
             $fallback_request->options = $request->options;
             $request->fallback_request = $fallback_request;
@@ -709,9 +709,9 @@ class CheckExistanceCollector
 
     function __construct()
     {
-        $this->rc = new RollingCurl(array($this, 'processResponse'));
+        $this->rc = new RollingCurl([$this, 'processResponse']);
         $this->rc->window_size = 10;
-        $this->statusArr = array();
+        $this->statusArr = [];
         $this->statusHash = "";
     }
 
@@ -767,7 +767,7 @@ class CheckExistanceCollector
         foreach ($urls as $url)
         {
             $request = new RollingCurlRequest($url);
-            $request->options = array(CURLOPT_POST => true, CURLOPT_SSL_VERIFYPEER => false, CURLOPT_CONNECTTIMEOUT => 15, CURLOPT_SSL_VERIFYHOST => false, CURLOPT_TIMEOUT => 15, CURLOPT_POSTFIELDS => $postParams);
+            $request->options = [CURLOPT_POST => true, CURLOPT_SSL_VERIFYPEER => false, CURLOPT_CONNECTTIMEOUT => 15, CURLOPT_SSL_VERIFYHOST => false, CURLOPT_TIMEOUT => 15, CURLOPT_POSTFIELDS => $postParams];
             $fallback_request = new RollingCurlRequest(preg_replace('/^https:/i', 'http:', $url));
             $fallback_request->options = $request->options;
             $request->fallback_request = $fallback_request;
@@ -809,7 +809,7 @@ class PropagationCollector
 
     function __construct()
     {
-        $this->rc = new RollingCurl(array($this, 'processResponse'));
+        $this->rc = new RollingCurl([$this, 'processResponse']);
         $this->rc->window_size = 10;
         $this->error = false;
     }
@@ -898,7 +898,7 @@ class PropagationCollector
         foreach ($urls as $url)
         {
             $request = new RollingCurlRequest($url);
-            $request->options = array(CURLOPT_POST => true, CURLOPT_SSL_VERIFYPEER => false, CURLOPT_RETURNTRANSFER => true, CURLOPT_CONNECTTIMEOUT => 25, CURLOPT_SSL_VERIFYHOST => false, CURLOPT_TIMEOUT => 36000, CURLOPT_POSTFIELDS => $postParams, CURLOPT_HTTPHEADER => array( 'Expect:' ));
+            $request->options = [CURLOPT_POST => true, CURLOPT_SSL_VERIFYPEER => false, CURLOPT_RETURNTRANSFER => true, CURLOPT_CONNECTTIMEOUT => 25, CURLOPT_SSL_VERIFYHOST => false, CURLOPT_TIMEOUT => 36000, CURLOPT_POSTFIELDS => $postParams, CURLOPT_HTTPHEADER => ['Expect:']];
             $fallback_request = new RollingCurlRequest(preg_replace('/^https:/i', 'http:', $url));
             $fallback_request->options = $request->options;
             $request->fallback_request = $fallback_request;
@@ -942,7 +942,7 @@ class VideoPropagationCollector
 
     function __construct()
     {
-        $this->rc = new RollingCurl(array($this, 'processResponse'));
+        $this->rc = new RollingCurl([$this, 'processResponse']);
         $this->rc->window_size = 10;
         $this->error = false;
     }
@@ -973,7 +973,7 @@ class VideoPropagationCollector
         foreach ($urls as $url)
         {
             $request = new RollingCurlRequest($url);
-            $request->options = array(CURLOPT_POST => true, CURLOPT_SSL_VERIFYPEER => false, CURLOPT_RETURNTRANSFER => true, CURLOPT_CONNECTTIMEOUT => 25, CURLOPT_SSL_VERIFYHOST => false, CURLOPT_TIMEOUT => 36000, CURLOPT_POSTFIELDS => $postParams, CURLOPT_HTTPHEADER => array( 'Expect:' ));
+            $request->options = [CURLOPT_POST => true, CURLOPT_SSL_VERIFYPEER => false, CURLOPT_RETURNTRANSFER => true, CURLOPT_CONNECTTIMEOUT => 25, CURLOPT_SSL_VERIFYHOST => false, CURLOPT_TIMEOUT => 36000, CURLOPT_POSTFIELDS => $postParams, CURLOPT_HTTPHEADER => ['Expect:']];
             $fallback_request = new RollingCurlRequest(preg_replace('/^https:/i', 'http:', $url));
             $fallback_request->options = $request->options;
             $request->fallback_request = $fallback_request;

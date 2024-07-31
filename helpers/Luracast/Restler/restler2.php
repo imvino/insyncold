@@ -7,7 +7,7 @@ use Luracast\Restler\AutoLoader;
 use Luracast\Restler\CommentParser;
 
 //changes in auto loading
-$classMap = array();
+$classMap = [];
 //find lowercase php files representing a class/interface
 foreach (explode(PATH_SEPARATOR, get_include_path()) as $path)
     foreach (new DirectoryIterator($path) as $fileInfo)

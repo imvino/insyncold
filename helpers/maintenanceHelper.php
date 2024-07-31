@@ -28,20 +28,20 @@ switch($action)
         if($cmd == "")
             exit;
         
-        if(substr($cmd, 0, 5) != "ping " && substr($cmd, 0, 4) != "arp ")
+        if(!str_starts_with($cmd, "ping ") && !str_starts_with($cmd, "arp "))
             if($cmd != "ping" && $cmd != "arp")
                 die("Invalid Command!<br />");
             
-        $descriptorspec = array(1 => array("pipe", "w"),2 => array("pipe", "w"));
+        $descriptorspec = [1 => ["pipe", "w"], 2 => ["pipe", "w"]];
 
-        $process = proc_open(escapeshellcmd($cmd), $descriptorspec, $pipes, NULL, NULL, array("bypass_shell"=>TRUE));
+        $process = proc_open(escapeshellcmd($cmd), $descriptorspec, $pipes, NULL, NULL, ["bypass_shell"=>TRUE]);
         
-        $emptyarr = array();
+        $emptyarr = [];
         $start = microtime(true);
         
         if (is_resource($process)) 
         { 
-            $replace = array("\r\n", "\n");
+            $replace = ["\r\n", "\n"];
             
             while(!feof($pipes[1]) && microtime(true) - $start < 30)
             {
@@ -91,7 +91,7 @@ switch($action)
         {
             $WshShell->Run("$AppMonEXE /system_restart", 1, false); 
         }
-        catch(Exception $e)
+        catch(Exception)
         {
             die("Error: Could not execute ApplicationMonitor /system_restart");
         }
@@ -112,7 +112,7 @@ switch($action)
         {
             $WshShell->Run("$AppMonEXE /killkiosk", 1, true); 
         }
-        catch(Exception $e)
+        catch(Exception)
         {
             die("Could not execute ApplicationMonitor /killkiosk");
         }
@@ -134,7 +134,7 @@ switch($action)
         {
             $WshShell->Run("$InSync /clearstorage", 1, true); 
         }
-        catch(Exception $e)
+        catch(Exception)
         {
             die("Could not execute InSync /clearstorage");
         }
@@ -154,7 +154,7 @@ switch($action)
 	{
 		$WshShell->Run($EnableRdp);
 	}
-	catch(Exception $e)
+	catch(Exception)
 	{
 		die("Could not enable RDP using $EnableRdp ");
 	}
@@ -175,7 +175,7 @@ switch($action)
 		$WshShell->Run($DisableRdp);
 		$WshShell->Run("$WriteFilterExe -commit_hklm_system_hive_to_disk");		
 	}
-	catch(Exception $e)
+	catch(Exception)
 	{
 		die("Could not disable RDP using $DisableRdp ");
 	}
@@ -216,7 +216,7 @@ switch($action)
 		if(strlen($drive) == 0)
 			die("Error: No drive specified.");
 
-		echo json_encode(getArchiveList($drive));
+		echo json_encode(getArchiveList());
 	}
 	break;
 	
@@ -327,14 +327,14 @@ function cleanArchives()
     //Maintain at least 20 archives in the archive
     if(is_array($archivefilelist) && count($archivefilelist) > 20)
     {
-    	$creationtimes = array();
+    	$creationtimes = [];
         foreach($archivefilelist as $filename)
         {
             $creationtimes[$filename] = @filemtime($filename);
         }
         asort($creationtimes, SORT_NUMERIC);
 
-        $deletionlist = array();
+        $deletionlist = [];
 
 	    foreach ($creationtimes as $name => $date)
         {
@@ -511,7 +511,7 @@ function restoreArchive($file, $video)
             {
                 $WshShell->Run("$manageIPConfigEXE -restore", 1, true); 
             }
-            catch(Exception $e)
+            catch(Exception)
             {
                 $error = "Could not execute ManageIPConfig -restore";
                 die("Error:<br />" . $error);
@@ -587,12 +587,7 @@ function restoreArchive($file, $video)
                     break;
 
                 if (!pg_query_params($db, 'INSERT INTO phase_renaming ("user", phase_number, short, long) values ($1, $2, $3, $4)', 
-                        array(
-                            base64_decode((string)$phase["user"]), 
-                            (string)$phase["number"], 
-                            base64_decode((string)$phase["short"]), 
-                            base64_decode((string)$phase["long"])
-                            )))
+                        [base64_decode((string)$phase["user"]), (string)$phase["number"], base64_decode((string)$phase["short"]), base64_decode((string)$phase["long"])]))
                 {
                     pg_query($db, "ROLLBACK TRANSACTION");
                     pg_close($db);
@@ -613,7 +608,7 @@ function restoreArchive($file, $video)
         {
             $WshShell->Run("$manageIPConfigEXE -restore", 1, false); 
         }
-        catch(Exception $e)
+        catch(Exception)
         {
             $error = "Could not execute ManageIPConfig -restore";
             die("Error:<br />" . $error);
@@ -623,7 +618,7 @@ function restoreArchive($file, $video)
         {
             $WshShell->Run("$appMonitorEXE /update", 1, false); 
         }
-        catch(Exception $e)
+        catch(Exception)
         {
             $error = "Could not execute AppMonitor /update";
         }
@@ -657,15 +652,15 @@ function archiveFiles($target, $download, $logs)
 	$xml = '<Archive version="' . trim($version) . '">';
 	
 	$IntersectionXML = getFile("Intersection.xml");
-	if(substr($IntersectionXML, 0, 5) != "Error")
+	if(!str_starts_with($IntersectionXML, "Error"))
 		$xml .= '<DatabaseEntry name="Intersection.xml">' . base64_encode($IntersectionXML) . "</DatabaseEntry>\r\n";
 	
 	$intersection_diagramXML = getFile("intersection_diagram.xml");
-	if(substr($intersection_diagramXML, 0, 5) != "Error")
+	if(!str_starts_with($intersection_diagramXML, "Error"))
 		$xml .= '<DatabaseEntry name="intersection_diagram.xml">' . base64_encode($intersection_diagramXML) . "</DatabaseEntry>\r\n";
 	
 	$intersection_backgroundPNG = getFile("intersection_background.png");
-	if(substr($intersection_backgroundPNG, 0, 5) != "Error")
+	if(!str_starts_with($intersection_backgroundPNG, "Error"))
 		$xml .= '<DatabaseEntry name="intersection_background.png">' . base64_encode($intersection_backgroundPNG) . "</DatabaseEntry>\r\n";
     
     $pathsXML = @simplexml_load_file(PATHS_CONF_FILE);
@@ -721,13 +716,9 @@ function archiveFiles($target, $download, $logs)
 	
 	if($logs)
 	{
-		$logDirs = array(GREEN_SPLITS_STATS_ROOT, HISTORY_STATS_ROOT, MISC_STATS_ROOT, 
-						PERIOD_STATS_ROOT, RED_SPLITS_STATS_ROOT, SUBPHASE_STATS_ROOT, 
-						TMC_STATS_ROOT);
+		$logDirs = [GREEN_SPLITS_STATS_ROOT, HISTORY_STATS_ROOT, MISC_STATS_ROOT, PERIOD_STATS_ROOT, RED_SPLITS_STATS_ROOT, SUBPHASE_STATS_ROOT, TMC_STATS_ROOT];
 		
-		$constants = array("GREEN_SPLITS_STATS_ROOT", "HISTORY_STATS_ROOT", "MISC_STATS_ROOT", 
-						"PERIOD_STATS_ROOT", "RED_SPLITS_STATS_ROOT", "SUBPHASE_STATS_ROOT", 
-						"TMC_STATS_ROOT");
+		$constants = ["GREEN_SPLITS_STATS_ROOT", "HISTORY_STATS_ROOT", "MISC_STATS_ROOT", "PERIOD_STATS_ROOT", "RED_SPLITS_STATS_ROOT", "SUBPHASE_STATS_ROOT", "TMC_STATS_ROOT"];
 		
 		for($i = 0; $i < count($logDirs); $i++)
 		{
@@ -798,7 +789,7 @@ function archiveFiles($target, $download, $logs)
  */
 function getArchiveList($target)
 {   
-    $thumbRestoreFiles = array();
+    $thumbRestoreFiles = [];
     
 	if (file_exists("$target:/InSync/Conf/Archives/InSync")) 
     {
@@ -812,7 +803,7 @@ function getArchiveList($target)
         closedir($dir);
     }
     
-    $fileList = array();
+    $fileList = [];
     $count = 0;
     
     foreach($thumbRestoreFiles as $file)
@@ -837,7 +828,7 @@ function getArchiveList($target)
  */
 function getRestoreDrives()
 {
-	$driveArr = array();
+	$driveArr = [];
 	
 	$fso = new COM('Scripting.FileSystemObject');
 	$D = $fso->Drives;
@@ -861,7 +852,7 @@ function getRestoreDrives()
  */
 function getRestoreDrive()
 {
-	$driveArr = array();
+	$driveArr = [];
 	
 	$fso = new COM('Scripting.FileSystemObject');
 	$D = $fso->Drives;

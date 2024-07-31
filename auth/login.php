@@ -42,7 +42,7 @@ if(isset($_REQUEST["submit"]))
 
 $version = @file_get_contents("../includes/version.txt");
 
-$bgNum = rand(1,5);
+$bgNum = random_int(1,5);
 ?>
 
 <!DOCTYPE html>
@@ -100,7 +100,7 @@ if($bgNum == 5)
 {
     echo "<div id='bug_container_1' style='top:15%;left:28%' class='bug_container'>";
     for($i=0;$i<6;$i++)
-        echo "<div id='glowbug_" . $i . "' class='glowbug' style='top:" . rand(0,150) . "px;left:" . rand(0,100) . "px'></div>";
+        echo "<div id='glowbug_" . $i . "' class='glowbug' style='top:" . random_int(0,150) . "px;left:" . random_int(0,100) . "px'></div>";
     echo "</div>";
 }
 ?>

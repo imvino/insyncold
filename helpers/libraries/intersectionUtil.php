@@ -1,28 +1,22 @@
 <?php
 use \Exception;
 $loggedIn = true;
-require_once dirname(__FILE__) . '/../constants.php';
+require_once __DIR__ . '/../constants.php';
 require_once SITE_DOCUMENT_ROOT . 'helpers/pathDefinitions.php';
 require_once SITE_DOCUMENT_ROOT . "helpers/databaseInterface.php";
 
 class CameraDetail {
-    public $name = null;
     public $url = null;
-    public $cameraUrl = null;
-    public $videoServer = false;
 
-    function __construct($name, $cameraUrl, $videoServer) {
-        $this->name = $name;
-        $this->url = "helpers/insyncInterface.php?action=getImage&viewCamera=" . $name;
-        $this->videoServer = $videoServer;
-        $this->cameraUrl = $cameraUrl;
+    function __construct(public $name, public $cameraUrl, public $videoServer) {
+        $this->url = "helpers/insyncInterface.php?action=getImage&viewCamera=" . $this->name;
     }
 }
 
 class IntersectionUtil {
     private $intersectionXML = null;
     private $intersectionObject = null;
-    private $cameras = array();
+    private $cameras = [];
 
     function __construct($simpleXml = null) {
         if ($simpleXml === null) {
@@ -36,7 +30,7 @@ class IntersectionUtil {
             return FALSE;
         }
 
-        $this->cameras = array();
+        $this->cameras = [];
 
         foreach($this->intersectionObject->xpath("VideoStreamSettings/VideoServer") as $VideoServer) {
             $cameraUrl = (string)$VideoServer["Name"];
@@ -89,11 +83,11 @@ class IntersectionUtil {
     function getCameraNames() {
         $names = array_keys($this->cameras);
         sort($names, SORT_STRING);
-        $sorted_names = array();
+        $sorted_names = [];
 
         foreach (['North Bound', 'South Bound', 'East Bound', 'West Bound'] as $direction) {
             foreach($names as $name) {
-                if (strpos($name, $direction) === 0) {
+                if (str_starts_with($name, $direction)) {
                     $sorted_names[] = $name;
                 }
             }

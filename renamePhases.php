@@ -8,10 +8,11 @@ $title = ": Rename Phases";
 $breadCrumb = "<h1>Settings <small>Rename Phases</small></h1>";
 $menuCategory = "settings";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP
+;
 
 include("includes/header.php");
 

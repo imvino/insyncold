@@ -52,12 +52,12 @@ switch($action)
 		$remoteURL = "$ip/helpers/insyncInterface.php?action=getImage&viewCamera=" . urlencode($cam) . "&width=$width&height=$height&quality=$quality&session=false&u=" . urlencode(base64_encode("PEC")) . "&p=" . urlencode(base64_encode("lenpec4321"));
 
 
-		$ctx = stream_context_create(array('http' => array('timeout' => 5))); 
+		$ctx = stream_context_create(['http' => ['timeout' => 5]]); 
 		$results = @file_get_contents("https://$remoteURL", 0, $ctx); 
 
 		if($results === FALSE)
 		{
-			$ctxR = stream_context_create(array('http' => array('timeout' => 5))); 
+			$ctxR = stream_context_create(['http' => ['timeout' => 5]]); 
 			$results = @file_get_contents("http://$remoteURL", 0, $ctxR); 
 			if($results === FALSE)
 			{

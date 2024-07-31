@@ -19,15 +19,15 @@ switch($action)
 	{
 		$systemType = getSystemType();
 		echo $systemType;
-                
+
 		break;
 	}
 	case "isContextCamera":
 	{
 		$cameraName = "";
 		if(isset($_REQUEST['cameraName']))
-			$cameraName = $_REQUEST['cameraName'];		
-		
+			$cameraName = $_REQUEST['cameraName'];
+
 		echo isCameraTypeContext($cameraName);
 		break;
 	}
@@ -46,7 +46,7 @@ function getSystemType()
 	{
 		$string = file_get_contents(SYSTEM_CONFIGURATOR_CONFIG);
 		$array = json_decode($string, true);
-		$systemType = $array[SystemConfiguration];
+		$systemType = $array["SystemConfiguration"];
 	}
 	return $systemType;
 }
@@ -54,7 +54,7 @@ function getSystemType()
 function isCameraTypeContext($cameraName)
 {
 	$isContext = false;
-	
+
 	$Intersection = @simplexml_load_file(INTERSECTION_CONF_FILE);
 	if($Intersection !== FALSE)
 	{
@@ -67,15 +67,15 @@ function isCameraTypeContext($cameraName)
 			}
 		}
 	}
-	
+
 	return $isContext;
-	
+
 }
 
 function isCameraTypeMultiViewContext($cameraName)
 {
 	$isMultiviewContext = false;
-	$Intersection = @simplexml_load_file(INTERSECTION_CONF_FILE);		
+	$Intersection = @simplexml_load_file(INTERSECTION_CONF_FILE);
 	if($Intersection !== FALSE)
 	{
 		foreach($Intersection->xpath("//VideoStream") as $str)
@@ -99,7 +99,7 @@ function isCameraTypeMultiViewContext($cameraName)
 function getPhasesWithCamera()
 {
 	require_once("databaseInterface.php");
-	
+
 	$cameraDetectors = array();
 	$cameraPhases = array();
 

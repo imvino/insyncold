@@ -201,7 +201,7 @@ function viewSchedule()
 		
 		echo "<td class='text-center'>" . bytesToSize($size) . "</td>";
 		
-		$randID = "a" . rand(111111,9999999);
+		$randID = "a" . random_int(111111,9999999);
 		
 		echo "<td class='text-center'><a href='' id='$randID' class='delete-recording' title='Delete'><span>×</span></a><script>$('#$randID').click(function(e){\$.get('/helpers/recordingHelper.php?action=delete&cam=" . $Recording['camera'] . "&startDay=" . $Recording['startDay'] . "&duration=" . $Recording['durationSecs'] . "'); e.preventDefault(); reloadData();})</script></td>";
 		echo "</tr>";
@@ -274,7 +274,7 @@ function frameRateToHRF($rate)
  */
 function getDriveList($permissions)
 {
-	$driveArr = array();
+	$driveArr = [];
 	
 	$fso = new COM('Scripting.FileSystemObject');
 	$D = $fso->Drives;
@@ -295,7 +295,7 @@ function getDriveList($permissions)
             }
 
             if(strcasecmp($dO->DriveLetter, "c") != 0 || $permissions["username"] === "PEC")
-                $driveArr[] = array($dO->DriveLetter, $n, $s);
+                $driveArr[] = [$dO->DriveLetter, $n, $s];
 		}
 	}
 	

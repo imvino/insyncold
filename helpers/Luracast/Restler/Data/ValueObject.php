@@ -16,14 +16,14 @@ namespace Luracast\Restler\Data;
 class ValueObject implements iValueObject
 {
 
-    public function __toString()
+    public function __toString(): string
     {
-        return ' new ' . get_called_class() . '() ';
+        return ' new ' . static::class . '() ';
     }
 
     public static function __set_state(array $properties)
     {
-        $class = get_called_class();
+        $class = static::class;
         $instance = new $class ();
         $vars = get_object_vars($instance);
         foreach ($properties as $property => $value) {
@@ -34,10 +34,7 @@ class ValueObject implements iValueObject
                 } else {
                     $method = 'set' . ucfirst($property);
                     if (method_exists($instance, $method)) {
-                        call_user_func(array(
-                            $instance,
-                            $method
-                        ), $value);
+                        call_user_func([$instance, $method], $value);
                     }
                 }
             }
@@ -50,7 +47,7 @@ class ValueObject implements iValueObject
         $r = get_object_vars($this);
         $methods = get_class_methods($this);
         foreach ($methods as $m) {
-            if (substr($m, 0, 3) == 'get') {
+            if (str_starts_with($m, 'get')) {
                 $r [lcfirst(substr($m, 3))] = @$this->{$m} ();
             }
         }

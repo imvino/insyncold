@@ -192,7 +192,7 @@ function testNTP($target)
     
     $offsetInterval = round($server_time_explode[1] - $ntp_time_explode[0], 3)*1000;
     
-    $retArray = array();
+    $retArray = [];
     
     $retArray["vn_response"] = $vn_response;
     $retArray["stratum_response"] = $stratum_response;

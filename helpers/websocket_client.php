@@ -69,7 +69,7 @@ function websocket_open($host='',$port=80,$headers='',&$error_string='',$timeout
   $header.="\r\n";
 
   // Connect to server
-  $host = $host ? $host : "127.0.0.1";
+  $host = $host ?: "127.0.0.1";
   $port = $port <1 ? 80 : $port;
   $address = ($ssl ? 'ssl://' : '') . $host . ':' . $port;
   
@@ -135,7 +135,7 @@ function websocket_write($sp,$data,$final=true){
   else $header.=chr(0x80 | 127) . pack("N",0) . pack("N",strlen($data));
 
   // Add mask
-  $mask=pack("N",rand(1,0x7FFFFFFF));
+  $mask=pack("N",random_int(1,0x7FFFFFFF));
   $header.=$mask;
 
   // Mask application data.
@@ -158,7 +158,7 @@ function websocket_write_text($sp,$data,$final=true){
   else $header.=chr(0x80 | 127) . pack("N",0) . pack("N",strlen($data));
 
   // Add mask
-  $mask=pack("N",rand(1,0x7FFFFFFF));
+  $mask=pack("N",random_int(1,0x7FFFFFFF));
   $header.=$mask;
 
   // Mask application data.
@@ -239,7 +239,7 @@ function websocket_read($sp,&$error_string=NULL){
     // Handle ping requests (sort of) send pong and continue to read
     if($opcode == 9){
       // Assamble header: FINal 0x80 | Opcode 0x0A + Mask on 0x80 with zero payload
-      fwrite($sp,chr(0x8A) . chr(0x80) . pack("N", rand(1,0x7FFFFFFF)));
+      fwrite($sp,chr(0x8A) . chr(0x80) . pack("N", random_int(1,0x7FFFFFFF)));
       continue;
 
     // Close

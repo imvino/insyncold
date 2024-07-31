@@ -9,13 +9,14 @@ $title = ": Invalid Logins";
 $breadCrumb = "<h1>Account <small>Invalid Logins</small></h1>";
 $menuCategory = "account";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 
 <link rel="stylesheet" type="text/css" href="/css/account.css"/>
 
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP
+;
 
 include("includes/header.php");
 

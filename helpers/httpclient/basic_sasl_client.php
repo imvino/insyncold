@@ -11,8 +11,8 @@ define("SASL_BASIC_STATE_DONE",     1);
 
 class basic_sasl_client_class
 {
-	var $credentials=array();
-	var $state=SASL_BASIC_STATE_START;
+	public $credentials=[];
+	public $state=SASL_BASIC_STATE_START;
 
 	Function Initialize(&$client)
 	{
@@ -26,12 +26,8 @@ class basic_sasl_client_class
 			$client->error="Basic authentication state is not at the start";
 			return(SASL_FAIL);
 		}
-		$this->credentials=array(
-			"user"=>"",
-			"password"=>""
-		);
-		$defaults=array(
-		);
+		$this->credentials=["user"=>"", "password"=>""];
+		$defaults=[];
 		$status=$client->GetCredentials($this->credentials,$defaults,$interactions);
 		if($status==SASL_CONTINUE)
 		{

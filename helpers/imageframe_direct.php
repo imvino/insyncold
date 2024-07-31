@@ -1,5 +1,6 @@
 <?php
-require_once(dirname(__FILE__) . "/../helpers/constants.php");
+use Unirest\Request;
+require_once(__DIR__ . "/../helpers/constants.php");
 require_once(SITE_DOCUMENT_ROOT . "helpers/getcameralist.php");
 require_once(SITE_DOCUMENT_ROOT . "helpers/httpclient/Unirest.php");
 
@@ -7,8 +8,8 @@ require_once(SITE_DOCUMENT_ROOT . "helpers/httpclient/Unirest.php");
 
 Function ReadCameraImage($cameraURL, $username, $password)
 {
-    Unirest\Request::auth($username, $password, CURLAUTH_DIGEST);
-    $response = Unirest\Request::get($cameraURL, $headers, $query);    
+    Request::auth($username, $password, CURLAUTH_DIGEST);
+    $response = Request::get($cameraURL, $headers, $query);    
     
     if (($response->code / 100) > 2)
     {

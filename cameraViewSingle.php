@@ -8,7 +8,7 @@ $title = ": Single Camera View";
 $breadCrumb = "<h1>Views <small>Single Camera View</small></h1>";
 $menuCategory = "views";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 
 <link rel="stylesheet" type="text/css" href="/css/cameraViews.css"/>
@@ -16,7 +16,8 @@ $head = <<<HEAD
 <script language="javascript" type="text/javascript" src="js/cameraViewSingle.js"></script>
 
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP
+;
 
 include("includes/header.php");
 

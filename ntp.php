@@ -8,10 +8,11 @@ $title = ": NTP Server";
 $breadCrumb = "<h1>Settings <small>NTP Server</small></h1>";
 $menuCategory = "settings";
 
-$head = <<<HEAD
+$head = <<<HEAD_WRAP
 <!-- HEADER -->
 <!-- END HEADER -->
-HEAD;
+HEAD_WRAP
+;
 
 if($permissions["username"] == "kiosk")
     include("includes/header_lite.php");
