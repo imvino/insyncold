@@ -1,0 +1,56 @@
+# Ignore sensitive files
+.env
+.env.local
+.env.*.local
+.php_cs.cache
+.php_cs
+
+# Ignore Composer dependency directory
+/vendor/
+
+# Ignore Composer lock file (if you prefer to include this, remove this line)
+# /composer.lock
+
+# Ignore PHPUnit result cache
+.phpunit.result.cache
+
+# Ignore local server configurations
+Homestead.yaml
+Homestead.json
+Vagrantfile
+
+# Ignore IDE files
+.idea/
+*.swp
+*.swo
+
+# Ignore OS-generated files
+.DS_Store
+Thumbs.db
+
+# Ignore log files and databases
+*.log
+*.sqlite
+*.sqlite3
+
+# Ignore coverage reports
+coverage/
+
+# Ignore build directories
+/build/
+/node_modules/
+
+# Ignore temporary files and directories
+/tmp/
+/temp/
+/*.tmp
+*.~*
+*.seed
+*.log
+*.cache
+
+# Ignore PHPUnit coverage results
+coverage/
+
+# Ignore Symfony directory
+var/
